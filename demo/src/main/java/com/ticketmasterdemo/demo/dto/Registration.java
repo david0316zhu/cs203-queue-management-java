@@ -13,15 +13,9 @@ import lombok.Setter;
 public class Registration {
     private String id;
     private String eventId;
-    private User groupLeader;
+    private String groupLeaderId;
+    private String groupLeaderEmail;
     private int groupSize;
     private List<User> userGroup;
-
-    public Registration(List<User> userGroup, User groupLeader, String eventId) {
-        this.groupLeader = groupLeader;
-        this.userGroup = userGroup;
-        this.eventId = eventId;
-        this.groupSize = userGroup.size();
-    }
 
 }
