@@ -16,8 +16,11 @@
         SELECT * FROM user WHERE email = #{email}
     </select>
 
-    <select id="findUserById" resultMap="petResultMap" parameterType="String">
+    <select id="findUserById" resultMap="userResultMap" parameterType="String">
         SELECT * FROM user WHERE user_id = #{id}
     </select>
 
+    <select id="findUserByMobile" resultMap="userResultMap" parameterType="String">
+        SELECT * FROM user WHERE mobile_number = #{mobile}
+    </select>
 </mapper>

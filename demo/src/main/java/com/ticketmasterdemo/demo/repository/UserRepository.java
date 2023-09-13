@@ -10,4 +10,7 @@ public interface UserRepository {
     
     User findUserByEmail(String email);
     User findUserById(String userId);
+    User findUserByMobile(String mobile);
+
+    
 }
