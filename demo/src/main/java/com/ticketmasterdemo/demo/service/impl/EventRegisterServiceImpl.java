@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
@@ -13,7 +14,6 @@ import com.ticketmasterdemo.demo.repository.EventRegisterRepository;
 import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
 import com.ticketmasterdemo.demo.util.Utility;
-import com.ticketmasterdemo.demo.common.exception.UserException;
 
 import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -63,13 +63,23 @@ public class EventRegisterServiceImpl implements EventRegisterService{
         System.out.println(form.getGroupLeaderEmail());
         User groupLeader = userRepository.findUserByEmail(form.getGroupLeaderEmail());
         form.setGroupLeaderId(groupLeader.getId());
-        eventRegisterRepository.registerGroup(form);
+        try {
+            eventRegisterRepository.registerGroup(form);
+        }
+        catch (Exception e){
+            throw new UserException("User Group registration error!");
+        }
         log.info("Group Registration Success");
 
-        if (!this.registerUsers(responseUserList, groupId, form.getEventId())) {
+        try {
+            if (!this.registerUsers(responseUserList, groupId, form.getEventId())) {
+                throw new UserException("User Registration Error!");
+            }
+            log.info("Group Users Registration Success");
+        }
+        catch (Exception e){
             throw new UserException("User Registration Error!");
         }
-        log.info("Group Users Registration Success");
         return form; // Registration is successful
        
     }
