@@ -1,0 +1,22 @@
+POST http://localhost:8080/events/register/group
+Content-Type: application/json
+
+{
+  "queueId": "1",
+  "user": {
+    "id": "1",
+    "email": "davidapsc@gmail.com"
+  },
+  "userGroup": [
+    {
+      "email": "davidapsc@gmail.com"
+    },
+    {
+      "email": "teo.junrui.jonathanedward@gmail.com"
+    },
+    {
+      "email": "teo.junrui.jonathanedward2@gmail.com"
+    }
+  ]
+  
+}
