@@ -40,20 +40,5 @@ public class UserServiceImpl implements UserService {
         }
         return user.isVerified();
     }
-    public boolean isUserMobileVerified(String mobile) {
-        User user = userRepository.findUserByMobile(mobile);
-        if (user == null) {
-            return false;
-        }
-        return user.isVerified();
-    }
-
-    public boolean isUserIdVerified(String id) {
-        User user = userRepository.findUserByMobile(id);
-        if (user == null) {
-            return false;
-        }
-        return user.isVerified();
-    }
 
 }
