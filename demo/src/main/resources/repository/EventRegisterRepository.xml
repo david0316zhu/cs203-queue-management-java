@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ticketmasterdemo.demo.repository.EventRegisterRepository">
+
+    <resultMap id="eventRegisterResultMap" type="com.ticketmasterdemo.demo.dto.Registration">
+        <id column="group_id" property="id"/>
+        <result column="event_id" property="eventId"/>
+        <result column="group_leader" property="groupLeader"/>
+        <result column="group_size" property="groupSize"/>
+    </resultMap>
+
+    <insert id="registerGroup" parameterType="Registration">
+        INSERT INTO registration_group_for_event (group_id, group_size, event_id, group_leader) 
+        VALUES (#{id}, #{groupSize}, #{eventId}, #{groupLeader})
+    </insert>
+
+    <select id="registerUser" resultMap="petResultMap" parameterType="String">
+        INSERT INTO registration_group_for_event (group_id, group_size, event_id, group_leader) 
+        VALUES (#{id}, #{groupSize}, #{eventId}, #{groupLeader})
+    </select>
+
+</mapper>

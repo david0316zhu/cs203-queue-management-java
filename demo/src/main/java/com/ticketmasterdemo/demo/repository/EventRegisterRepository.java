@@ -1,10 +1,12 @@
 package com.ticketmasterdemo.demo.repository;
 
-import com.ticketmasterdemo.demo.model.Registration;
-import com.ticketmasterdemo.demo.model.User;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.ticketmasterdemo.demo.dto.Registration;
+import com.ticketmasterdemo.demo.dto.User;
 
+@Mapper
 public interface EventRegisterRepository {
-    Registration addRegistration(Registration form);
-    boolean registerUser(User user, String group_id);
+    int registerGroup(Registration form);
+    int registerUser(User user, String group_id);
 }
