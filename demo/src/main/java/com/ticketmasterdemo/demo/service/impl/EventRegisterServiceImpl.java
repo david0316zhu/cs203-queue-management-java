@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
@@ -40,31 +39,45 @@ public class EventRegisterServiceImpl implements EventRegisterService{
         List<User> responseUserList = new ArrayList<>();
 
         for (User user : userList) {
-            User verifiedUser = userRepository.findUserByEmail(user.getEmail());
-            if (verifiedUser == null) {
-                throw new UserException("Email(s) in group are not registered as users");
+            try {
+                User verifiedUser = userRepository.findUserByEmailAndMobile(user.getEmail(), user.getMobile());
+                if (verifiedUser == null) {
+                    throw new UserException("Email(s) in group are not registered as users");
+                }
+                
+                if (verifiedUser != null && !verifiedUser.isVerified()) {
+                    throw new UserException("User(s) in group are not verified"); // User is not authenticated
+                }
+                System.out.println(user.getEmail() + "and" + user.getMobile());
+                responseUserList.add(verifiedUser);
             }
-            
-            if (verifiedUser != null && !verifiedUser.isVerified()) {
-                throw new UserException("User(s) in group are not verified"); // User is not authenticated
+            catch (Exception e){
+                throw new UserException("User Error!");
             }
-            responseUserList.add(verifiedUser);
         }
         form.setUserGroup(responseUserList);
 
         Utility util = new Utility();
         String groupId = util.generateRandomUUID();
         form.setId(groupId);
+        System.out.println(form.getGroupLeaderEmail());
+        User groupLeader = userRepository.findUserByEmail(form.getGroupLeaderEmail());
+        form.setGroupLeaderId(groupLeader.getId());
         eventRegisterRepository.registerGroup(form);
-        
+        log.info("Group Registration Success");
+
+        if (!this.registerUsers(responseUserList, groupId, form.getEventId())) {
+            throw new UserException("User Registration Error!");
+        }
+        log.info("Group Users Registration Success");
         return form; // Registration is successful
        
     }
 
-    public boolean registerUsers(List<User> userList, String groupId) {
+    public boolean registerUsers(List<User> userList, String groupId, String eventId) {
         try {
             for (User user : userList) {
-                eventRegisterRepository.registerUser(user, groupId);
+                eventRegisterRepository.registerUser(user, groupId, eventId);
             }
             return true; // User registration is successful
         } catch (Exception e) {

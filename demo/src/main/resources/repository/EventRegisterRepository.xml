@@ -6,18 +6,18 @@
     <resultMap id="eventRegisterResultMap" type="com.ticketmasterdemo.demo.dto.Registration">
         <id column="group_id" property="id"/>
         <result column="event_id" property="eventId"/>
-        <result column="group_leader" property="groupLeader"/>
+        <result column="group_leader" property="groupLeaderId"/>
         <result column="group_size" property="groupSize"/>
     </resultMap>
 
-    <insert id="registerGroup" parameterType="Registration">
+    <insert id="registerGroup" parameterType="com.ticketmasterdemo.demo.dto.Registration">
         INSERT INTO registration_group_for_event (group_id, group_size, event_id, group_leader) 
-        VALUES (#{id}, #{groupSize}, #{eventId}, #{groupLeader})
+        VALUES (#{id}, #{groupSize}, #{eventId}, #{groupLeaderId})
     </insert>
 
-    <select id="registerUser" resultMap="petResultMap" parameterType="String">
-        INSERT INTO registration_group_for_event (group_id, group_size, event_id, group_leader) 
-        VALUES (#{id}, #{groupSize}, #{eventId}, #{groupLeader})
-    </select>
+    <insert id="registerUser" parameterType="map">
+        INSERT INTO confirmation_group_for_event (user_id, event_id, group_id) 
+        VALUES (#{user.id}, #{event_id}, #{group_id})
+    </insert>
 
 </mapper>
