@@ -24,32 +24,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
-    private final EventRegisterRepository eventRegisterRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, EventRegisterRepository eventRegisterRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.eventRegisterRepository = eventRegisterRepository;
     }
 
     public boolean isUserEmailVerified(String email) {
         User user = userRepository.findUserByEmail(email);
-        if (user == null) {
-            return false;
-        }
-        return user.isVerified();
-    }
-    public boolean isUserMobileVerified(String mobile) {
-        User user = userRepository.findUserByMobile(mobile);
-        if (user == null) {
-            return false;
-        }
-        return user.isVerified();
-    }
-
-    public boolean isUserIdVerified(String id) {
-        User user = userRepository.findUserByMobile(id);
         if (user == null) {
             return false;
         }

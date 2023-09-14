@@ -32,6 +32,7 @@ public class EventRegisterController {
     @PostMapping("/group")
     public ResponseEntity<?> registerGroup(@RequestBody Registration form) {
         try {
+            form.setGroupSize(form.getUserGroup().size());
             Registration responseForm = eventRegisterService.registerGroup(form);
             return ResponseEntity.status(200).body(responseForm);
         }
