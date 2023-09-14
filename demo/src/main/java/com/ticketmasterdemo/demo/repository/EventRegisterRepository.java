@@ -10,4 +10,5 @@ import com.ticketmasterdemo.demo.dto.User;
 public interface EventRegisterRepository {
     int registerGroup(Registration form);
     int registerUser(@Param("user") User user, @Param("group_id") String groupId, @Param("event_id") String eventId);
+    Boolean checkGroupStatus(@Param("group_id") String groupId, @Param("event_id") String eventId);
 }

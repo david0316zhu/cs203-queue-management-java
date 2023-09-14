@@ -12,6 +12,11 @@ Content-Type: application/json
     }
   ], 
   "groupLeaderEmail": "davidapsc@gmail.com",
-  "eventId": "1"
+  "eventId": "GLOW1"
   
 }
+
+###
+
+GET http://localhost:8080/events-register/GLOW1/reg-statuses/402f2448-8eb7-4a98-bb07-2c6b03f4e846
+Content-Type: application/json

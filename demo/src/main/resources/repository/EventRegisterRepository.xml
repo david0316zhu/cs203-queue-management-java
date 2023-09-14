@@ -20,4 +20,10 @@
         VALUES (#{user.id}, #{event_id}, #{group_id})
     </insert>
 
+    <select id="checkGroupStatus" parameterType="map" resultType="boolean">
+        SELECT has_all_users_confirmed 
+        FROM registration_group_for_event 
+        WHERE group_id=#{group_id} AND event_id=#{event_id}
+    </select>
+
 </mapper>
