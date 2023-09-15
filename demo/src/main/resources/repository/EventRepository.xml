@@ -9,7 +9,7 @@
         <result column="max_queueable" property="maxQueueable"/>
         <result column="is_highlighted" property="isHighlighted"/>
         <result column="description" property="description"/>
-        <result column="terms_and_condition" property="termsAndCondition"/>
+        <result column="terms_and_conditions" property="termsAndCondition"/>
     </resultMap>
 
     <select id="retrieveAllEvents" resultMap="eventResultMap">

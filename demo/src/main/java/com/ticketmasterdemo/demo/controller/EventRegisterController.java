@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
+import com.ticketmasterdemo.demo.dto.Status;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
 
 @RestController
@@ -52,7 +53,9 @@ public class EventRegisterController {
     public ResponseEntity<?> getGroupEventRegistrationStatus(@PathVariable String eventId, @PathVariable String groupId) {
         try {
             Boolean groupEventRegistrationStatus = eventRegisterService.checkGroupRegistrationStatus(groupId, eventId);
-            return new ResponseEntity<>(groupEventRegistrationStatus, HttpStatus.OK);
+            Status responseStatus = new Status();
+            responseStatus.setStatus(groupEventRegistrationStatus);
+            return new ResponseEntity<>(responseStatus, HttpStatus.OK);
         }
         catch (EventRegisterException e){
             log.error("Event registration error: ", e);

@@ -32,7 +32,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     public ResponseEntity<?> getAllEvents() {
         try {
             List<Event> allEvents = eventService.getAllEvents();
