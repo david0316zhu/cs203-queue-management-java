@@ -9,11 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Event {
-    private String id;
-    private String name;
-    private int maxQueueable;
-    private boolean isHighlighted;
-    private String description;
-    private String termsAndCondition;
+public class Status {
+    private boolean status;
 }
