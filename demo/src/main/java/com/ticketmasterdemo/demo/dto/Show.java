@@ -1,5 +1,7 @@
 package com.ticketmasterdemo.demo.dto;
 
+import java.security.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,12 +11,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Event {
+public class Show {
     private String id;
-    private String name;
-    private int maxQueueable;
-    private boolean isHighlighted;
-    private String description;
-    private String termsAndCondition;
-    private java.util.List<Show> shows;
+    private Event event;
+    private Timestamp dateTime;
+    private String locationId;
+    private String venueId;
+
 }

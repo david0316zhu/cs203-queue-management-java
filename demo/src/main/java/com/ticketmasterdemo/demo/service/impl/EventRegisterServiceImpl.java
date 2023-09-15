@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
+import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
@@ -94,6 +94,22 @@ public class EventRegisterServiceImpl implements EventRegisterService{
             // Handle any unexpected exceptions here
             e.printStackTrace(); // Log the exception for debugging
             return false;
+        }
+    }
+
+    public Boolean checkGroupRegistrationStatus(String groupId, String eventId) {
+        try {
+            Boolean status = eventRegisterRepository.checkGroupStatus(groupId, eventId);
+            System.out.println(status);
+            if (status == null) {
+                throw new EventRegisterException("Group ID/ Event ID does not exist");
+            }
+            return status;
+        }
+        catch (Exception e) {
+            // Handle any unexpected exceptions here
+            e.printStackTrace(); // Log the exception for debugging
+            throw new EventRegisterException("Unable to retrieve Group Data");
         }
     }
 }
