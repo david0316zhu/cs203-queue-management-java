@@ -36,7 +36,7 @@ public class EventRegisterController {
         try {
             form.setGroupSize(form.getUserGroup().size());
             Registration responseForm = eventRegisterService.registerGroup(form);
-            return ResponseEntity.status(200).body(responseForm);
+            return new ResponseEntity<>(responseForm, HttpStatus.OK);
         }
         catch (UserException e){
             log.error("User registration error: ", e);
@@ -44,7 +44,7 @@ public class EventRegisterController {
         }
         catch (Exception e){
             log.error("Insert registration error: ", e);
-            return ResponseEntity.status(500).body("Server Error " + e.getMessage());
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class EventRegisterController {
     public ResponseEntity<?> getGroupEventRegistrationStatus(@PathVariable String eventId, @PathVariable String groupId) {
         try {
             Boolean groupEventRegistrationStatus = eventRegisterService.checkGroupRegistrationStatus(groupId, eventId);
-            return ResponseEntity.status(200).body(groupEventRegistrationStatus);
+            return new ResponseEntity<>(groupEventRegistrationStatus, HttpStatus.OK);
         }
         catch (EventRegisterException e){
             log.error("Event registration error: ", e);
@@ -60,7 +60,7 @@ public class EventRegisterController {
         }
         catch (Exception e){
             log.error("Event registration status error: ", e);
-            return ResponseEntity.status(500).body("Server Error " + e.getMessage());
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
     }
 
