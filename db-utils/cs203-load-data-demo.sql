@@ -226,3 +226,89 @@ insert into ticketmaster.location_venue (location_id, venue_id) VALUES
 ("uk-pstm", "Main Event Area"),
 ("uk-wstm", "Stadium 1"),
 ("uk-wstm", "Stadium 2");
+
+## Add data for shows
+# 25 Taylor Swift Concerts, 20 Coldplay Concerts, 3 guns and roses, 0 anson, 5 twice concerts
+# 4 greenwich comedy fest, 4 andrea, 4 enhypen, 7 ed-sheeran, 4 pink
+insert into ticketmaster.show(event_id, show_id, show_datetime, entry_conditions_path, seating_plan_path, location_id, venue_id) values 
+# Taylor Swift The Eras Tour Concerts 1 - 10
+("tswift-era-2024", "2023-11-09", "2023-11-09 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-1.png", "argentina-erp", "Main Event Area"),
+("tswift-era-2024", "2023-11-10", "2023-11-10 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-1.png", "argentina-erp", "Main Event Area"),
+("tswift-era-2024", "2023-11-11", "2023-11-11 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-1.png", "argentina-erp", "Main Event Area"),
+("tswift-era-2024", "2023-11-17", "2023-11-17 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-2.png", "brazil-ens", "Main Area"),
+("tswift-era-2024", "2023-11-18", "2023-11-18 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-2.png", "brazil-ens", "Main Area"),
+("tswift-era-2024", "2023-11-19", "2023-11-19 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-2.png", "brazil-ens", "Main Area"),
+("tswift-era-2024", "2023-11-24", "2023-11-24 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-3.png", "brazil-ap", "Main Area"),
+("tswift-era-2024", "2024-02-07", "2024-02-07 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-3.png", "brazil-ap", "Main Area"),
+("tswift-era-2024", "2024-02-08", "2024-02-08 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-4.png", "japan-tdo", "Main Event Area"),
+("tswift-era-2024", "2024-02-09", "2024-02-09 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-4.png", "japan-tdo", "Main Event Area"),
+# Taylor Swift The Era Tour Concerts 11 - 20
+("tswift-era-2024", "2024-02-16", "2024-02-16 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-1.png", "australia-mcg", "Main Event Area"),
+("tswift-era-2024", "2024-02-17", "2024-02-17 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-1.png", "australia-mcg", "Main Event Area"),
+("tswift-era-2024", "2024-02-18", "2024-02-18 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-1.png", "australia-mcg", "Main Event Area"),
+("tswift-era-2024", "2024-02-23", "2024-02-23 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-5.jpg", "australia-astm", "Stadium 1"),
+("tswift-era-2024", "2024-02-24", "2024-02-24 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-5.jpg", "australia-astm", "Stadium 2"),
+("tswift-era-2024", "2024-02-25", "2024-02-25 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-5.jpg", "australia-astm", "Stadium 2"),
+("tswift-era-2024", "2024-03-02", "2024-03-02 18:00:00", "https://www.sportshub.com.sg/sites/default/files/2022-12/Conditions-of-Entry-NST.pdf", "tswift-era-2024-6.jpg", "singapore-nstm", "Main Event Arena"),
+("tswift-era-2024", "2024-03-03", "2024-03-03 18:00:00", "https://www.sportshub.com.sg/sites/default/files/2022-12/Conditions-of-Entry-NST.pdf", "tswift-era-2024-6.jpg", "singapore-nstm", "Main Event Arena"),
+("tswift-era-2024", "2024-03-04", "2024-03-04 18:00:00", "https://www.sportshub.com.sg/sites/default/files/2022-12/Conditions-of-Entry-NST.pdf", "tswift-era-2024-6.jpg", "singapore-nstm", "Main Event Arena"),
+("tswift-era-2024", "2024-03-07", "2024-03-07 18:00:00", "https://www.sportshub.com.sg/sites/default/files/2022-12/Conditions-of-Entry-NST.pdf", "tswift-era-2024-6.jpg", "singapore-nstm", "Main Event Arena"),
+# Taylor Swift The Era Tour Concerts 21 - 25
+("tswift-era-2024", "2024-03-08", "2024-03-08 18:00:00", "https://www.sportshub.com.sg/sites/default/files/2022-12/Conditions-of-Entry-NST.pdf", "tswift-era-2024-6.jpg", "singapore-nstm", "Main Event Arena"),
+("tswift-era-2024", "2024-03-09", "2024-03-09 18:00:00", "https://www.sportshub.com.sg/sites/default/files/2022-12/Conditions-of-Entry-NST.pdf", "tswift-era-2024-6.jpg", "singapore-nstm", "Main Event Arena"),
+("tswift-era-2024", "2024-05-09", "2024-05-09 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-3.png", "france-plda", "Arena 1"),
+("tswift-era-2024", "2024-05-10", "2024-05-10 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-3.png", "france-plda", "Arena 1"),
+("tswift-era-2024", "2024-05-11", "2024-05-11 18:00:00", "https://www.ebilet.pl/media/cms/media/vxooxulf/taylor-swift-the-eras-tour-2024_08_1-3-terms-and-conditions-2023_07_11.pdf", "tswift-era-2024-3.png", "france-plda", "Arena 1"),
+# Coldplay Music of The Spheres Concerts 1 - 10
+("cplay-mots-2024", "2023-11-06", "2023-11-06 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-1.jpg", "japan-tdo", "Main Event Area"),
+("cplay-mots-2024", "2023-11-07", "2023-11-07 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-1.jpg", "japan-tdo", "Main Event Area"),
+("cplay-mots-2024", "2023-11-11", "2023-11-11 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-2.jpg", "kaohsiung-nstm", "Main Event Area"),
+("cplay-mots-2024", "2023-11-12", "2023-11-12 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-2.jpg", "kaohsiung-nstm", "Main Event Area"),
+("cplay-mots-2024", "2023-11-15", "2023-11-15 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-3.png", "indo-gbks", "Main Event Area"),
+("cplay-mots-2024", "2023-11-18", "2023-11-18 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-3.png", "australia-os", "Stadium 3"),
+("cplay-mots-2024", "2023-11-19", "2023-11-19 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-3.png", "australia-os", "Stadium 1"),
+("cplay-mots-2024", "2024-01-19", "2024-01-19 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-3.png", "manila-para", "Arena 3"),
+("cplay-mots-2024", "2024-01-20", "2024-01-20 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-3.png", "manila-para", "Arena 5"),
+("cplay-mots-2024", "2024-01-21", "2024-01-21 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-3.png", "manila-para", "Arena 3"),
+# Coldplay Music of the Spheres Concerts 11 - 18
+("cplay-mots-2024", "2024-01-23", "2024-01-23 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-4.png", "singapore-nstm", "Main Event Arena"),
+("cplay-mots-2024", "2024-01-24", "2024-01-24 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-4.png", "singapore-nstm", "Main Event Arena"),
+("cplay-mots-2024", "2024-01-26", "2024-01-26 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-4.png", "singapore-nstm", "Main Event Arena"),
+("cplay-mots-2024", "2024-01-27", "2024-01-27 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-4.png", "singapore-nstm", "Main Event Arena"),
+("cplay-mots-2024", "2024-01-30", "2024-01-30 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-4.png", "singapore-nstm", "Main Event Arena"),
+("cplay-mots-2024", "2024-01-31", "2024-01-31 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-4.png", "singapore-nstm", "Main Event Arena"),
+("cplay-mots-2024", "2024-02-03", "2024-02-03 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-5.jpg", "thailand-rnstm", "Main Event Area"),
+("cplay-mots-2024", "2024-02-04", "2024-02-04 18:45:00", "cplay-mots-2024.png", "cplay-mots-2024-5.jpg", "thailand-rnstm", "Main Event Area"),
+# Guns and Roses Concerts 1 to 3
+('gnr-2023', "2023-11-27", "2023-11-27 17:45:00", "", "gnr-2023-1.png", "california-dda", "Arena 3"),
+('gnr-2023', "2023-12-01", "2023-12-01 17:45:00", "", "gnr-2023-1.png", "texas-aac", "SkyHigh Theatre"),
+('gnr-2023', "2023-12-05", "2023-12-05 17:45:00", "", "gnr-2023-1.png", "illinois-uc", "Theatre 1"),
+# Twice Concert 1 - 5 (Note that this one has 3 expired events and 2 events upcoming in Feb 2024). This also has less events than the max queueable.
+('twice-rtb-2023', "2023-04-15", "2023-04-15 20:30:00", "", "twice-rtb-2.png", "skorea-kpso", "Main Event Area"),
+('twice-rtb-2023', "2023-04-16", "2023-04-16 20:30:00", "", "twice-rtb-2.png", "skorea-kpso", "Main Event Area"),
+('twice-rtb-2023', "2023-09-02", "2023-09-02 18:00:00", "https://www.sportshub.com.sg/sites/default/files/2022-12/Conditions-of-Entry-NST.pdf", "twice-rtb-2.jpg", "singapore-nstm", "Main Event Arena"),
+('twice-rtb-2023', "2024-02-06", "2024-02-06 18:00:00", "", "twice-rtb-1.png", "brazil-ap", "Main Area"),
+('twice-rtb-2023', "2024-02-07", "2024-02-07 18:00:00", "", "twice-rtb-1.png", "brazil-ap", "Main Area"),
+# Anson Seabra ---> No Concerts
+# Andrea Bocelli --> 2 concerts
+("andrea-b-2023", "2023-12-13", "2023-12-13 20:00:00", "", "andrea-b-2023-1.jpg", "uk-nmm", "History Theatre 1"),
+("andrea-b-2023", "2023-12-16", "2023-12-16 20:00:00", "", "andrea-b-2023-1.png", "texas-tc", "Theatre 1"),
+# Greenwich Fest (4 events --> Only held at 1 location)
+("greenwich-2023", "2023-12-21", "2023-12-21 19:00:00", "", "greenwich-2023-1.jpg", "uk-nmm", "History Theatre 1"),
+("greenwich-2023", "2023-12-22", "2023-12-22 19:00:00", "", "greenwich-2023-1.jpg", "uk-nmm", "History Theatre 2"),
+("greenwich-2023", "2023-12-23", "2023-12-23 19:00:00", "", "greenwich-2023-1.jpg", "uk-nmm", "History Theatre 2"),
+("greenwich-2023", "2023-12-24", "2023-12-24 19:00:00", "", "greenwich-2023-1.jpg", "uk-nmm", "History Theatre 2"),
+# Enhypen (4 events)
+("enhypen-2023", "2023-12-14", "2023-12-14 19:30:00", "", "enhypen-2023-1.jpg", "texas-aac", "SkyHigh Theatre"),
+("enhypen-2023", "2023-12-18", "2023-12-18 19:30:00", "", "enhypen-2023-2.jpg", "njersey-pc", "Theatre 5B"),
+("enhypen-2023", "2023-12-19", "2023-12-19 19:30:00", "", "enhypen-2023-2.jpg", "njersey-pc", "Theatre 5B"),
+("enhypen-2023", "2023-12-22", "2023-12-22 19:30:00", "", "enhypen-2023-1.jpg", "illinois-uc", "Theatre 2"),
+# Pink concert (4 events)
+("pink-sc-2024", "2024-02-13", "2024-02-13 20:00:00", "", "pink-sc-2024-1.jpg", "california-dda", "Arena 1"),
+("pink-sc-2024", "2024-02-20", "2024-02-20 20:00:00", "", "pink-sc-2024-1.jpg", "california-dda", "Arena 1"),
+("pink-sc-2024", "2024-03-01", "2024-03-01 16:00:00", "", "pink-sc-2024-2.jpg", "australia-os", "Stadium 2"),
+("pink-sc-2024", "2024-03-02", "2024-03-02 16:00:00", "", "pink-sc-2024-2.jpg", "australia-os", "Stadium 2"),
+# Ed Sheeran (1 event) (max-queueable > num concerts)
+("ed-sheeran-2024", "2024-05-01", "2024-05-01 17:00:00", "", "ed-sheeran-2024-1.png", "ire-avstm", "Main Event Area") ;
+
+select * from ticketmaster.show;
