@@ -5,20 +5,20 @@ Content-Type: application/json
 
   "userGroup": [
     {
-      "email": "davidapsc@gmail.com", "mobile": "06586616057"
+      "email": "david.zhu.2022@smu.edu.sg", "mobile": "06586616057"
     },
     {
-      "email": "ryan.yap@gmail.com", "mobile": "06597873327"
+      "email": "ryan.yap.2022@smu.edu.sg", "mobile": "06597873327"
     }
   ], 
-  "groupLeaderEmail": "davidapsc@gmail.com",
+  "groupLeaderEmail": "david.zhu.2022@smu.edu.sg",
   "eventId": "pink-sc-2024"
 
 }
 
 ###
 
-GET http://localhost:8080/events-register/GLOW1/reg-statuses/b8d33c7a-738d-48d4-8b36-deab0606a3b7
+GET http://localhost:8080/events-register/pink-sc-2024/reg-statuses/48ac90d4-ec56-40c8-9e04-4b3bd1e0339a
 Content-Type: application/json
 
 ###
@@ -30,3 +30,15 @@ Content-Type: application/json
 
 GET http://localhost:8080/events/pink-sc-2024
 Content-Type: application/json
+
+###
+PUT http://localhost:8080/events-register/group/event/user/confirm
+Content-Type: application/json
+
+{
+  "userId": "1",
+  "eventId": "pink-sc-2024",
+  "groupId": "48ac90d4-ec56-40c8-9e04-4b3bd1e0339a"
+}
+
+###

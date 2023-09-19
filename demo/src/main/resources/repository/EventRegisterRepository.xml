@@ -32,7 +32,7 @@
         WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
     </update>
 
-    <select id="checkUserStatus" parameterType="map" >
+    <select id="checkUserStatus" parameterType="map" resultType="boolean">
         SELECT has_user_confirmed
         FROM confirmation_group_for_event
         WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}

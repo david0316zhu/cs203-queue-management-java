@@ -43,7 +43,7 @@ public class EventRegisterServiceImpl implements EventRegisterService{
                 User verifiedUser = userRepository.findUserByEmailAndMobile(user.getEmail(), user.getMobile());
                 System.out.println("Passes here");
                 System.out.println(user.getEmail() + user.getMobile());
-                System.out.println(verifiedUser.getEmail());
+                System.out.println(verifiedUser);
                 if (verifiedUser == null) {
                     throw new UserException("Email(s) in group are not registered as users");
                 }
@@ -54,6 +54,9 @@ public class EventRegisterServiceImpl implements EventRegisterService{
                 }
                 System.out.println(user.getEmail() + "and" + user.getMobile());
                 responseUserList.add(verifiedUser);
+            }
+            catch (UserException e) {
+                throw new UserException(e.getMessage());
             }
             catch (Exception e){
                 throw new UserException("User Error!");

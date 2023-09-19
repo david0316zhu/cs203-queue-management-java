@@ -12,11 +12,11 @@
         <result column="is_verified" property="verified" />
     </resultMap>
 
-    <select id="findUserByEmailAndMobile" resultMap="userResultMap" parameterType="String">
+    <select id="findUserByEmailAndMobile" resultMap="userResultMap" parameterType="map">
         SELECT * FROM user WHERE email = #{email} and mobile_number = #{mobile} and is_verified = 1
     </select>
 
-    <select id="findUserByEmail" resultMap="userResultMap" parameterType="String">
+    <select id="findUserByEmail" resultMap="userResultMap" parameterType="map">
         SELECT * FROM user WHERE email = #{email} and is_verified = 1
     </select>
 
