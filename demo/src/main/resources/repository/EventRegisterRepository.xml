@@ -26,4 +26,16 @@
         WHERE group_id=#{group_id} AND event_id=#{event_id}
     </select>
 
+    <update id="updateUserStatus" parameterType="map" >
+        UPDATE confirmation_group_for_event
+        SET has_user_confirmed = 1
+        WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
+    </update>
+
+    <select id="checkUserStatus" parameterType="map" >
+        SELECT has_user_confirmed
+        FROM confirmation_group_for_event
+        WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
+    </select>
+
 </mapper>

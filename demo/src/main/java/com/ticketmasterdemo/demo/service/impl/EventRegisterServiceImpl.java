@@ -41,9 +41,13 @@ public class EventRegisterServiceImpl implements EventRegisterService{
         for (User user : userList) {
             try {
                 User verifiedUser = userRepository.findUserByEmailAndMobile(user.getEmail(), user.getMobile());
+                System.out.println("Passes here");
+                System.out.println(user.getEmail() + user.getMobile());
+                System.out.println(verifiedUser.getEmail());
                 if (verifiedUser == null) {
                     throw new UserException("Email(s) in group are not registered as users");
                 }
+                
                 
                 if (verifiedUser != null && !verifiedUser.isVerified()) {
                     throw new UserException("User(s) in group are not verified"); // User is not authenticated
@@ -84,7 +88,8 @@ public class EventRegisterServiceImpl implements EventRegisterService{
        
     }
 
-    public boolean registerUsers(List<User> userList, String groupId, String eventId) {
+    @Override
+    public Boolean registerUsers(List<User> userList, String groupId, String eventId) {
         try {
             for (User user : userList) {
                 eventRegisterRepository.registerUser(user, groupId, eventId);
@@ -96,13 +101,14 @@ public class EventRegisterServiceImpl implements EventRegisterService{
             return false;
         }
     }
-
+    
+    @Override
     public Boolean checkGroupRegistrationStatus(String groupId, String eventId) {
         try {
             Boolean status = eventRegisterRepository.checkGroupStatus(groupId, eventId);
-            System.out.println(status);
+            
             if (status == null) {
-                throw new EventRegisterException("Group ID/ Event ID does not exist");
+                throw new EventRegisterException("Group ID/Event ID does not exist");
             }
             return status;
         }
@@ -110,6 +116,23 @@ public class EventRegisterServiceImpl implements EventRegisterService{
             // Handle any unexpected exceptions here
             e.printStackTrace(); // Log the exception for debugging
             throw new EventRegisterException("Unable to retrieve Group Data");
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateEventGroupUserConfirmation(String userId, String eventId, String groupId) {
+        try {
+            eventRegisterRepository.updateUserStatus(groupId, eventId,userId);
+            Boolean status = eventRegisterRepository.checkUserStatus(groupId, eventId, userId);
+            if (status == null) {
+                throw new EventRegisterException("User ID/Group ID/Event ID does not match");
+            }
+            return status;
+        }
+        catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging
+            throw new EventRegisterException("Unable to update user confirmation Data");
         }
     }
 }

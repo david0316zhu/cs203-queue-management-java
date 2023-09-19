@@ -16,20 +16,4 @@ public class User {
     private String authenticatorId;
     private boolean verified;
 
-    public User(String email) {
-        this.email = email;
-    }
-
-    public User(String email, String mobile) {
-        this.mobile = mobile;
-        this.email = email;
-    }
-
-    public User(String id, String email, boolean verified) {
-        this.id = id;
-        this.email = email;
-        this.verified = verified;
-
-    }
-
 }

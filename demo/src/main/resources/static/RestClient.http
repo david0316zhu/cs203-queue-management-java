@@ -5,14 +5,14 @@ Content-Type: application/json
 
   "userGroup": [
     {
-      "email": "davidapsc@gmail.com", "mobile": "86616057"
+      "email": "davidapsc@gmail.com", "mobile": "06586616057"
     },
     {
-      "email": "ryan.yap@gmail.com", "mobile": "97873327"
+      "email": "ryan.yap@gmail.com", "mobile": "06597873327"
     }
   ], 
   "groupLeaderEmail": "davidapsc@gmail.com",
-  "eventId": "GLOW1"
+  "eventId": "pink-sc-2024"
 
 }
 
@@ -28,5 +28,5 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/events/GLOW1
+GET http://localhost:8080/events/pink-sc-2024
 Content-Type: application/json

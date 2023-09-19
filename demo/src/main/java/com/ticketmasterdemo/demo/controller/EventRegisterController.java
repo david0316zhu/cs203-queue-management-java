@@ -2,6 +2,8 @@ package com.ticketmasterdemo.demo.controller;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,6 +66,24 @@ public class EventRegisterController {
         }
         catch (Exception e){
             log.error("Event registration status error: ", e);
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/group/event/user/confirm")
+    public ResponseEntity<?> updateGroupEventUserConfirmation(@RequestBody Map<String, String> requestData) {
+        try {
+            Boolean groupEventUserStatus = eventRegisterService.updateEventGroupUserConfirmation(requestData.get("userId"), requestData.get("eventId"), requestData.get("groupId"));
+            Status responseStatus = new Status();
+            responseStatus.setStatus(groupEventUserStatus);
+            return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+        }
+        catch (EventRegisterException e){
+            log.error("Event Group User confirmation error: ", e);
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+        catch (Exception e){
+            log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
     }
