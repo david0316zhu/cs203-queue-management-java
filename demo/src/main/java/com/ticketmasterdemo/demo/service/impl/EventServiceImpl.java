@@ -10,10 +10,8 @@ import com.ticketmasterdemo.demo.dto.Event;
 import com.ticketmasterdemo.demo.repository.EventRepository;
 import com.ticketmasterdemo.demo.service.EventService;
 
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 public class EventServiceImpl implements EventService{
     private final EventRepository eventRepository;
 

@@ -7,6 +7,7 @@ import com.ticketmasterdemo.demo.dto.User;
 
 public interface EventRegisterService {
     public Registration registerGroup(Registration form);
-    public boolean registerUsers(List<User> userList, String groupId, String eventId);
+    public Boolean registerUsers(List<User> userList, String groupId, String eventId, String groupLeaderEmail);
     public Boolean checkGroupRegistrationStatus(String groupId, String eventId);
+    public Boolean updateEventGroupUserConfirmation(String userId, String eventId, String groupId);
 }

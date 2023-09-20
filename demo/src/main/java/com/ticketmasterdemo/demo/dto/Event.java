@@ -15,5 +15,5 @@ public class Event {
     private int maxQueueable;
     private boolean isHighlighted;
     private String description;
-    private String termsAndCondition;
+    private String posterImagePath;
 }

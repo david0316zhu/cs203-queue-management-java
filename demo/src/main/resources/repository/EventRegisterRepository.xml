@@ -16,14 +16,26 @@
     </insert>
 
     <insert id="registerUser" parameterType="map">
-        INSERT INTO confirmation_group_for_event (user_id, event_id, group_id) 
-        VALUES (#{user.id}, #{event_id}, #{group_id})
+        INSERT INTO confirmation_group_for_event (user_id, event_id, has_user_confirmed, group_id) 
+        VALUES (#{user.id}, #{event_id}, #{confirmation}, #{group_id})
     </insert>
 
     <select id="checkGroupStatus" parameterType="map" resultType="boolean">
         SELECT has_all_users_confirmed 
         FROM registration_group_for_event 
         WHERE group_id=#{group_id} AND event_id=#{event_id}
+    </select>
+
+    <update id="updateUserStatus" parameterType="map" >
+        UPDATE confirmation_group_for_event
+        SET has_user_confirmed = 1
+        WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
+    </update>
+
+    <select id="checkUserStatus" parameterType="map" resultType="boolean">
+        SELECT has_user_confirmed
+        FROM confirmation_group_for_event
+        WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
     </select>
 
 </mapper>
