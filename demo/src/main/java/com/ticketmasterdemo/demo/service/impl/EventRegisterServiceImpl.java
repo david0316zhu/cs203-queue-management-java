@@ -79,7 +79,7 @@ public class EventRegisterServiceImpl implements EventRegisterService{
         log.info("Group Registration Success");
 
         try {
-            if (!this.registerUsers(responseUserList, groupId, form.getEventId())) {
+            if (!this.registerUsers(responseUserList, groupId, form.getEventId(), form.getGroupLeaderEmail())) {
                 throw new UserException("User Registration Error!");
             }
             log.info("Group Users Registration Success");
@@ -92,10 +92,11 @@ public class EventRegisterServiceImpl implements EventRegisterService{
     }
 
     @Override
-    public Boolean registerUsers(List<User> userList, String groupId, String eventId) {
+    public Boolean registerUsers(List<User> userList, String groupId, String eventId, String groupLeaderEmail) {
         try {
             for (User user : userList) {
-                eventRegisterRepository.registerUser(user, groupId, eventId);
+                boolean isLeader = user.getEmail().equals(groupLeaderEmail);
+                eventRegisterRepository.registerUser(user, groupId, eventId, isLeader);
             }
             return true; // User registration is successful
         } catch (Exception e) {
