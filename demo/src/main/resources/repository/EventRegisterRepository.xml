@@ -38,4 +38,13 @@
         WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
     </select>
 
+    <select id="isGroupLeader" parameterType="map" resultType="boolean">
+        SELECT 
+        CASE 
+            WHEN COUNT(*) > 0 THEN TRUE
+            ELSE FALSE
+        END
+        FROM registration_group_for_event
+        WHERE group_id = #{group_id} AND group_leader = #{user_id}
+    </select>
 </mapper>
