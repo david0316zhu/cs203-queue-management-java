@@ -10,6 +10,7 @@ import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.dto.UserRegistrationGroupInfo;
 import com.ticketmasterdemo.demo.repository.EventRegisterRepository;
 import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
@@ -20,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class EventRegisterServiceImpl implements EventRegisterService{
-    
+public class EventRegisterServiceImpl implements EventRegisterService {
+
     private final EventRegisterRepository eventRegisterRepository;
     private final UserRepository userRepository;
 
@@ -72,8 +73,7 @@ public class EventRegisterServiceImpl implements EventRegisterService{
         form.setGroupLeaderId(groupLeader.getId());
         try {
             eventRegisterRepository.registerGroup(form);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new UserException("User Group registration error!");
         }
         log.info("Group Registration Success");
@@ -83,12 +83,11 @@ public class EventRegisterServiceImpl implements EventRegisterService{
                 throw new UserException("User Registration Error!");
             }
             log.info("Group Users Registration Success");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new UserException("User Registration Error!");
         }
         return form; // Registration is successful
-       
+
     }
 
     @Override
@@ -116,8 +115,7 @@ public class EventRegisterServiceImpl implements EventRegisterService{
                 throw new EventRegisterException("Group ID/Event ID does not exist");
             }
             return status;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Handle any unexpected exceptions here
             e.printStackTrace(); // Log the exception for debugging
             throw new EventRegisterException("Unable to retrieve Group Data");
@@ -140,4 +138,31 @@ public class EventRegisterServiceImpl implements EventRegisterService{
             throw new EventRegisterException("Unable to update user confirmation Data");
         }
     }
+//     public List<UserRegistrationGroupInfo> getRegistrationGroupInfo(String userId, String eventId) throws Exception {
+//         String groupId = eventRegisterRepository.getGroupId(userId, eventId);
+//         if (groupId == null) {
+//             throw new EventRegisterException("User ID / Event ID does not exist");
+//         }
+
+//         List<User> users = eventRegisterRepository.getUsersInRegistrationGroup(groupId);
+//         if (users == null) {
+//             throw new EventRegisterException("Group ID does not exist");
+//         }
+
+//         String groupLeader = eventRegisterRepository.getRegistrationGroupLeader(groupId);
+//         List<UserRegistrationGroupInfo> registrationGroupInfo = new ArrayList<>();
+
+//         for (User user : users) {
+//             boolean isConfirmed = eventRegisterRepository.checkUserConfirmationStatus(user.getId(), eventId);
+//             boolean isGroupLeader = false;
+//             if (user.getId() == groupLeader) {
+//                 isGroupLeader = true;
+//             }
+//             UserRegistrationGroupInfo userRegistrationGroupInfo = new UserRegistrationGroupInfo(
+//                     user.getId(), user.getMobile(), user.getEmail(), isConfirmed, isGroupLeader);
+//             registrationGroupInfo.add(userRegistrationGroupInfo);
+//         }
+
+//         return registrationGroupInfo;
+//     }
 }
