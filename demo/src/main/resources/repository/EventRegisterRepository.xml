@@ -16,8 +16,8 @@
     </insert>
 
     <insert id="registerUser" parameterType="map">
-        INSERT INTO confirmation_group_for_event (user_id, event_id, group_id) 
-        VALUES (#{user.id}, #{event_id}, #{group_id})
+        INSERT INTO confirmation_group_for_event (user_id, event_id, has_user_confirmed, group_id) 
+        VALUES (#{user.id}, #{event_id}, #{confirmation}, #{group_id})
     </insert>
 
     <select id="checkGroupStatus" parameterType="map" resultType="boolean">

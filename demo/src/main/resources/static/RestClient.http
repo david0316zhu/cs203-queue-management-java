@@ -18,7 +18,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/events-register/pink-sc-2024/reg-statuses/48ac90d4-ec56-40c8-9e04-4b3bd1e0339a
+GET http://localhost:8080/events-register/pink-sc-2024/reg-statuses/ff3d7270-f13f-41d3-9c2a-3819e7cba2cf
 Content-Type: application/json
 
 ###
@@ -36,9 +36,9 @@ PUT http://localhost:8080/events-register/group/event/user/confirm
 Content-Type: application/json
 
 {
-  "userId": "1",
+  "userId": "2",
   "eventId": "pink-sc-2024",
-  "groupId": "48ac90d4-ec56-40c8-9e04-4b3bd1e0339a"
+  "groupId": "ff3d7270-f13f-41d3-9c2a-3819e7cba2cf"
 }
 
 ###

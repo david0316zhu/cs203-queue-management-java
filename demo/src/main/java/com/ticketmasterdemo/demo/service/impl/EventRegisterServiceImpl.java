@@ -95,7 +95,8 @@ public class EventRegisterServiceImpl implements EventRegisterService{
     public Boolean registerUsers(List<User> userList, String groupId, String eventId, String groupLeaderEmail) {
         try {
             for (User user : userList) {
-                boolean isLeader = user.getEmail().equals(groupLeaderEmail);
+                boolean isLeaderBool = user.getEmail().equals(groupLeaderEmail);
+                int isLeader = isLeaderBool ? 1 : 0;
                 eventRegisterRepository.registerUser(user, groupId, eventId, isLeader);
             }
             return true; // User registration is successful
