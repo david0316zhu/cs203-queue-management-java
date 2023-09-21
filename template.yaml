@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CS203 G4 T4 Lambda API
+
+Resources:
+  TicketManagementAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+
+
+  TicketManagementFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      Handler: com.ticketmasterdemo.demo.StreamLambdaHandler::handleRequest
+      Runtime: java17
+      CodeUri: demo/target/demo-0.0.1-SNAPSHOT.jar
+      # Policies:
+      #   Version: '2012-10-17'
+      #   Statement:
+      #     Effect: Allow
+      #     Action:
+      #       apigateway:Invoke
+      #     Resource: 
+      #       Fn::Sub: "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${TicketManagementAPI}/*/*/*"
+      MemorySize: 1024
+      Timeout: 30
+      Events:
+        ApiEvents:
+          Type: Api 
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            RestApiId: !Ref TicketManagementAPI
+Outputs:
+  TicketManagementApiEndpoint:
+    Description: "Endpoint URL for CS203 G4 T4 APIs"
+    Value: 
+      Fn::Sub: https://${TicketManagementAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/
+

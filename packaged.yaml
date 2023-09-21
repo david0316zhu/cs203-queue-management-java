@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CS203 G4 T4 Lambda API
+Resources:
+  TicketManagementAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+    Metadata:
+      SamResourceId: TicketManagementAPI
+  TicketManagementFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.ticketmasterdemo.demo.StreamLambdaHandler::handleRequest
+      Runtime: java17
+      CodeUri: s3://aws-sam-cli-managed-default-samclisourcebucket-j73ypfaat3lw/bbb2f9913a7ea5bd656115f620a18f4c
+      MemorySize: 1024
+      Timeout: 30
+      Events:
+        ApiEvents:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            RestApiId:
+              Ref: TicketManagementAPI
+    Metadata:
+      SamResourceId: TicketManagementFunction
+Outputs:
+  TicketManagementApiEndpoint:
+    Description: Endpoint URL for CS203 G4 T4 APIs
+    Value:
+      Fn::Sub: https://${TicketManagementAPI}.execute-api.${AWS::Region}.amazonaws.com/prod/
