@@ -13,7 +13,7 @@
     </resultMap>
 
     <select id="findUserByEmailAndMobile" resultMap="userResultMap" parameterType="map">
-        SELECT * FROM user WHERE email = #{email} and mobile_number = #{mobile} and is_verified = 1
+        SELECT * FROM user WHERE email = #{email} and mobile_number = #{mobile}
     </select>
 
     <select id="findUserByEmail" resultMap="userResultMap" parameterType="map">

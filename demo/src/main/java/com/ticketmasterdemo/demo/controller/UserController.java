@@ -32,7 +32,6 @@ public class UserController {
 
     @GetMapping("/email/{email}/mobile/{mobile}")
     public ResponseEntity<?> getUserByEmailAndMobile(@PathVariable String email, @PathVariable String mobile) {
-        System.out.println("email" + email + ", mobile = " + mobile);
         try{
             User user = userService.getUser(email, mobile);
             return ResponseEntity.ok().body(user);

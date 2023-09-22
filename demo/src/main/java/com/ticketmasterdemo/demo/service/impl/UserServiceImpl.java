@@ -32,10 +32,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUserVerified(String email, String mobile) {
-        if (email == null || mobile == null)
-            throw new InvalidArgsException("mobile and email is invalid");
-
-        User user = userRepository.findUserByEmailAndMobile(email, mobile);
+        
+        User user = getUser(email, mobile);
         return (user != null) && user.isVerified();
     }
 
