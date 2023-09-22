@@ -1,5 +1,10 @@
 package com.ticketmasterdemo.demo.service.impl;
 
+import java.security.DrbgParameters.Reseed;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,9 +37,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isUserVerified(String email, String mobile) {
-        
-        User user = getUser(email, mobile);
-        return (user != null) && user.isVerified();
+        try {
+           User user = getUser(email, mobile);
+           return (user != null) && user.isVerified(); 
+        } catch(UserException e){
+            return false;
+        }
     }
 
     @Override
@@ -45,4 +53,15 @@ public class UserServiceImpl implements UserService {
         return (user != null) && user.isVerified();
     }
 
+    public List<Boolean> verifyMultiple(List<String> emailList, List<String> mobileList) {
+        if (emailList == null || mobileList == null || emailList.size() != mobileList.size()) {
+            throw new InvalidArgsException("email list or mobile list provided is invalid.");
+        }
+        List<Boolean> output = new ArrayList<>();
+        Iterator<String> emailIter = emailList.iterator(), mobileIter = mobileList.iterator();
+        while (emailIter.hasNext() && mobileIter.hasNext()) {
+            output.add(isUserVerified(emailIter.next(), mobileIter.next()));
+        }
+        return output;
+    }
 }

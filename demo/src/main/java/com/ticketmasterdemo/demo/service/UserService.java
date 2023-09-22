@@ -1,5 +1,7 @@
 package com.ticketmasterdemo.demo.service;
 
+import java.util.List;
+
 import com.ticketmasterdemo.demo.dto.User;
 
 public interface UserService {
@@ -9,4 +11,5 @@ public interface UserService {
     
     public User getUser(String email, String mobile);
     
+    public List<Boolean> verifyMultiple(List<String> emailList, List<String> mobileList);
 }

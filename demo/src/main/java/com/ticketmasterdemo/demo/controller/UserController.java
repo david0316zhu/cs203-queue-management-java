@@ -1,5 +1,8 @@
 package com.ticketmasterdemo.demo.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,29 +18,28 @@ import com.ticketmasterdemo.demo.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @RestController
 @Slf4j
 @CrossOrigin
 @RequestMapping("/users")
 public class UserController {
-    
+
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("")
     public ResponseEntity<?> getUserByEmailAndMobile(@RequestParam String email, @RequestParam String mobile) {
-        try{
+        try {
             User user = userService.getUser(email, mobile);
             return ResponseEntity.ok().body(user);
-        } catch (InvalidArgsException e){
+        } catch (InvalidArgsException e) {
             log.error("Get-user error: ", e);
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }
@@ -47,14 +49,27 @@ public class UserController {
         try {
             boolean success = userService.isUserVerified(email, mobile);
             return ResponseEntity.ok().body(success);
+        } catch (InvalidArgsException e) {
+            log.error("User verification error: ", e);
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/verify-multiple")
+    public ResponseEntity<?> verifyMultipleUsers(
+            @RequestParam List<String> emailList, @RequestParam List<String> mobileList) {
+
+        try {
+            List<Boolean> output = userService.verifyMultiple(emailList, mobileList);
+            return ResponseEntity.ok().body(output);
         } catch (InvalidArgsException e){
-            log.error("User verification error: " , e);
+            log.error("Verify multiple error: ", e);
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
         } catch (Exception e){
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }
 
-
 }
-
