@@ -25,22 +25,26 @@ public class JwtUtil {
     }
 
     public static String generateToken(int userId) {
+        return generateToken(String.valueOf(userId));
+    }
+
+    public static String generateToken(String userIdStr) { 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         byte[] secretKeyBytes = Base64.getDecoder().decode(secretKey);
         Key signingKey = Keys.hmacShaKeyFor(secretKeyBytes);
 
         Date now = new Date();
         Date tokenExpiration = new Date(now.getTime() + TOKEN_VALIDITY_MILLIS);
-
+        
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .setSubject(userIdStr)
                 .setIssuedAt(now)
                 .setExpiration(tokenExpiration)
                 .signWith(signingKey, signatureAlgorithm)
                 .compact();
     }
 
-    public static int verifyToken(String token) throws JwtException {
+    public static String verifyToken(String token) throws JwtException {
         try {
             byte[] secretKeyBytes = Base64.getDecoder().decode(secretKey);
             Key signingKey = Keys.hmacShaKeyFor(secretKeyBytes);
@@ -51,7 +55,7 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
 
-            return Integer.parseInt(claims.getSubject());
+            return claims.getSubject();
         } catch (JwtException e) {
             throw new JwtException("Invalid JWT token", e);
         }
