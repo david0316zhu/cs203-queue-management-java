@@ -11,4 +11,6 @@ public interface UserRepository {
     
     User findUserByEmailAndMobile(@Param("email") String email, @Param("mobile") String mobile);
     User findUserByEmail(@Param("email") String email);
+
+    String retrieveUserForAuth(@Param("email") String email, @Param("mobile") String mobile);
 }
