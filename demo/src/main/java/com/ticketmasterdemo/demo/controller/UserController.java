@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.service.UserService;
+import com.ticketmasterdemo.demo.util.JwtUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,5 +76,20 @@ public class UserController {
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }
-
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user){
+        try{
+            if (userService.authenticateUser(user.getEmail(), user.getMobile(), user.getPassword())){
+                String jwt = JwtUtil.generateToken(user.getMobile()); // I'm lazy
+                return ResponseEntity.ok().body(jwt);
+            } 
+            return ResponseEntity.ok().body(false);
+        } catch (InvalidArgsException e){
+            log.error("Verify multiple error: ", e);
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        } catch (Exception e){
+            System.out.println(e.getStackTrace());
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
 }

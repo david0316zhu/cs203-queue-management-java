@@ -65,4 +65,13 @@ public class UserServiceImpl implements UserService {
         }
         return output;
     }
+
+    @Override
+    public boolean authenticateUser(String email, String mobile, String password){
+        if (email == null || mobile == null || password == null) {
+            throw new InvalidArgsException("invalid login credentials - failed preliminary check");
+        } 
+        String userPwd = userRepository.retrieveUserForAuth(email, mobile);
+        return password.equals(userPwd);
+    }
 }

@@ -12,4 +12,6 @@ public interface UserService {
     public User getUser(String email, String mobile);
     
     public List<Boolean> verifyMultiple(List<String> emailList, List<String> mobileList);
+    
+    public boolean authenticateUser(String email, String mobile, String password);
 }
