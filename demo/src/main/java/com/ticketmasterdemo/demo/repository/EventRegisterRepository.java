@@ -14,8 +14,9 @@ public interface EventRegisterRepository {
     Boolean checkGroupStatus(@Param("group_id") String groupId, @Param("event_id") String eventId);
     int updateUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId, @Param("user_id") String userId);
     Boolean checkUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId, @Param("user_id") String userId);
-    String getGroupId(@Param("user_id") String userId, @Param("event_id") String eventId);
-    List<User> getUsersInRegistrationGroup(@Param("group_id") String groupId);
+    String getRegistrationGroupId(@Param("user_id") String userId, @Param("event_id") String eventId);
+    // might be redundant
     Boolean checkUserConfirmationStatus(@Param("user_id") String userId, @Param("event_id") String eventId);
     String getRegistrationGroupLeader(@Param("group_id") String groupId);
+    List<User> getUsersInfoInRegistrationGroup(@Param("group_id") String groupId);
 }

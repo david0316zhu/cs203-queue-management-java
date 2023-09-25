@@ -138,31 +138,31 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             throw new EventRegisterException("Unable to update user confirmation Data");
         }
     }
-//     public List<UserRegistrationGroupInfo> getRegistrationGroupInfo(String userId, String eventId) throws Exception {
-//         String groupId = eventRegisterRepository.getGroupId(userId, eventId);
-//         if (groupId == null) {
-//             throw new EventRegisterException("User ID / Event ID does not exist");
-//         }
+    public List<UserRegistrationGroupInfo> getRegistrationGroupInfo(String userId, String eventId) throws Exception {
+        String groupId = eventRegisterRepository.getRegistrationGroupId(userId, eventId);
+        if (groupId == null) {
+            throw new EventRegisterException("User ID / Event ID does not exist");
+        }
 
-//         List<User> users = eventRegisterRepository.getUsersInRegistrationGroup(groupId);
-//         if (users == null) {
-//             throw new EventRegisterException("Group ID does not exist");
-//         }
+        List<User> users = eventRegisterRepository.getUsersInfoInRegistrationGroup(groupId);
+        if (users == null) {
+            throw new EventRegisterException("Group ID does not exist");
+        }
 
-//         String groupLeader = eventRegisterRepository.getRegistrationGroupLeader(groupId);
-//         List<UserRegistrationGroupInfo> registrationGroupInfo = new ArrayList<>();
+        String groupLeader = eventRegisterRepository.getRegistrationGroupLeader(groupId);
+        List<UserRegistrationGroupInfo> registrationGroupInfo = new ArrayList<>();
 
-//         for (User user : users) {
-//             boolean isConfirmed = eventRegisterRepository.checkUserConfirmationStatus(user.getId(), eventId);
-//             boolean isGroupLeader = false;
-//             if (user.getId() == groupLeader) {
-//                 isGroupLeader = true;
-//             }
-//             UserRegistrationGroupInfo userRegistrationGroupInfo = new UserRegistrationGroupInfo(
-//                     user.getId(), user.getMobile(), user.getEmail(), isConfirmed, isGroupLeader);
-//             registrationGroupInfo.add(userRegistrationGroupInfo);
-//         }
+        for (User user : users) {
+            boolean isConfirmed = eventRegisterRepository.checkUserConfirmationStatus(user.getId(), eventId);
+            boolean isGroupLeader = false;
+            if (user.getId() == groupLeader) {
+                isGroupLeader = true;
+            }
+            UserRegistrationGroupInfo userRegistrationGroupInfo = new UserRegistrationGroupInfo(
+                    user.getId(), user.getMobile(), user.getEmail(), isConfirmed, isGroupLeader);
+            registrationGroupInfo.add(userRegistrationGroupInfo);
+        }
 
-//         return registrationGroupInfo;
-//     }
+        return registrationGroupInfo;
+    }
 }
