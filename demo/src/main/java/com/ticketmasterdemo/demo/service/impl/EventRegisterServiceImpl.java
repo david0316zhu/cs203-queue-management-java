@@ -31,7 +31,8 @@ public class EventRegisterServiceImpl implements EventRegisterService {
     private final UserRepository userRepository;
 
     @Autowired
-    public EventRegisterServiceImpl(UserRepository userRepository, EventRepository eventRepository, EventRegisterRepository eventRegisterRepository) {
+    public EventRegisterServiceImpl(UserRepository userRepository, EventRepository eventRepository,
+            EventRegisterRepository eventRegisterRepository) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
         this.eventRegisterRepository = eventRegisterRepository;
@@ -148,16 +149,10 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         }
 
         List<UserInfo> userInfoList = userRepository.getAllUserInfo(groupId);
-        if (userInfoList == null) {
-            throw new UserException("Group ID does not exist");
-        }
 
         Boolean hasAllUsersConfirmed = eventRegisterRepository.checkGroupStatus(groupId, eventId);
 
         List<Queue> queueList = eventRepository.retrieveAllQueuesForSpecificGroup(groupId);
-        if (queueList == null) {
-            throw new EventRegisterException("Queue list null");
-        }
 
         return new RegistrationInfo(groupId, userInfoList, hasAllUsersConfirmed, queueList);
     }
