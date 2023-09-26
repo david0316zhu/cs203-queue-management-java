@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketmasterdemo.demo.common.exception.EventException;
 import com.ticketmasterdemo.demo.dto.Event;
+import com.ticketmasterdemo.demo.dto.Show;
 import com.ticketmasterdemo.demo.service.EventService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +57,20 @@ public class EventController {
         catch (Exception e) {
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         } 
+    }
+
+    @GetMapping("/{eventId}/shows")
+    public ResponseEntity<?> getShowsForSpecificEvent(@PathVariable String eventId) {
+        try {
+            List<Show> allShowsForSpecificEvent = eventService.getAllShowsForSpecificEvent(eventId);
+            return new ResponseEntity<>(allShowsForSpecificEvent, HttpStatus.OK);
+        }
+        catch (EventException e) {
+            return ResponseEntity.status(404).body("Event Error: " + e.getMessage());
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
     }
     
 }
