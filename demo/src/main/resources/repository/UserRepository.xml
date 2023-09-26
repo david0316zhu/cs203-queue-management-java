@@ -13,11 +13,11 @@
     </resultMap>
 
     <select id="findUserByEmailAndMobile" resultMap="userResultMap" parameterType="map">
-        SELECT mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and mobile_number = #{mobile}
+        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and mobile_number = #{mobile}
     </select>
 
     <select id="findUserByEmail" resultMap="userResultMap" parameterType="map">
-        SELECT mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and is_verified = 1
+        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and is_verified = 1
     </select>
 
     <select id="retrieveUserForAuth" resultType = "java.lang.String" parameterType="map">

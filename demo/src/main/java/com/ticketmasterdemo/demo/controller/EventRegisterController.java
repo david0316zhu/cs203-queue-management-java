@@ -2,6 +2,7 @@ package com.ticketmasterdemo.demo.controller;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
+import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.Status;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
+import com.ticketmasterdemo.demo.service.enums.ValStatus;
 
 @RestController
 @Slf4j
@@ -41,30 +45,27 @@ public class EventRegisterController {
             form.setGroupSize(form.getUserGroup().size());
             Registration responseForm = eventRegisterService.registerGroup(form);
             return new ResponseEntity<>(responseForm, HttpStatus.OK);
-        }
-        catch (UserException e){
+        } catch (UserException e) {
             log.error("User registration error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("Insert registration error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
     }
 
     @GetMapping("/{eventId}/reg-statuses/{groupId}")
-    public ResponseEntity<?> getGroupEventRegistrationStatus(@PathVariable String eventId, @PathVariable String groupId) {
+    public ResponseEntity<?> getGroupEventRegistrationStatus(@PathVariable String eventId,
+            @PathVariable String groupId) {
         try {
             Boolean groupEventRegistrationStatus = eventRegisterService.checkGroupRegistrationStatus(groupId, eventId);
             Status responseStatus = new Status();
             responseStatus.setStatus(groupEventRegistrationStatus);
             return new ResponseEntity<>(responseStatus, HttpStatus.OK);
-        }
-        catch (EventRegisterException e){
+        } catch (EventRegisterException e) {
             log.error("Event registration error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("Event registration status error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
@@ -73,18 +74,35 @@ public class EventRegisterController {
     @PutMapping("/group/event/user/confirm")
     public ResponseEntity<?> updateGroupEventUserConfirmation(@RequestBody Map<String, String> requestData) {
         try {
-            Boolean groupEventUserStatus = eventRegisterService.updateEventGroupUserConfirmation(requestData.get("userId"), requestData.get("eventId"), requestData.get("groupId"));
+            Boolean groupEventUserStatus = eventRegisterService.updateEventGroupUserConfirmation(
+                    requestData.get("userId"), requestData.get("eventId"), requestData.get("groupId"));
             Status responseStatus = new Status();
             responseStatus.setStatus(groupEventUserStatus);
             return new ResponseEntity<>(responseStatus, HttpStatus.OK);
-        }
-        catch (EventRegisterException e){
+        } catch (EventRegisterException e) {
             log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
+
+    /*
+     * Checks if a list of users is verified AND has not been enrolled in another group prior to this.
+     */
+    @GetMapping("/validate-multiple")
+    public ResponseEntity<?> verifyMultipleUsers(
+            @RequestParam List<String> emailList, @RequestParam List<String> mobileList, @RequestParam String eventID) {
+
+        try {
+            List<ValStatus> output = eventRegisterService.validateGroup(emailList, mobileList, eventID);
+            return ResponseEntity.ok().body(output);
+        } catch (InvalidArgsException e) {
+            log.error("Verify multiple error: ", e);
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }
 

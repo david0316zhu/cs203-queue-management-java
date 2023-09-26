@@ -62,20 +62,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/verify-multiple")
-    public ResponseEntity<?> verifyMultipleUsers(
-            @RequestParam List<String> emailList, @RequestParam List<String> mobileList) {
-
-        try {
-            List<Boolean> output = userService.verifyMultiple(emailList, mobileList);
-            return ResponseEntity.ok().body(output);
-        } catch (InvalidArgsException e){
-            log.error("Verify multiple error: ", e);
-            return ResponseEntity.unprocessableEntity().body(e.getMessage());
-        } catch (Exception e){
-            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
-        }
-    }
     @PostMapping("/auth/login")
     public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user){
         try{
