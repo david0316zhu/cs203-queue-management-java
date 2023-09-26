@@ -25,9 +25,21 @@ public class EventServiceImpl implements EventService{
     }
     
     @Override
-    public List<Event> getAllEvents() {
-        List<Event> allEvents = eventRepository.retrieveAllEvents();
-        return allEvents;
+    public List<Event> getAllEvents(boolean onlyHighlighted) {
+        List<Event> eventsList = null;
+        if(onlyHighlighted){
+
+            eventsList = eventRepository.retrieveHighlightedEventInfo();
+
+            // Update the eventsList with countries.
+            for (Event event: eventsList){
+                List<String> countries = eventRepository.retrieveAllCountriesForSpecificEvent(event.getId());
+                event.setCountries(countries);
+            }
+        } else {
+            eventsList = eventRepository.retrieveAllEvents();
+        }
+        return eventsList;
     }
 
     @Override
