@@ -23,7 +23,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             return false;
         }
         try {
-            int userId = JwtUtil.verifyToken(token.substring(7));
+            String userId = JwtUtil.verifyToken(token.substring(7));
             boolean tokenAboutToExpire = JwtUtil.isTokenAboutToExpire(token.substring(7));
             if (tokenAboutToExpire) {
                 String newToken = JwtUtil.generateToken(userId);
