@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserRegistrationGroupInfo {
+public class UserInfo {
     private String id;
     private String mobile;
     private String email;

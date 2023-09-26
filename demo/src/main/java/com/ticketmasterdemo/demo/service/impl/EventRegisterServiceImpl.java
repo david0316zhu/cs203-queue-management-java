@@ -10,7 +10,8 @@ import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
-import com.ticketmasterdemo.demo.dto.UserRegistrationGroupInfo;
+import com.ticketmasterdemo.demo.dto.UserInfo;
+import com.ticketmasterdemo.demo.dto.RegistrationInfo;
 import com.ticketmasterdemo.demo.repository.EventRegisterRepository;
 import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
@@ -138,31 +139,18 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             throw new EventRegisterException("Unable to update user confirmation Data");
         }
     }
-    public List<UserRegistrationGroupInfo> getRegistrationGroupInfo(String userId, String eventId) throws Exception {
+
+    @Override
+    public List<RegistrationInfo> getRegistrationGroupInfo(String userId, String eventId) {
         String groupId = eventRegisterRepository.getRegistrationGroupId(userId, eventId);
         if (groupId == null) {
             throw new EventRegisterException("User ID / Event ID does not exist");
         }
 
-        List<User> users = eventRegisterRepository.getUsersInfoInRegistrationGroup(groupId);
-        if (users == null) {
-            throw new EventRegisterException("Group ID does not exist");
-        }
+        List<UserInfo> userInfoList = eventRegisterRepository.getAllUserInfo(groupId);
 
-        String groupLeader = eventRegisterRepository.getRegistrationGroupLeader(groupId);
-        List<UserRegistrationGroupInfo> registrationGroupInfo = new ArrayList<>();
+        Boolean hasAllUsersConfirmed = eventRegisterRepository.checkGroupStatus(groupId, eventId);
+        return null;
 
-        for (User user : users) {
-            boolean isConfirmed = eventRegisterRepository.checkUserConfirmationStatus(user.getId(), eventId);
-            boolean isGroupLeader = false;
-            if (user.getId() == groupLeader) {
-                isGroupLeader = true;
-            }
-            UserRegistrationGroupInfo userRegistrationGroupInfo = new UserRegistrationGroupInfo(
-                    user.getId(), user.getMobile(), user.getEmail(), isConfirmed, isGroupLeader);
-            registrationGroupInfo.add(userRegistrationGroupInfo);
-        }
-
-        return registrationGroupInfo;
     }
 }
