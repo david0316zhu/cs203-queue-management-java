@@ -12,7 +12,9 @@ import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.dto.UserInfo;
 import com.ticketmasterdemo.demo.dto.RegistrationInfo;
+import com.ticketmasterdemo.demo.dto.Queue;
 import com.ticketmasterdemo.demo.repository.EventRegisterRepository;
+import com.ticketmasterdemo.demo.repository.EventRepository;
 import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
 import com.ticketmasterdemo.demo.util.Utility;
@@ -25,11 +27,13 @@ import lombok.extern.slf4j.Slf4j;
 public class EventRegisterServiceImpl implements EventRegisterService {
 
     private final EventRegisterRepository eventRegisterRepository;
+    private final EventRepository eventRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public EventRegisterServiceImpl(UserRepository userRepository, EventRegisterRepository eventRegisterRepository) {
+    public EventRegisterServiceImpl(UserRepository userRepository, EventRepository eventRepository, EventRegisterRepository eventRegisterRepository) {
         this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
         this.eventRegisterRepository = eventRegisterRepository;
     }
 
@@ -49,18 +53,15 @@ public class EventRegisterServiceImpl implements EventRegisterService {
                 if (verifiedUser == null) {
                     throw new UserException("Email(s) in group are not registered as users");
                 }
-                
-                
+
                 if (verifiedUser != null && !verifiedUser.isVerified()) {
                     throw new UserException("User(s) in group are not verified"); // User is not authenticated
                 }
                 System.out.println(user.getEmail() + "and" + user.getMobile());
                 responseUserList.add(verifiedUser);
-            }
-            catch (UserException e) {
+            } catch (UserException e) {
                 throw new UserException(e.getMessage());
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 throw new UserException("User Error!");
             }
         }
@@ -106,12 +107,12 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             return false;
         }
     }
-    
+
     @Override
     public Boolean checkGroupRegistrationStatus(String groupId, String eventId) {
         try {
             Boolean status = eventRegisterRepository.checkGroupStatus(groupId, eventId);
-            
+
             if (status == null) {
                 throw new EventRegisterException("Group ID/Event ID does not exist");
             }
@@ -127,30 +128,37 @@ public class EventRegisterServiceImpl implements EventRegisterService {
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateEventGroupUserConfirmation(String userId, String eventId, String groupId) {
         try {
-            eventRegisterRepository.updateUserStatus(groupId, eventId,userId);
+            eventRegisterRepository.updateUserStatus(groupId, eventId, userId);
             Boolean status = eventRegisterRepository.checkUserStatus(groupId, eventId, userId);
             if (status == null) {
                 throw new EventRegisterException("User ID/Group ID/Event ID does not match");
             }
             return status;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace(); // Log the exception for debugging
             throw new EventRegisterException("Unable to update user confirmation Data");
         }
     }
 
     @Override
-    public List<RegistrationInfo> getRegistrationGroupInfo(String userId, String eventId) {
+    public RegistrationInfo getRegistrationGroupInfo(String userId, String eventId) {
         String groupId = eventRegisterRepository.getRegistrationGroupId(userId, eventId);
         if (groupId == null) {
             throw new EventRegisterException("User ID / Event ID does not exist");
         }
 
-        List<UserInfo> userInfoList = eventRegisterRepository.getAllUserInfo(groupId);
+        List<UserInfo> userInfoList = userRepository.getAllUserInfo(groupId);
+        if (userInfoList == null) {
+            throw new UserException("Group ID does not exist");
+        }
 
         Boolean hasAllUsersConfirmed = eventRegisterRepository.checkGroupStatus(groupId, eventId);
-        return null;
 
+        List<Queue> queueList = eventRepository.retrieveAllQueuesForSpecificGroup(groupId);
+        if (queueList == null) {
+            throw new EventRegisterException("Queue list null");
+        }
+
+        return new RegistrationInfo(groupId, userInfoList, hasAllUsersConfirmed, queueList);
     }
 }

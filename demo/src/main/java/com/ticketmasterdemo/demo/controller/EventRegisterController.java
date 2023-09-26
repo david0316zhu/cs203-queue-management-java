@@ -3,7 +3,7 @@ package com.ticketmasterdemo.demo.controller;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
+import com.ticketmasterdemo.demo.dto.RegistrationInfo;
 import com.ticketmasterdemo.demo.dto.Status;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
 
@@ -88,4 +89,18 @@ public class EventRegisterController {
         }
     }
 
+    @GetMapping("/{eventId}/user/{userId}/group-info")
+    public ResponseEntity<?> getRegistrationGroupInfo(@PathVariable String eventId, @PathVariable String userId) {
+        try {
+            RegistrationInfo registrationGroupInfo = eventRegisterService.getRegistrationGroupInfo(userId, eventId);
+            return new ResponseEntity<>(registrationGroupInfo, HttpStatus.OK);
+        } catch (EventRegisterException e){
+            log.error("Event registration error: ", e);
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+        catch (Exception e){
+            log.error("Event registration status error: ", e);
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
 }

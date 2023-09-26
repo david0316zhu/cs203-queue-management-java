@@ -10,14 +10,6 @@
         <result column="group_size" property="groupSize"/>
     </resultMap>
 
-    <resultMap id="userInfoResultMap" type="com.ticketmasterdemo.demo.dto.UserInfo">
-        <id column="user_id" property="id"/>
-        <result column="mobile_number" property="mobile"/>
-        <result column="email" property="email"/>
-        <result column="has_user_confirmed" property="isConfirmed"/>
-        <result column="is_group_leader" property="isGroupLeader"/>
-    </resultMap>
-
     <insert id="registerGroup" parameterType="com.ticketmasterdemo.demo.dto.Registration">
         INSERT INTO registration_group_for_event (group_id, group_size, event_id, group_leader) 
         VALUES (#{id}, #{groupSize}, #{eventId}, #{groupLeaderId})
@@ -57,14 +49,5 @@
         FROM registration_group_for_event
         WHERE group_id=#{group_id}
     </select>
-    
-    <select id="getAllUserInfo" parameterType="map" resultMap="userInfoResultMap">
-        SELECT u.user_id, u.mobile_number, u.email, c.has_user_confirmed, 
-        (u.user_id = (SELECT group_leader FROM registration_group_for_event WHERE group_id = #{group_id}))
-        AS is_group_leader
-        FROM confirmation_group_for_event c 
-        INNER JOIN user u 
-        ON u.user_id = c.user_id
-        WHERE c.group_id=#{group_id}
-    </select>
+
 </mapper>

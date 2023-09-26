@@ -14,4 +14,5 @@ public class RegistrationInfo {
     String groupId;
     List<UserInfo> userInfoList;
     Boolean hasAllUsersConfirmed;
+    List<Queue> queueList;
 }

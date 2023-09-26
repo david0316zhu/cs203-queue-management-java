@@ -34,6 +34,7 @@
     <resultMap id="queueResultMap" type="com.ticketmasterdemo.demo.dto.Queue">
         <id column="queue_id" property="queueId"/>
         <result column="show_id" property="showId"/>
+        <result column="event_id" property="eventId"/>
         <result column="queue_start_datetime" property="startDateTime"/>
         <result column="queue_end_datetime" property="endDatetime"/>
     </resultMap>
@@ -48,5 +49,12 @@
     <select id="retrieveAllQueuesForSpecificEvent" parameterType="map" resultMap="queueResultMap">
         SELECT * FROM queue
         WHERE event_id = #{event_id}
+    </select>
+
+    <select id="retrieveAllQueuesForSpecificGroup" parameterType="map" resultMap="queueResultMap">
+        SELECT q.queue_id, q.queue_start_datetime, q.queue_end_datetime, q.show_id, q.event_id
+        FROM queue q 
+        INNER JOIN registration_group_for_queue r ON q.queue_id = r.queue_id
+        WHERE r.group_id =#{group_id}
     </select>
 </mapper>

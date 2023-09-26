@@ -12,5 +12,5 @@ public interface EventRegisterService {
     public Boolean registerUsers(List<User> userList, String groupId, String eventId, String groupLeaderEmail);
     public Boolean checkGroupRegistrationStatus(String groupId, String eventId);
     public Boolean updateEventGroupUserConfirmation(String userId, String eventId, String groupId);
-    public List<RegistrationInfo> getRegistrationGroupInfo(String userId, String eventId);
+    public RegistrationInfo getRegistrationGroupInfo(String userId, String eventId);
 }
