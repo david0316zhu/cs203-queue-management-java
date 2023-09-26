@@ -14,8 +14,11 @@ import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
-import com.ticketmasterdemo.demo.dto.UserRegistrationGroupInfo;
+import com.ticketmasterdemo.demo.dto.UserInfo;
+import com.ticketmasterdemo.demo.dto.RegistrationInfo;
+import com.ticketmasterdemo.demo.dto.Queue;
 import com.ticketmasterdemo.demo.repository.EventRegisterRepository;
+import com.ticketmasterdemo.demo.repository.EventRepository;
 import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
 import com.ticketmasterdemo.demo.service.enums.ValStatus;
@@ -29,11 +32,14 @@ import lombok.extern.slf4j.Slf4j;
 public class EventRegisterServiceImpl implements EventRegisterService {
 
     private final EventRegisterRepository eventRegisterRepository;
+    private final EventRepository eventRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public EventRegisterServiceImpl(UserRepository userRepository, EventRegisterRepository eventRegisterRepository) {
+    public EventRegisterServiceImpl(UserRepository userRepository, EventRepository eventRepository,
+            EventRegisterRepository eventRegisterRepository) {
         this.userRepository = userRepository;
+        this.eventRepository = eventRepository;
         this.eventRegisterRepository = eventRegisterRepository;
     }
 
@@ -56,12 +62,11 @@ public class EventRegisterServiceImpl implements EventRegisterService {
                     throw new UserException("User(s) in group are not verified"); // User is not authenticated
                 }
                 responseUserList.add(verifiedUser);
-            }
-            catch (UserException e) {
-                log.info(e.getMessage());
+            } catch (UserException e) {
                 throw new UserException(e.getMessage());
+            } catch (Exception e) {
+                throw new UserException("User Error!");
             }
-
         }
         form.setUserGroup(responseUserList);
 
@@ -157,32 +162,22 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             throw new EventRegisterException("Unable to update user confirmation Data");
         }
     }
-    public List<UserRegistrationGroupInfo> getRegistrationGroupInfo(String userId, String eventId) throws Exception {
+
+    @Override
+    public RegistrationInfo getRegistrationGroupInfo(String userId, String eventId) {
         String groupId = eventRegisterRepository.getRegistrationGroupId(userId, eventId);
         if (groupId == null) {
             throw new EventRegisterException("User ID / Event ID does not exist");
         }
 
-        List<User> users = eventRegisterRepository.getUsersInfoInRegistrationGroup(groupId);
-        if (users == null) {
-            throw new EventRegisterException("Group ID does not exist");
-        }
+        List<UserInfo> userInfoList = userRepository.getAllUserInfo(groupId);
 
-        String groupLeader = eventRegisterRepository.getRegistrationGroupLeader(groupId);
-        List<UserRegistrationGroupInfo> registrationGroupInfo = new ArrayList<>();
+        Boolean hasAllUsersConfirmed = eventRegisterRepository.checkGroupStatus(groupId, eventId);
 
-        for (User user : users) {
-            boolean isConfirmed = eventRegisterRepository.checkUserConfirmationStatus(user.getId(), eventId);
-            boolean isGroupLeader = false;
-            if (user.getId() == groupLeader) {
-                isGroupLeader = true;
-            }
-            UserRegistrationGroupInfo userRegistrationGroupInfo = new UserRegistrationGroupInfo(
-                    user.getId(), user.getMobile(), user.getEmail(), isConfirmed, isGroupLeader);
-            registrationGroupInfo.add(userRegistrationGroupInfo);
-        }
+        List<Queue> queueList = eventRepository.retrieveAllQueuesForSpecificGroup(groupId);
 
-        return registrationGroupInfo;
+        return new RegistrationInfo(groupId, userInfoList, hasAllUsersConfirmed, queueList);
+    }
 
     @Override
     public List<ValStatus> validateGroup(List<String> emailList, List<String> mobileList, String eventID) {

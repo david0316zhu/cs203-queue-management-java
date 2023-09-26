@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.dto.UserInfo;
 
 @Mapper
 public interface EventRegisterRepository {
@@ -30,4 +31,5 @@ public interface EventRegisterRepository {
             @Param("user_id") String userId);
 
     int userGroupForEventCount(@Param("user_id") String userId, @Param("event_id") String eventId);
+    String getRegistrationGroupLeader(@Param("group_id") String groupId);
 }
