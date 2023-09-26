@@ -13,4 +13,5 @@ public interface EventRegisterRepository {
     Boolean checkGroupStatus(@Param("group_id") String groupId, @Param("event_id") String eventId);
     int updateUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId, @Param("user_id") String userId);
     Boolean checkUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId, @Param("user_id") String userId);
+    Boolean isGroupLeader(@Param("group_id") String groupId, @Param("user_id") String userId);
 }

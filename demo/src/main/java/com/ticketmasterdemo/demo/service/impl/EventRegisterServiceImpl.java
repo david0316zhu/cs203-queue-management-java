@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
+import com.ticketmasterdemo.demo.dto.AddMember;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.repository.EventRegisterRepository;
@@ -40,26 +42,7 @@ public class EventRegisterServiceImpl implements EventRegisterService{
         List<User> userList = form.getUserGroup();
         List<User> responseUserList = new ArrayList<>();
 
-        for (User user : userList) {
-            try {
-                log.info("Verify user: " + user.getEmail() + ", " + user.getMobile());
-                User verifiedUser = userRepository.findUserByEmailAndMobile(user.getEmail(), user.getMobile());
-                if (verifiedUser == null) {
-                    throw new UserException("Email(s) in group are not registered as users");
-                }
-                
-                
-                if (verifiedUser != null && !verifiedUser.isVerified()) {
-                    throw new UserException("User(s) in group are not verified"); // User is not authenticated
-                }
-                responseUserList.add(verifiedUser);
-            }
-            catch (UserException e) {
-                log.info(e.getMessage());
-                throw new UserException(e.getMessage());
-            }
-
-        }
+        responseUserList = this.verifyUser(userList);
         form.setUserGroup(responseUserList);
 
         Utility util = new Utility();
@@ -155,5 +138,41 @@ public class EventRegisterServiceImpl implements EventRegisterService{
             e.printStackTrace(); // Log the exception for debugging
             throw new EventRegisterException("Unable to update user confirmation Data");
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean addUsersToGroup(AddMember form){
+        if (!eventRegisterRepository.isGroupLeader(form.getGroupId(), form.getUserId())) {
+            throw new EventRegisterException("User ID is not a group leader!");
+        }
+        List<User> verifiedUsers = verifyUser(form.getUserGroup());
+        registerUsers(verifiedUsers, form.getGroupId(), form.getEventId(), form.getUserId());
+        return true;
+    }
+
+    public List<User> verifyUser(List<User> userList){
+        List<User> verifiedUserList = new ArrayList<>();
+        for (User user : userList) {
+            try {
+                User verifiedUser = userRepository.findUserByEmailAndMobile(user.getEmail(), user.getMobile());
+                if (verifiedUser == null) {
+                    throw new UserException("Email(s) in group are not registered as users");
+                }
+                
+                
+                if (verifiedUser != null && !verifiedUser.isVerified()) {
+                    throw new UserException("User(s) in group are not verified"); // User is not authenticated
+                }
+                verifiedUserList.add(verifiedUser);
+            }
+            catch (UserException e) {
+                throw new UserException(e.getMessage());
+            }
+            catch (Exception e){
+                throw new UserException("User Error!");
+            }
+        }
+        return verifiedUserList;
     }
 }

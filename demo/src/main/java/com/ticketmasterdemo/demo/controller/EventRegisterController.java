@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
+import com.ticketmasterdemo.demo.dto.AddMember;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.Status;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
@@ -76,6 +77,23 @@ public class EventRegisterController {
             Boolean groupEventUserStatus = eventRegisterService.updateEventGroupUserConfirmation(requestData.get("userId"), requestData.get("eventId"), requestData.get("groupId"));
             Status responseStatus = new Status();
             responseStatus.setStatus(groupEventUserStatus);
+            return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+        }
+        catch (EventRegisterException e){
+            log.error("Event Group User confirmation error: ", e);
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+        catch (Exception e){
+            log.error("Event Group User confirmation error: ", e);
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
+    @PostMapping("/group/event/add-member")
+    public ResponseEntity<?> addUserGroupEvent(@RequestBody AddMember form) {
+        try {
+            Boolean addUsersStatus = eventRegisterService.addUsersToGroup(form);
+            Status responseStatus = new Status();
+            responseStatus.setStatus(addUsersStatus);
             return new ResponseEntity<>(responseStatus, HttpStatus.OK);
         }
         catch (EventRegisterException e){
