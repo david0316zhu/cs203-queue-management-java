@@ -28,7 +28,8 @@ import com.ticketmasterdemo.demo.service.enums.ValStatus;
 
 @RestController
 @Slf4j
-@CrossOrigin(allowedHeaders = {"*"}, exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
+@CrossOrigin
+// @CrossOrigin(allowedHeaders = {"*"}, exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
 @RequestMapping("/events-register")
 public class EventRegisterController {
 

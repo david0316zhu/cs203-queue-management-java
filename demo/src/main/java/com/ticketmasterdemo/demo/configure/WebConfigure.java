@@ -7,19 +7,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
-public class WebConfigure implements WebMvcConfigurer {
-    private final JwtInterceptor jwtInterceptor;
+// @Configuration
+// public class WebConfigure implements WebMvcConfigurer {
+//     private final JwtInterceptor jwtInterceptor;
 
-    @Autowired
-    WebConfigure(JwtInterceptor jwtInterceptor){
-        this.jwtInterceptor = jwtInterceptor;
-    }
+//     @Autowired
+//     WebConfigure(JwtInterceptor jwtInterceptor){
+//         this.jwtInterceptor = jwtInterceptor;
+//     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor)
-                .addPathPatterns("/users/**")
-                .addPathPatterns("/events-register/**");
-    }
-}
+//     @Override
+//     public void addInterceptors(InterceptorRegistry registry) {
+//         registry.addInterceptor(jwtInterceptor)
+//                 .addPathPatterns("/users/**")
+//                 .addPathPatterns("/events-register/**");
+//     }
+// }
