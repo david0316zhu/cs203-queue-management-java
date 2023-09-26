@@ -38,6 +38,25 @@
         WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
     </select>
 
+    <select id="getRegistrationGroupId" parameterType="map" resultType="String">
+        SELECT group_id
+        FROM confirmation_group_for_event
+        WHERE user_id=#{user_id} AND event_id=#{event_id}
+    </select>
+
+    <select id="getRegistrationGroupLeader" parameterType="map" resultType="String">
+        SELECT group_leader
+        FROM registration_group_for_event
+        WHERE group_id=#{group_id}
+    </select>
+    
+    <select id="getUsersInfoInRegistrationGroup" parameterType="map" resultMap="userResultMap">
+        SELECT u.user_id, u.mobile_number, u.email, c.has_user_confirmed
+        FROM confirmation_group_for_event c 
+        INNER JOIN user u 
+        ON u.user_id = c.user_id
+        WHERE c.group_id=#{group_id}
+    </select>
     <select id = "userGroupForEventCount" parameterType="map" resultType="int">
         SELECT COUNT(*) 
         FROM confirmation_group_for_event 
