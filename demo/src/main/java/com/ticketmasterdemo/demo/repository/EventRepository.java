@@ -18,4 +18,5 @@ public interface EventRepository {
     List<String> retrieveAllCountriesForSpecificEvent(@Param("event_id") String eventId);
 
     List<Event> retrieveHighlightedEventInfo();
+    List<Queue> retrieveAllQueuesForSpecificGroup(@Param("group_id") String groupId);
 }
