@@ -4,10 +4,16 @@ import java.util.List;
 
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.service.enums.ValStatus;
 
 public interface EventRegisterService {
     public Registration registerGroup(Registration form);
+
     public Boolean registerUsers(List<User> userList, String groupId, String eventId, String groupLeaderEmail);
+
     public Boolean checkGroupRegistrationStatus(String groupId, String eventId);
+
     public Boolean updateEventGroupUserConfirmation(String userId, String eventId, String groupId);
+
+    public List<ValStatus> validateGroup (List<String> emailList, List<String> mobileList, String eventID);
 }

@@ -9,8 +9,17 @@ import com.ticketmasterdemo.demo.dto.User;
 @Mapper
 public interface EventRegisterRepository {
     int registerGroup(Registration form);
-    int registerUser(@Param("user") User user, @Param("group_id") String groupId, @Param("event_id") String eventId, @Param("confirmation") int confirmation);
+
+    int registerUser(@Param("user") User user, @Param("group_id") String groupId, @Param("event_id") String eventId,
+            @Param("confirmation") int confirmation);
+
     Boolean checkGroupStatus(@Param("group_id") String groupId, @Param("event_id") String eventId);
-    int updateUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId, @Param("user_id") String userId);
-    Boolean checkUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId, @Param("user_id") String userId);
+
+    int updateUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId,
+            @Param("user_id") String userId);
+
+    Boolean checkUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId,
+            @Param("user_id") String userId);
+
+    int userGroupForEventCount(@Param("user_id") String userId, @Param("event_id") String eventId);
 }

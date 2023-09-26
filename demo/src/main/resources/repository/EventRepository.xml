@@ -12,7 +12,9 @@
         <result column="poster_image_path" property="posterImagePath"/>
     </resultMap>
 
-    
+    <resultMap id = "stringResultMap" type = "java.lang.String">
+        <result property="value" column = "country"/>
+    </resultMap>
 
     <select id="retrieveAllEvents" resultMap="eventResultMap">
         SELECT * FROM event
@@ -21,6 +23,19 @@
     <select id="retrieveEvent" parameterType="map" resultMap="eventResultMap">
         SELECT * FROM event
         WHERE event_id = #{event_id}
+    </select>
+
+
+    <select id="retrieveAllCountriesForSpecificEvent" resultMap = "stringResultMap" parameterType="map">
+        SELECT country
+        FROM ticketmaster.event_countries 
+        WHERE event_id = #{event_id}
+    </select>
+
+    <select id = "retrieveHighlightedEventInfo" resultMap= "eventResultMap">
+        SELECT * 
+        FROM ticketmaster.event
+        WHERE is_highlighted = 1
     </select>
 
     <resultMap id="showResultMap" type="com.ticketmasterdemo.demo.dto.Show">
@@ -49,4 +64,5 @@
         SELECT * FROM queue
         WHERE event_id = #{event_id}
     </select>
-</mapper>
+    
+    </mapper>

@@ -38,4 +38,10 @@
         WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
     </select>
 
+    <select id = "userGroupForEventCount" parameterType="map" resultType="int">
+        SELECT COUNT(*) 
+        FROM confirmation_group_for_event 
+        WHERE user_id = #{user_id} and event_id = #{event_id}
+    </select>
+
 </mapper>
