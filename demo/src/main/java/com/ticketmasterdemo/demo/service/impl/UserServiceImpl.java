@@ -54,19 +54,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Boolean> verifyMultiple(List<String> emailList, List<String> mobileList) {
-        if (emailList == null || mobileList == null || emailList.size() != mobileList.size()) {
-            throw new InvalidArgsException("email list or mobile list provided is invalid.");
-        }
-        List<Boolean> output = new ArrayList<>();
-        Iterator<String> emailIter = emailList.iterator(), mobileIter = mobileList.iterator();
-        while (emailIter.hasNext() && mobileIter.hasNext()) {
-            output.add(isUserVerified(emailIter.next(), mobileIter.next()));
-        }
-        return output;
-    }
-
-    @Override
     public boolean authenticateUser(String email, String mobile, String password){
         if (email == null || mobile == null || password == null) {
             throw new InvalidArgsException("invalid login credentials - failed preliminary check");
