@@ -10,6 +10,8 @@ public interface UserService {
     public boolean isUserVerified(String email, String mobile);
     
     public User getUser(String email, String mobile);
+
+    public User getUser(String email);
     
     public boolean authenticateUser(String email, String mobile, String password);
 }

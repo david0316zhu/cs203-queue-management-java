@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@CrossOrigin
+@CrossOrigin(allowedHeaders = {"Authorization"}, exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
 @RequestMapping("/users")
 public class UserController {
 
@@ -49,6 +50,19 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        try {
+            User user = userService.getUser(email);
+            return ResponseEntity.ok().body(user);
+        } catch (InvalidArgsException e) {
+            log.error("Get-user error: ", e);
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/is-verified")
     public ResponseEntity<?> isUserVerified(@RequestParam String email, @RequestParam String mobile) {
         try {
@@ -62,20 +76,20 @@ public class UserController {
         }
     }
 
-    @PostMapping("/auth/login")
-    public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user){
-        try{
-            if (userService.authenticateUser(user.getEmail(), user.getMobile(), user.getPassword())){
-                String jwt = JwtUtil.generateToken(user.getMobile()); // I'm lazy
-                return ResponseEntity.ok().body(jwt);
-            } 
-            return ResponseEntity.ok().body(false);
-        } catch (InvalidArgsException e){
-            log.error("Verify multiple error: ", e);
-            return ResponseEntity.unprocessableEntity().body(e.getMessage());
-        } catch (Exception e){
-            System.out.println(e.getStackTrace());
-            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
-        }
-    }
+    // @PostMapping("/auth/login")
+    // public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user) {
+    //     try {
+    //         if (userService.authenticateUser(user.getEmail(), user.getMobile(), user.getPassword())) {
+    //             String jwt = JwtUtil.generateToken(user.getMobile()); // I'm lazy
+    //             return ResponseEntity.ok().body(jwt);
+    //         }
+    //         return ResponseEntity.ok().body(false);
+    //     } catch (InvalidArgsException e) {
+    //         log.error("Verify multiple error: ", e);
+    //         return ResponseEntity.unprocessableEntity().body(e.getMessage());
+    //     } catch (Exception e) {
+    //         System.out.println(e.getStackTrace());
+    //         return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+    //     }
+    // }
 }

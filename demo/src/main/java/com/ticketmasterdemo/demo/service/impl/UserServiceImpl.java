@@ -36,6 +36,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUser(String email) {
+        if ( email == null) {
+            throw new InvalidArgsException("email is invalid");
+        }
+        User user = userRepository.findUserByEmail(email);
+        if (user == null)
+            throw new UserException("user does not exist");
+        return user;
+    }
+
+    @Override
     public boolean isUserVerified(String email, String mobile) {
         try {
            User user = getUser(email, mobile);
