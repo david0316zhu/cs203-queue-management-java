@@ -143,18 +143,23 @@ public class EventRegisterServiceImpl implements EventRegisterService {
 
     @Override
     public RegistrationInfo getRegistrationGroupInfo(String userId, String eventId) {
-        String groupId = eventRegisterRepository.getRegistrationGroupId(userId, eventId);
-        if (groupId == null) {
-            throw new EventRegisterException("User ID / Event ID does not exist");
+        try {
+            String groupId = eventRegisterRepository.getRegistrationGroupId(userId, eventId);
+            if (groupId == null) {
+                throw new UserException("User ID / Event ID does not exist");
+            }
+
+            List<UserInfo> userInfoList = userRepository.getAllUserInfo(groupId);
+
+            Boolean hasAllUsersConfirmed = eventRegisterRepository.checkGroupStatus(groupId, eventId);
+
+            List<Queue> queueList = eventRepository.retrieveAllQueuesForSpecificGroup(groupId);
+
+            return new RegistrationInfo(groupId, userInfoList, hasAllUsersConfirmed, queueList);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new RuntimeException("Unable to get User's registration group information");
         }
-
-        List<UserInfo> userInfoList = userRepository.getAllUserInfo(groupId);
-
-        Boolean hasAllUsersConfirmed = eventRegisterRepository.checkGroupStatus(groupId, eventId);
-
-        List<Queue> queueList = eventRepository.retrieveAllQueuesForSpecificGroup(groupId);
-
-        return new RegistrationInfo(groupId, userInfoList, hasAllUsersConfirmed, queueList);
     }
 
     @Override
@@ -182,6 +187,7 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         if(groupCount > 0) return ValStatus.USER_IN_OTHER_GROUP;
         
         return ValStatus.VALID_MEMBER;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public Boolean addUsersToGroup(AddMember form) {
