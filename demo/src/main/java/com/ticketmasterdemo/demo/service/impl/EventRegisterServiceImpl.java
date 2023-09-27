@@ -156,6 +156,8 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             List<Queue> queueList = eventRepository.retrieveAllQueuesForSpecificGroup(groupId);
 
             return new RegistrationInfo(groupId, userInfoList, hasAllUsersConfirmed, queueList);
+        } catch (UserException e) {
+            throw new UserException(e.getMessage());
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new RuntimeException("Unable to get User's registration group information");

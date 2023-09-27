@@ -25,6 +25,7 @@ import com.ticketmasterdemo.demo.dto.AddMember;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.RegistrationInfo;
 import com.ticketmasterdemo.demo.dto.Status;
+import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
 import com.ticketmasterdemo.demo.service.enums.ValStatus;
 
@@ -112,7 +113,7 @@ public class EventRegisterController {
         try {
             RegistrationInfo registrationGroupInfo = eventRegisterService.getRegistrationGroupInfo(userId, eventId);
             return new ResponseEntity<>(registrationGroupInfo, HttpStatus.OK);
-        } catch (EventRegisterException e) {
+        } catch (UserException e) {
             log.error("User Registration Group Info error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
         } catch (Exception e) {
