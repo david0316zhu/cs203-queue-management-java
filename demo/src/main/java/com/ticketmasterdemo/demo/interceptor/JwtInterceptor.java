@@ -17,6 +17,14 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws IOException {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+            response.setHeader("Access-Control-Allow-Headers", "authorization, content-type, x-requested-with");
+            response.setHeader("Access-Control-Max-Age", "1800");
+            return true;
+        }
         String token = request.getHeader("Authorization");
         if (token == null || !token.startsWith("Bearer ")) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing token");
