@@ -49,8 +49,10 @@ public class EventRegisterController {
             Registration responseForm = eventRegisterService.registerGroup(form);
             return new ResponseEntity<>(responseForm, HttpStatus.OK);
         } catch (UserException e) {
+        } catch (UserException e) {
             log.error("User registration error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
+        } catch (Exception e) {
         } catch (Exception e) {
             log.error("Insert registration error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
@@ -60,14 +62,18 @@ public class EventRegisterController {
     @GetMapping("/{eventId}/reg-statuses/{groupId}")
     public ResponseEntity<?> getGroupEventRegistrationStatus(@PathVariable String eventId,
             @PathVariable String groupId) {
+    public ResponseEntity<?> getGroupEventRegistrationStatus(@PathVariable String eventId,
+            @PathVariable String groupId) {
         try {
             Boolean groupEventRegistrationStatus = eventRegisterService.checkGroupRegistrationStatus(groupId, eventId);
             Status responseStatus = new Status();
             responseStatus.setStatus(groupEventRegistrationStatus);
             return new ResponseEntity<>(responseStatus, HttpStatus.OK);
         } catch (EventRegisterException e) {
+        } catch (EventRegisterException e) {
             log.error("Event registration error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
+        } catch (Exception e) {
         } catch (Exception e) {
             log.error("Event registration status error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
@@ -79,9 +85,12 @@ public class EventRegisterController {
         try {
             Boolean groupEventUserStatus = eventRegisterService.updateEventGroupUserConfirmation(
                     requestData.get("userId"), requestData.get("eventId"), requestData.get("groupId"));
+            Boolean groupEventUserStatus = eventRegisterService.updateEventGroupUserConfirmation(
+                    requestData.get("userId"), requestData.get("eventId"), requestData.get("groupId"));
             Status responseStatus = new Status();
             responseStatus.setStatus(groupEventUserStatus);
             return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+        } catch (EventRegisterException e) {
         } catch (EventRegisterException e) {
             log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
