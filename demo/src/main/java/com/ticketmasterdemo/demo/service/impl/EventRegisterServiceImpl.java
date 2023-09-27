@@ -8,10 +8,12 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
+import com.ticketmasterdemo.demo.dto.AddMember;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.dto.UserInfo;
@@ -50,24 +52,7 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         List<User> userList = form.getUserGroup();
         List<User> responseUserList = new ArrayList<>();
 
-        for (User user : userList) {
-            try {
-                log.info("Verify user: " + user.getEmail() + ", " + user.getMobile());
-                User verifiedUser = userRepository.findUserByEmailAndMobile(user.getEmail(), user.getMobile());
-                if (verifiedUser == null) {
-                    throw new UserException("Email(s) in group are not registered as users");
-                }
-
-                if (verifiedUser != null && !verifiedUser.isVerified()) {
-                    throw new UserException("User(s) in group are not verified"); // User is not authenticated
-                }
-                responseUserList.add(verifiedUser);
-            } catch (UserException e) {
-                throw new UserException(e.getMessage());
-            } catch (Exception e) {
-                throw new UserException("User Error!");
-            }
-        }
+        responseUserList = this.verifyUser(userList);
         form.setUserGroup(responseUserList);
 
         Utility util = new Utility();
@@ -80,17 +65,14 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         try {
             log.info(form.getGroupLeaderId());
             eventRegisterRepository.registerGroup(form);
-        }
-        catch (DataIntegrityViolationException e) {
-            if (e.getCause() instanceof SQLIntegrityConstraintViolationException){
+        } catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
                 // Handle the specific duplicate key scenario
                 throw new UserException("User is already a group leader of another Group of the same event!");
-            }
-            else {
+            } else {
                 throw new UserException("Group Insertion Error");
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             throw new UserException("Group registration error!");
         }
@@ -99,8 +81,7 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         try {
             this.registerUsers(responseUserList, groupId, form.getEventId(), form.getGroupLeaderEmail());
             log.info("Group Users Registration Success");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new UserException(e.getMessage());
         }
         return form; // Registration is successful
@@ -116,17 +97,14 @@ public class EventRegisterServiceImpl implements EventRegisterService {
                 eventRegisterRepository.registerUser(user, groupId, eventId, isLeader);
             }
             return true; // User registration is successful
-        }
-        catch (DataIntegrityViolationException e) {
-            if (e.getCause() instanceof SQLIntegrityConstraintViolationException){
+        } catch (DataIntegrityViolationException e) {
+            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
                 // Handle the specific duplicate key scenario
                 throw new UserException("User is already in another Group of the same event!");
-            }
-            else {
+            } else {
                 throw new UserException("Group Users Registration Insertion Error");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new UserException("Group Users Registration Error");
         }
     }
@@ -204,5 +182,36 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         if(groupCount > 0) return ValStatus.USER_IN_OTHER_GROUP;
         
         return ValStatus.VALID_MEMBER;
+
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean addUsersToGroup(AddMember form) {
+        if (!eventRegisterRepository.isGroupLeader(form.getGroupId(), form.getUserId())) {
+            throw new EventRegisterException("User ID is not a group leader!");
+        }
+        List<User> verifiedUsers = verifyUser(form.getUserGroup());
+        registerUsers(verifiedUsers, form.getGroupId(), form.getEventId(), form.getUserId());
+        return true;
+    }
+
+    public List<User> verifyUser(List<User> userList) {
+        List<User> verifiedUserList = new ArrayList<>();
+        for (User user : userList) {
+            try {
+                User verifiedUser = userRepository.findUserByEmailAndMobile(user.getEmail(), user.getMobile());
+                if (verifiedUser == null) {
+                    throw new UserException("Email(s) in group are not registered as users");
+                }
+
+                if (verifiedUser != null && !verifiedUser.isVerified()) {
+                    throw new UserException("User(s) in group are not verified"); // User is not authenticated
+                }
+                verifiedUserList.add(verifiedUser);
+            } catch (UserException e) {
+                throw new UserException(e.getMessage());
+            } catch (Exception e) {
+                throw new UserException("User Error!");
+            }
+        }
+        return verifiedUserList;
     }
 }

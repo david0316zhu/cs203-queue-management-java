@@ -1,7 +1,9 @@
 package com.ticketmasterdemo.demo.service;
 
 import java.util.List;
+import java.util.Map;
 
+import com.ticketmasterdemo.demo.dto.AddMember;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.RegistrationInfo;
 import com.ticketmasterdemo.demo.dto.User;
@@ -19,4 +21,5 @@ public interface EventRegisterService {
 
     public List<ValStatus> validateGroup (List<String> emailList, List<String> mobileList, String eventID);
     public RegistrationInfo getRegistrationGroupInfo(String userId, String eventId);
+    public Boolean addUsersToGroup(AddMember form);
 }
