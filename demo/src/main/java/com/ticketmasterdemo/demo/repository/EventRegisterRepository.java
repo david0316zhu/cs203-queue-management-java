@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.dto.UserInfo;
 
 @Mapper
 public interface EventRegisterRepository {
@@ -20,8 +21,14 @@ public interface EventRegisterRepository {
     String getRegistrationGroupId(@Param("user_id") String userId, @Param("event_id") String eventId);
 
     Boolean checkUserConfirmationStatus(@Param("user_id") String userId, @Param("event_id") String eventId);
-
+    String getRegistrationGroupLeader(@Param("group_id") String groupId);
     List<User> getUsersInfoInRegistrationGroup(@Param("group_id") String groupId);
+
+    int updateUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId,
+            @Param("user_id") String userId);
+
+    Boolean checkUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId,
+            @Param("user_id") String userId);
 
     int userGroupForEventCount(@Param("user_id") String userId, @Param("event_id") String eventId);
     String getRegistrationGroupLeader(@Param("group_id") String groupId);
