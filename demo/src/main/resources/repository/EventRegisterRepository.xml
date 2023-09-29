@@ -38,10 +38,31 @@
         WHERE user_id = #{user_id} and group_id = #{group_id} and event_id = #{event_id}
     </select>
 
+    <select id="getRegistrationGroupId" parameterType="map" resultType="String">
+        SELECT group_id
+        FROM confirmation_group_for_event
+        WHERE user_id=#{user_id} AND event_id=#{event_id}
+    </select>
+
+    <select id="getRegistrationGroupLeader" parameterType="map" resultType="String">
+        SELECT group_leader
+        FROM registration_group_for_event
+        WHERE group_id=#{group_id}
+    </select>
+    
     <select id = "userGroupForEventCount" parameterType="map" resultType="int">
         SELECT COUNT(*) 
         FROM confirmation_group_for_event 
         WHERE user_id = #{user_id} and event_id = #{event_id}
     </select>
 
+    <select id="isGroupLeader" parameterType="map" resultType="boolean">
+        SELECT 
+        CASE 
+            WHEN COUNT(*) > 0 THEN TRUE
+            ELSE FALSE
+        END
+        FROM registration_group_for_event
+        WHERE group_id = #{group_id} AND group_leader = #{user_id}
+    </select>
 </mapper>

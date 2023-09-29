@@ -1,5 +1,6 @@
 package com.ticketmasterdemo.demo.repository;
 
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,12 +15,11 @@ public interface EventRegisterRepository {
             @Param("confirmation") int confirmation);
 
     Boolean checkGroupStatus(@Param("group_id") String groupId, @Param("event_id") String eventId);
-
-    int updateUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId,
-            @Param("user_id") String userId);
-
-    Boolean checkUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId,
-            @Param("user_id") String userId);
+    int updateUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId, @Param("user_id") String userId);
+    Boolean checkUserStatus(@Param("group_id") String groupId, @Param("event_id") String eventId, @Param("user_id") String userId);
+    String getRegistrationGroupId(@Param("user_id") String userId, @Param("event_id") String eventId);
 
     int userGroupForEventCount(@Param("user_id") String userId, @Param("event_id") String eventId);
+    String getRegistrationGroupLeader(@Param("group_id") String groupId);
+    Boolean isGroupLeader(@Param("group_id") String groupId, @Param("user_id") String userId);
 }

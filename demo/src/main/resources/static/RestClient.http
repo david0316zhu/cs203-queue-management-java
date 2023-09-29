@@ -42,7 +42,31 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:8080/events-register/group/event/add-member
+Content-Type: application/json
+
+{
+  "eventId": "pink-sc-2024",
+  "userId": "1",
+  "groupId": "ff3d7270-f13f-41d3-9c2a-3819e7cba2cf",
+  "userGroup": [
+    {
+      "email": "jrteo.2022@smu.edu.sg", "mobile": "06598231539"
+    },
+    {
+      "email": "clarissatoh.2022@smu.edu.sg", "mobile": "06581996653"
+    }
+  ]
+}
+
+###
 GET http://localhost:8080/events/twice-rtb-2023/shows
 Content-Type: application/json
 
 ###
+GET http://localhost:8080/events-register/pink-sc-2024/user/1/group-info
+Content-Type: application/json
+
+###
+GET http://localhost:8080/events-register/anson-2023/user/2/group-info
+Content-Type: application/json
