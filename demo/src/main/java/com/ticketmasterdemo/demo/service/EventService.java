@@ -6,7 +6,7 @@ import com.ticketmasterdemo.demo.dto.Event;
 import com.ticketmasterdemo.demo.dto.Show;
 
 public interface EventService {
-    public List<Event> getAllEvents();
+    public List<Event> getAllEvents(boolean onlyHighlighted);
     public Event getEvent(String eventId);
     public List<Show> getAllShowsForSpecificEvent(String eventId);
 }

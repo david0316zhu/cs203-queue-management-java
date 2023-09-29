@@ -12,7 +12,9 @@
         <result column="poster_image_path" property="posterImagePath"/>
     </resultMap>
 
-    
+    <resultMap id = "stringResultMap" type = "java.lang.String">
+        <result property="value" column = "country"/>
+    </resultMap>
 
     <select id="retrieveAllEvents" resultMap="eventResultMap">
         SELECT * FROM event
@@ -21,6 +23,19 @@
     <select id="retrieveEvent" parameterType="map" resultMap="eventResultMap">
         SELECT * FROM event
         WHERE event_id = #{event_id}
+    </select>
+
+
+    <select id="retrieveAllCountriesForSpecificEvent" resultMap = "stringResultMap" parameterType="map">
+        SELECT country
+        FROM ticketmaster.event_countries 
+        WHERE event_id = #{event_id}
+    </select>
+
+    <select id = "retrieveHighlightedEventInfo" resultMap= "eventResultMap">
+        SELECT * 
+        FROM ticketmaster.event
+        WHERE is_highlighted = 1
     </select>
 
     <resultMap id="showResultMap" type="com.ticketmasterdemo.demo.dto.Show">
@@ -34,6 +49,7 @@
     <resultMap id="queueResultMap" type="com.ticketmasterdemo.demo.dto.Queue">
         <id column="queue_id" property="queueId"/>
         <result column="show_id" property="showId"/>
+        <result column="event_id" property="eventId"/>
         <result column="queue_start_datetime" property="startDateTime"/>
         <result column="queue_end_datetime" property="endDatetime"/>
     </resultMap>
@@ -48,5 +64,12 @@
     <select id="retrieveAllQueuesForSpecificEvent" parameterType="map" resultMap="queueResultMap">
         SELECT * FROM queue
         WHERE event_id = #{event_id}
+    </select>
+
+    <select id="retrieveAllQueuesForSpecificGroup" parameterType="map" resultMap="queueResultMap">
+        SELECT q.queue_id, q.queue_start_datetime, q.queue_end_datetime, q.show_id, q.event_id
+        FROM queue q 
+        INNER JOIN registration_group_for_queue r ON q.queue_id = r.queue_id
+        WHERE r.group_id =#{group_id}
     </select>
 </mapper>

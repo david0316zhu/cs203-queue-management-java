@@ -15,4 +15,8 @@ public interface EventRepository {
     Event retrieveEvent(@Param("event_id") String eventId);
     List<Show> retrieveAllShowsForSpecificEvent(@Param("event_id") String eventId);
     List<Queue> retrieveAllQueuesForSpecificEvent(@Param("event_id") String eventId);
+    List<String> retrieveAllCountriesForSpecificEvent(@Param("event_id") String eventId);
+
+    List<Event> retrieveHighlightedEventInfo();
+    List<Queue> retrieveAllQueuesForSpecificGroup(@Param("group_id") String groupId);
 }

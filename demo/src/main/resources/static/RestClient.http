@@ -64,3 +64,9 @@ GET http://localhost:8080/events/twice-rtb-2023/shows
 Content-Type: application/json
 
 ###
+GET http://localhost:8080/events-register/pink-sc-2024/user/1/group-info
+Content-Type: application/json
+
+###
+GET http://localhost:8080/events-register/anson-2023/user/2/group-info
+Content-Type: application/json
