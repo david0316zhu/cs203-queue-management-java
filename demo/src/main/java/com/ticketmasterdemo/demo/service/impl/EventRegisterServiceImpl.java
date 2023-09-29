@@ -8,7 +8,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
@@ -90,6 +89,10 @@ public class EventRegisterServiceImpl implements EventRegisterService {
 
     @Override
     public Boolean registerUsers(List<User> userList, String groupId, String eventId, String groupLeaderEmail) {
+        Utility utility = new Utility();
+        if (!utility.emailWhitelist(groupLeaderEmail) || !utility.isInputSafe(eventId) || !utility.isInputSafe(groupId)) {
+            throw new InvalidArgsException("Invalid request");
+        }
         try {
             for (User user : userList) {
                 boolean isLeaderBool = user.getEmail().equals(groupLeaderEmail);
@@ -111,6 +114,10 @@ public class EventRegisterServiceImpl implements EventRegisterService {
 
     @Override
     public Boolean checkGroupRegistrationStatus(String groupId, String eventId) {
+        Utility utility = new Utility();
+        if (!utility.isInputSafe(eventId) || !utility.isInputSafe(groupId)) {
+            throw new InvalidArgsException("Invalid request");
+        }
         try {
             Boolean status = eventRegisterRepository.checkGroupStatus(groupId, eventId);
 
@@ -128,6 +135,10 @@ public class EventRegisterServiceImpl implements EventRegisterService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateEventGroupUserConfirmation(String userId, String eventId, String groupId) {
+        Utility utility = new Utility();
+        if (!utility.isInputSafe(userId) || !utility.isInputSafe(eventId) || !utility.isInputSafe(groupId)) {
+            throw new InvalidArgsException("Invalid request");
+        }
         try {
             eventRegisterRepository.updateUserStatus(groupId, eventId, userId);
             Boolean status = eventRegisterRepository.checkUserStatus(groupId, eventId, userId);
@@ -143,6 +154,10 @@ public class EventRegisterServiceImpl implements EventRegisterService {
 
     @Override
     public RegistrationInfo getRegistrationGroupInfo(String userId, String eventId) {
+        Utility utility = new Utility();
+        if (!utility.isInputSafe(eventId) || !utility.isInputSafe(userId)) {
+            throw new InvalidArgsException("Invalid request");
+        }
         try {
             String groupId = eventRegisterRepository.getRegistrationGroupId(userId, eventId);
             if (groupId == null) {
@@ -165,26 +180,30 @@ public class EventRegisterServiceImpl implements EventRegisterService {
     }
 
     @Override
-    public List<ValStatus> validateGroup(List<String> emailList, List<String> mobileList, String eventID) {
+    public List<ValStatus> validateGroup(List<String> emailList, List<String> mobileList, String eventId) {
         if (emailList == null || mobileList == null || emailList.size() != mobileList.size()) {
             throw new InvalidArgsException("email list or mobile list provided is invalid.");
         }
         List<ValStatus> output = new ArrayList<>();
         Iterator<String> emailIter = emailList.iterator(), mobileIter = mobileList.iterator();
         while (emailIter.hasNext() && mobileIter.hasNext()) {
-            output.add(determineUserElligibility(emailIter.next(), mobileIter.next(), eventID));
+            output.add(determineUserElligibility(emailIter.next(), mobileIter.next(), eventId));
         }
         return output;
     }
 
-    private ValStatus determineUserElligibility(String email, String mobile, String eventID){
+    private ValStatus determineUserElligibility(String email, String mobile, String eventId){
+        Utility utility = new Utility();
+        if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile) || !utility.isInputSafe(eventId)) {
+            throw new InvalidArgsException("Invalid request");
+        }
         User user = userRepository.findUserByEmailAndMobile(email, mobile);
         if (user == null) return ValStatus.USER_DOES_NOT_EXIST;
 
         if (!user.isVerified()) return ValStatus.USER_NOT_VERIFIED;
 
         // Searches the event
-        int groupCount = eventRegisterRepository.userGroupForEventCount(user.getId(), eventID);
+        int groupCount = eventRegisterRepository.userGroupForEventCount(user.getId(), eventId);
 
         if(groupCount > 0) return ValStatus.USER_IN_OTHER_GROUP;
         
