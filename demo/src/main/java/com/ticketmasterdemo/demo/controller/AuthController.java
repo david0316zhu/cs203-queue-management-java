@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.dto.User;
@@ -27,10 +28,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user) {
+    public ResponseEntity<?> authenticateAndLoginUser(@RequestHeader("email") String email, @RequestHeader("mobile") String mobile, @RequestHeader("password") String password) {
         try {
-            if (userService.authenticateUser(user.getEmail(), user.getMobile(), user.getPassword())) {
-                String jwt = JwtUtil.generateToken(user.getMobile()); // I'm lazy
+            if (userService.authenticateUser(email, mobile , password)) {
+                String jwt = JwtUtil.generateToken(mobile);
                 return ResponseEntity.ok().body(jwt);
             }
             return ResponseEntity.ok().body(false);
