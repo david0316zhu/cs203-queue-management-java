@@ -18,7 +18,7 @@ public interface EventRegisterService {
     public Boolean checkGroupRegistrationStatus(String groupId, String eventId);
 
     public Boolean updateEventGroupUserConfirmation(String userId, String eventId, String groupId);
-    public List<ValStatus> validateGroup (List<String> emailList, List<String> mobileList, String eventID);
+    public List<ValStatus> validateGroup (List<String> emailList, List<String> mobileList, String eventId);
     public RegistrationInfo getRegistrationGroupInfo(String userId, String eventId);
     public Boolean addUsersToGroup(AddMember form);
 }

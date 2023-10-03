@@ -2,6 +2,8 @@ package com.ticketmasterdemo.demo.configure;
 
 import com.ticketmasterdemo.demo.interceptor.JwtInterceptor;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,8 +22,6 @@ public class WebConfigure implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/users/**")
-                .addPathPatterns("/events-register/**")
-                .excludePathPatterns("/users/register")
-                .excludePathPatterns("/users/auth/login");
+                .addPathPatterns("/events-register/**");
     }
 }

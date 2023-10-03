@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ticketmasterdemo.demo.common.exception.EventException;
+import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.dto.Event;
 import com.ticketmasterdemo.demo.dto.Queue;
 import com.ticketmasterdemo.demo.dto.Show;
 import com.ticketmasterdemo.demo.repository.EventRepository;
 import com.ticketmasterdemo.demo.service.EventService;
+import com.ticketmasterdemo.demo.util.Utility;
 
 
 @Service
@@ -44,6 +46,10 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public Event getEvent(String eventId){
+        Utility utility = new Utility();
+        if (!utility.isInputSafe(eventId)) {
+            throw new InvalidArgsException("Invalid Request");
+        }
         Event event = eventRepository.retrieveEvent(eventId);
         if (event == null) {
             throw new EventException("Event does not exist");
@@ -53,6 +59,10 @@ public class EventServiceImpl implements EventService{
 
     @Override
     public List<Show> getAllShowsForSpecificEvent(String eventId) {
+        Utility utility = new Utility();
+        if (!utility.isInputSafe(eventId)) {
+            throw new InvalidArgsException("Invalid Request");
+        }
         List<Show> allShowsForEvent = eventRepository.retrieveAllShowsForSpecificEvent(eventId);
         List<Queue> allQueuesForEvent = eventRepository.retrieveAllQueuesForSpecificEvent(eventId);
         

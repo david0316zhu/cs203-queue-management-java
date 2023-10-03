@@ -2,9 +2,7 @@ package com.ticketmasterdemo.demo.controller;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
 import java.util.Map;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
@@ -25,13 +22,13 @@ import com.ticketmasterdemo.demo.dto.AddMember;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.RegistrationInfo;
 import com.ticketmasterdemo.demo.dto.Status;
-import com.ticketmasterdemo.demo.dto.User;
+
 import com.ticketmasterdemo.demo.service.EventRegisterService;
-import com.ticketmasterdemo.demo.service.enums.ValStatus;
 
 @RestController
 @Slf4j
-@CrossOrigin
+@CrossOrigin(allowedHeaders = { "*" }, exposedHeaders = { "Access-Control-Allow-Origin",
+        "Access-Control-Allow-Credentials" })
 @RequestMapping("/events-register")
 public class EventRegisterController {
 
@@ -51,6 +48,8 @@ public class EventRegisterController {
         } catch (UserException e) {
             log.error("User registration error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
+        } catch (InvalidArgsException e) {
+            return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
         } catch (Exception e) {
             log.error("Insert registration error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
@@ -68,6 +67,8 @@ public class EventRegisterController {
         } catch (EventRegisterException e) {
             log.error("Event registration error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
+        } catch (InvalidArgsException e) {
+            return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
         } catch (Exception e) {
             log.error("Event registration status error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
@@ -85,11 +86,14 @@ public class EventRegisterController {
         } catch (EventRegisterException e) {
             log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
+        } catch (InvalidArgsException e) {
+            return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
         } catch (Exception e) {
             log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
     }
+
     @PostMapping("/group/event/add-member")
     public ResponseEntity<?> addUserGroupEvent(@RequestBody AddMember form) {
         try {
@@ -97,12 +101,12 @@ public class EventRegisterController {
             Status responseStatus = new Status();
             responseStatus.setStatus(addUsersStatus);
             return new ResponseEntity<>(responseStatus, HttpStatus.OK);
-        }
-        catch (EventRegisterException e){
+        } catch (EventRegisterException e) {
             log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
-        }
-        catch (Exception e){
+        } catch (InvalidArgsException e) {
+            return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
+        } catch (Exception e) {
             log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
@@ -116,6 +120,8 @@ public class EventRegisterController {
         } catch (UserException e) {
             log.error("User Registration Group Info error: ", e);
             return ResponseEntity.status(400).body(e.getMessage());
+        } catch (InvalidArgsException e) {
+            return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
         } catch (Exception e) {
             log.error("User Registration Group Info error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
