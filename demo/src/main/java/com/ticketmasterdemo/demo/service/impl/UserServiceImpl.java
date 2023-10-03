@@ -6,11 +6,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.dto.VerificationEmail;
 import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.UserService;
 
@@ -18,10 +22,27 @@ import com.ticketmasterdemo.demo.service.UserService;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RabbitTemplate rabbitTemplate;
+
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, RabbitTemplate rabbitTemplate) {
         this.userRepository = userRepository;
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    @Bean
+    public Queue queue() {
+        return new Queue("emailQueue");
+    }
+
+    public void sendVerificationTokenToEmailService(String email, String token) {
+        String verificationUrl = "https://yourwebsite.com/verify?token=" + token;
+        VerificationEmail verificationEmail = new VerificationEmail();
+        verificationEmail.setEmail(email);
+        verificationEmail.setVerificationUrl(verificationUrl);
+
+        rabbitTemplate.convertAndSend("emailQueue", verificationEmail);
     }
 
     @Override
