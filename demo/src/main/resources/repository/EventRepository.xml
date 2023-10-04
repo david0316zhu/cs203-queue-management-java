@@ -16,6 +16,22 @@
         <result property="value" column = "country"/>
     </resultMap>
 
+    <resultMap id="showResultMap" type="com.ticketmasterdemo.demo.dto.Show">
+        <id column="show_id" property="id"/>
+        <result column="show_datetime" property="dateTime"/>
+        <result column="location_id" property="locationId"/>
+        <result column="location_name" property="locationName"/>
+        <result column="venue_id" property="venueId"/>
+    </resultMap>
+
+    <resultMap id="queueResultMap" type="com.ticketmasterdemo.demo.dto.Queue">
+        <id column="queue_id" property="queueId"/>
+        <result column="show_id" property="showId"/>
+        <result column="event_id" property="eventId"/>
+        <result column="queue_start_datetime" property="startDateTime"/>
+        <result column="queue_end_datetime" property="endDatetime"/>
+    </resultMap>
+    
     <select id="retrieveAllEvents" resultMap="eventResultMap">
         SELECT * FROM event
     </select>
@@ -37,22 +53,6 @@
         FROM ticketmaster.event
         WHERE is_highlighted = 1
     </select>
-
-    <resultMap id="showResultMap" type="com.ticketmasterdemo.demo.dto.Show">
-        <id column="show_id" property="id"/>
-        <result column="show_datetime" property="dateTime"/>
-        <result column="location_id" property="locationId"/>
-        <result column="location_name" property="locationName"/>
-        <result column="venue_id" property="venueId"/>
-    </resultMap>
-
-    <resultMap id="queueResultMap" type="com.ticketmasterdemo.demo.dto.Queue">
-        <id column="queue_id" property="queueId"/>
-        <result column="show_id" property="showId"/>
-        <result column="event_id" property="eventId"/>
-        <result column="queue_start_datetime" property="startDateTime"/>
-        <result column="queue_end_datetime" property="endDatetime"/>
-    </resultMap>
 
     <select id="retrieveAllShowsForSpecificEvent" parameterType="map" resultMap="showResultMap">
         SELECT s.*, l.location_name as location_name

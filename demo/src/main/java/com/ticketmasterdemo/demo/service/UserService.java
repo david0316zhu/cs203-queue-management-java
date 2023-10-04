@@ -18,4 +18,6 @@ public interface UserService {
     public Queue queue();
 
     public void sendVerificationTokenToEmailService(String email, String token);
+
+    public boolean verifyEmailToken(String token);
 }

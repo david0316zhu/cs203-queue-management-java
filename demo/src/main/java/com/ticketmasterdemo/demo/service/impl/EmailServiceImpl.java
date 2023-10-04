@@ -20,7 +20,7 @@ public class EmailServiceImpl implements EmailService {
 
     @RabbitListener(queues = "emailQueue")
     public void listenForVerificationUrls(VerificationEmail verificationEmail) {
-        sendVerificationEmail(verificationEmail.getVerificationUrl(), verificationEmail.getVerificationUrl());
+        sendVerificationEmail(verificationEmail.getEmail(), verificationEmail.getVerificationUrl());
     }
 
     public void sendVerificationEmail(String email, String verificationUrl) {
@@ -29,6 +29,5 @@ public class EmailServiceImpl implements EmailService {
         message.setSubject("Verification of Email Address");
         message.setText("Thank you for registering! Please click the following link to verify your email address: "
                 + verificationUrl);
-
     }
 }

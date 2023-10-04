@@ -12,6 +12,14 @@
         <result column="is_verified" property="verified" />
     </resultMap>
 
+    <resultMap id="userInfoResultMap" type="com.ticketmasterdemo.demo.dto.UserInfo">
+        <id column="user_id" property="id"/>
+        <result column="mobile_number" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="has_user_confirmed" property="isConfirmed"/>
+        <result column="is_group_leader" property="isGroupLeader"/>
+    </resultMap>
+
     <select id="findUserByEmailAndMobile" resultMap="userResultMap" parameterType="map">
         SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and mobile_number = #{mobile}
     </select>
@@ -24,14 +32,6 @@
         SELECT password FROM user
         WHERE email = #{email} and mobile_number = #{mobile}
     </select>
-
-    <resultMap id="userInfoResultMap" type="com.ticketmasterdemo.demo.dto.UserInfo">
-        <id column="user_id" property="id"/>
-        <result column="mobile_number" property="mobile"/>
-        <result column="email" property="email"/>
-        <result column="has_user_confirmed" property="isConfirmed"/>
-        <result column="is_group_leader" property="isGroupLeader"/>
-    </resultMap>
     
     <select id="getAllUserInfo" parameterType="map" resultMap="userInfoResultMap">
         SELECT u.user_id, u.mobile_number, u.email, c.has_user_confirmed, 
@@ -42,4 +42,15 @@
         ON u.user_id = c.user_id
         WHERE c.group_id=#{group_id}
     </select>
+
+    <select id="findEmailVerificationToken" parameterType="map" resultType="java.lang.String">
+        SELECT user_id FROM user_email_verification
+        WHERE verification_token = #{token} AND expiryDate > #{date_time};
+    </select>
+
+    <update id="updateEmailVerification" parameterType="map" resultType="int">
+        UPDATE user_email_mobile_verification
+        SET is_email_verified = 1
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>

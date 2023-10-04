@@ -1,6 +1,7 @@
 package com.ticketmasterdemo.demo.service.impl;
 
 import java.security.DrbgParameters.Reseed;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
         return new Queue("emailQueue");
     }
 
+    @Override
     public void sendVerificationTokenToEmailService(String email, String token) {
         String verificationUrl = "https://yourwebsite.com/verify?token=" + token;
         VerificationEmail verificationEmail = new VerificationEmail();
@@ -81,5 +83,16 @@ public class UserServiceImpl implements UserService {
         } 
         String userPwd = userRepository.retrieveUserForAuth(email, mobile);
         return password.equals(userPwd);
+    }
+
+    @Override
+    public boolean verifyEmailToken(String token){
+        LocalDateTime currDateTime = LocalDateTime.now();
+        String userId = userRepository.findEmailVerificationToken(token, currDateTime);
+        if (userId == null) {
+            throw new UserException("Verification Token Invalid/Expired");
+        }
+        userRepository.updateEmailVerification(userId);
+        return true;
     }
 }
