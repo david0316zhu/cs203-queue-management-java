@@ -26,7 +26,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RabbitTemplate rabbitTemplate;
 
-
     @Autowired
     public UserServiceImpl(UserRepository userRepository, RabbitTemplate rabbitTemplate) {
         this.userRepository = userRepository;
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService {
         if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile)) {
             throw new InvalidArgsException("Invalid email and/or mobile");
         }
-        
+
         User user = userRepository.findUserByEmailAndMobile(email, mobile);
         if (user == null)
             throw new UserException("user does not exist");
@@ -74,15 +73,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User createUser(String email, String mobile, String password) {
+        Utility utility = new Utility();
+        if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile)) {
+            throw new InvalidArgsException("Invalid email and/or mobile");
+        }
+        try {
+            String userId = utility.generateUserId();
+            String authenticatorId = utility.generateRandomUUID();
+            User user = userRepository.createUser(email, mobile, password, userId, authenticatorId, false);
+            return user;
+        } catch (UserException e) {
+            return null;
+        }
+    }
+
+    @Override
     public boolean isUserVerified(String email, String mobile) {
         Utility utility = new Utility();
         if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile)) {
             throw new InvalidArgsException("Invalid email and/or mobile");
         }
         try {
-           User user = getUser(email, mobile);
-           return (user != null) && user.isVerified(); 
-        } catch(UserException e){
+            User user = getUser(email, mobile);
+            return (user != null) && user.isVerified();
+        } catch (UserException e) {
             return false;
         }
     }
@@ -98,18 +113,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean authenticateUser(String email, String mobile, String password){
+    public boolean authenticateUser(String email, String mobile, String password) {
         Utility utility = new Utility();
-        if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile) || password==null) {
+        if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile) || password == null) {
             throw new InvalidArgsException("invalid login credentials - failed preliminary check");
         }
-    
+
         String userPwd = userRepository.retrieveUserForAuth(email, mobile);
         return password.equals(userPwd);
     }
 
     @Override
-    public boolean verifyEmailToken(String token){
+    public boolean verifyEmailToken(String token) {
         LocalDateTime currDateTime = LocalDateTime.now();
         String userId = userRepository.findEmailVerificationToken(token, currDateTime);
         if (userId == null) {

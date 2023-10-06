@@ -16,6 +16,10 @@ public interface UserRepository {
 
     User findUserByEmail(@Param("email") String email);
 
+    User createUser(@Param("email") String email, @Param("mobile") String mobile, @Param("password") String password,
+            @Param("user_id") String userId, @Param("authenticator_id") String authenticatorId,
+            @Param("is_verified") boolean isVerified);
+
     String retrieveUserForAuth(@Param("email") String email, @Param("mobile") String mobile);
 
     List<UserInfo> getAllUserInfo(@Param("group_id") String groupId);

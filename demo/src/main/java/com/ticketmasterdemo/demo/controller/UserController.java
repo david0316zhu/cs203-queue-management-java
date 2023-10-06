@@ -1,12 +1,6 @@
 package com.ticketmasterdemo.demo.controller;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@CrossOrigin(allowedHeaders = {"Authorization"}, exposedHeaders = {"Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"})
+@CrossOrigin(allowedHeaders = { "Authorization" }, exposedHeaders = { "Access-Control-Allow-Origin",
+        "Access-Control-Allow-Credentials" })
 @RequestMapping("/users")
 public class UserController {
 
@@ -36,6 +31,20 @@ public class UserController {
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> createUser(@RequestBody String email, @RequestBody String mobile,
+            @RequestBody String password) {
+        try {
+            User user = userService.createUser(email, mobile, password);
+            return ResponseEntity.ok().body(user);
+        } catch (InvalidArgsException e) {
+            log.error("Create-user error: ", e);
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
     }
 
     @GetMapping("")
@@ -78,17 +87,17 @@ public class UserController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user){
-        try{
-            if (userService.authenticateUser(user.getEmail(), user.getMobile(), user.getPassword())){
+    public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user) {
+        try {
+            if (userService.authenticateUser(user.getEmail(), user.getMobile(), user.getPassword())) {
                 String jwt = JwtUtil.generateToken(user.getMobile()); // I'm lazy
                 return ResponseEntity.ok().body(jwt);
-            } 
+            }
             return ResponseEntity.ok().body(false);
-        } catch (InvalidArgsException e){
+        } catch (InvalidArgsException e) {
             log.error("Verify multiple error: ", e);
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getStackTrace());
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
@@ -98,9 +107,9 @@ public class UserController {
     public ResponseEntity<?> emailVerification(@RequestParam String token) {
         try {
             return ResponseEntity.ok().body(userService.verifyEmailToken(token));
-        } catch (UserException e){
+        } catch (UserException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getStackTrace());
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }

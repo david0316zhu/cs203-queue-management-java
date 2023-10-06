@@ -32,6 +32,12 @@
         SELECT password FROM user
         WHERE email = #{email} and mobile_number = #{mobile}
     </select>
+
+    <insert id="createUser" parameterType="com.ticketmasterdemo.demo.dto.User"> 
+        INSERT into user
+        (user_id, mobile_number, email, password, authenticator_id, is_verified)
+        VALUES (#{user_id}, #{mobile}, #{email}, #{password}, #{authenticator_id}, #{is_verified})
+    </insert>
     
     <select id="getAllUserInfo" parameterType="map" resultMap="userInfoResultMap">
         SELECT u.user_id, u.mobile_number, u.email, c.has_user_confirmed, 
@@ -48,7 +54,7 @@
         WHERE verification_token = #{token} AND expiryDate > #{date_time};
     </select>
 
-    <update id="updateEmailVerification" parameterType="map" resultType="int">
+    <update id="updateEmailVerification" parameterType="map">
         UPDATE user_email_mobile_verification
         SET is_email_verified = 1
         WHERE user_id = #{user_id}

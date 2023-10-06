@@ -14,6 +14,8 @@ public interface UserService {
     public User getUser(String email, String mobile);
 
     public User getUser(String email);
+
+    public User createUser(String email, String mobile, String password);
     
     public boolean authenticateUser(String email, String mobile, String password);
 
