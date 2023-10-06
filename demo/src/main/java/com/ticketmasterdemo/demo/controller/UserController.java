@@ -1,5 +1,7 @@
 package com.ticketmasterdemo.demo.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,10 +36,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody String email, @RequestBody String mobile,
-            @RequestBody String password) {
+    public ResponseEntity<?> createUser(@RequestBody Map<String, String> userData) {
         try {
-            User user = userService.createUser(email, mobile, password);
+            System.out.println("userData.email = " + userData.get("email"));
+            User user = userService.createUser(userData.get("email"), userData.get("mobile"), userData.get("password"));
             return ResponseEntity.ok().body(user);
         } catch (InvalidArgsException e) {
             log.error("Create-user error: ", e);
