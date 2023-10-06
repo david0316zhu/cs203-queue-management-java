@@ -39,12 +39,16 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody Map<String, String> userData) {
         try {
             System.out.println("userData.email = " + userData.get("email"));
-            User user = userService.createUser(userData.get("email"), userData.get("mobile"), userData.get("password"));
+            userService.createUser(userData.get("email"), userData.get("mobile"), userData.get("password"));
+            User user = userService.getUser(userData.get("email"));
             return ResponseEntity.ok().body(user);
         } catch (InvalidArgsException e) {
             log.error("Create-user error: ", e);
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
-        } catch (Exception e) {
+        } catch (UserException e) {
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }

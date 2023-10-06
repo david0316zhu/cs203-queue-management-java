@@ -78,14 +78,13 @@ public class UserServiceImpl implements UserService {
         if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile)) {
             throw new InvalidArgsException("Invalid email and/or mobile");
         }
-        try {
-            String userId = utility.generateUserId();
-            String authenticatorId = utility.generateRandomUUID();
-            User user = userRepository.createUser(email, mobile, password, userId, authenticatorId, false);
-            return user;
-        } catch (UserException e) {
-            return null;
-        }
+        String userId = utility.generateUserId();
+        String authenticatorId = utility.generateRandomUUID();
+        userRepository.createUser(email, mobile, password, userId, authenticatorId, false);
+        // User user = userRepository.findUserByEmail(email);
+        User user = getUser(email);
+        return user;
+
     }
 
     @Override
