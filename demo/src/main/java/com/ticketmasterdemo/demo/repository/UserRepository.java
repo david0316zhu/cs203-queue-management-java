@@ -1,5 +1,6 @@
 package com.ticketmasterdemo.demo.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -18,4 +19,8 @@ public interface UserRepository {
     String retrieveUserForAuth(@Param("email") String email, @Param("mobile") String mobile);
 
     List<UserInfo> getAllUserInfo(@Param("group_id") String groupId);
+
+    String findEmailVerificationToken(@Param("token") String token, @Param("date_time") LocalDateTime dateTime);
+
+    int updateEmailVerification(@Param("user_id") String userId);
 }

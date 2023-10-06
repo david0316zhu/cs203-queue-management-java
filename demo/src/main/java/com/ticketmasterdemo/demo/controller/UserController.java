@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
+import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.service.UserService;
 import com.ticketmasterdemo.demo.util.JwtUtil;
@@ -76,20 +77,33 @@ public class UserController {
         }
     }
 
-    // @PostMapping("/auth/login")
-    // public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user) {
-    //     try {
-    //         if (userService.authenticateUser(user.getEmail(), user.getMobile(), user.getPassword())) {
-    //             String jwt = JwtUtil.generateToken(user.getMobile()); // I'm lazy
-    //             return ResponseEntity.ok().body(jwt);
-    //         }
-    //         return ResponseEntity.ok().body(false);
-    //     } catch (InvalidArgsException e) {
-    //         log.error("Verify multiple error: ", e);
-    //         return ResponseEntity.unprocessableEntity().body(e.getMessage());
-    //     } catch (Exception e) {
-    //         System.out.println(e.getStackTrace());
-    //         return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
-    //     }
-    // }
+    @PostMapping("/auth/login")
+    public ResponseEntity<?> authenticateAndLoginUser(@RequestBody User user){
+        try{
+            if (userService.authenticateUser(user.getEmail(), user.getMobile(), user.getPassword())){
+                String jwt = JwtUtil.generateToken(user.getMobile()); // I'm lazy
+                return ResponseEntity.ok().body(jwt);
+            } 
+            return ResponseEntity.ok().body(false);
+        } catch (InvalidArgsException e){
+            log.error("Verify multiple error: ", e);
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        } catch (Exception e){
+            System.out.println(e.getStackTrace());
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/auth/verification/")
+    public ResponseEntity<?> emailVerification(@RequestParam String token) {
+        try {
+            return ResponseEntity.ok().body(userService.verifyEmailToken(token));
+        } catch (UserException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e){
+            System.out.println(e.getStackTrace());
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+
+    }
 }
