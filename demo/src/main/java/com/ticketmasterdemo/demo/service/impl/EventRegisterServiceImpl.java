@@ -59,7 +59,7 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         log.info("Generate Group ID: " + groupId);
         form.setId(groupId);
 
-        User groupLeader = userRepository.findUserByEmail(form.getGroupLeaderEmail());
+        User groupLeader = userRepository.findVerifiedUserByEmail(form.getGroupLeaderEmail());
         form.setGroupLeaderId(groupLeader.getId());
         try {
             log.info(form.getGroupLeaderId());

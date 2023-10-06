@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         if (!utility.emailWhitelist(email)) {
             throw new InvalidArgsException("Invalid email");
         }
-        User user = userRepository.findUserByEmail(email);
+        User user = userRepository.findAnyUserByEmail(email);
         if (user == null)
             throw new UserException("user does not exist");
         return user;
@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
         if (!utility.emailWhitelist(email)) {
             throw new InvalidArgsException("Invalid email");
         }
-        User user = userRepository.findUserByEmail(email);
+        User user = userRepository.findVerifiedUserByEmail(email);
         return (user != null) && user.isVerified();
     }
 

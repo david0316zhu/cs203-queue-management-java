@@ -14,7 +14,9 @@ public interface UserRepository {
 
     User findUserByEmailAndMobile(@Param("email") String email, @Param("mobile") String mobile);
 
-    User findUserByEmail(@Param("email") String email);
+    User findVerifiedUserByEmail(@Param("email") String email);
+
+    User findAnyUserByEmail(@Param("email") String email);
 
     void createUser(@Param("email") String email, @Param("mobile") String mobile, @Param("password") String password,
             @Param("user_id") String userId, @Param("authenticator_id") String authenticatorId,
