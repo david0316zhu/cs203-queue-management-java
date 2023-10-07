@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = userRepository.findAnyUserByEmail(email);
         if (user == null)
-            throw new UserException("user does not exist");
+            throw new UserException("User does not exist");
         return user;
     }
 
@@ -81,8 +81,10 @@ public class UserServiceImpl implements UserService {
         String userId = utility.generateUserId();
         String authenticatorId = utility.generateRandomUUID();
         userRepository.createUser(email, mobile, password, userId, authenticatorId, false);
-        // User user = userRepository.findUserByEmail(email);
         User user = getUser(email);
+        // create verification token
+        String token = utility.generateEmailVerificationToken();
+        sendVerificationTokenToEmailService(email, token);
         return user;
 
     }
