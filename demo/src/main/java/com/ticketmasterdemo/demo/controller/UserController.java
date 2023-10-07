@@ -38,7 +38,6 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody Map<String, String> userData) {
         try {
-            System.out.println("userData.email = " + userData.get("email"));
             userService.createUser(userData.get("email"), userData.get("mobile"), userData.get("password"));
             User user = userService.getUser(userData.get("email"));
             return ResponseEntity.ok().body(user);
