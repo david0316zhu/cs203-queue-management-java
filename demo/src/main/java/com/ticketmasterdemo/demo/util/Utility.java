@@ -1,6 +1,7 @@
 package com.ticketmasterdemo.demo.util;
 
 import java.util.UUID;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -50,6 +51,16 @@ public class Utility {
         UUID randomUUID = UUID.randomUUID();
         return randomUUID.toString();
     }
-    
+
+    public String generateUserId() {
+        UUID randomUUID = UUID.randomUUID();
+        return randomUUID.toString();
+    }
+
+    public String generateEmailVerificationToken() {
+        UUID randomUUID = UUID.randomUUID();
+        return randomUUID.toString();
+    }
+
 }
 

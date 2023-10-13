@@ -12,19 +12,6 @@
         <result column="is_verified" property="verified" />
     </resultMap>
 
-    <select id="findUserByEmailAndMobile" resultMap="userResultMap" parameterType="map">
-        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and mobile_number = #{mobile}
-    </select>
-
-    <select id="findUserByEmail" resultMap="userResultMap" parameterType="map">
-        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and is_verified = 1
-    </select>
-
-    <select id="retrieveUserForAuth" resultType = "java.lang.String" parameterType="map">
-        SELECT password FROM user
-        WHERE email = #{email} and mobile_number = #{mobile}
-    </select>
-
     <resultMap id="userInfoResultMap" type="com.ticketmasterdemo.demo.dto.UserInfo">
         <id column="user_id" property="id"/>
         <result column="mobile_number" property="mobile"/>
@@ -32,6 +19,29 @@
         <result column="has_user_confirmed" property="isConfirmed"/>
         <result column="is_group_leader" property="isGroupLeader"/>
     </resultMap>
+
+    <select id="findUserByEmailAndMobile" resultMap="userResultMap" parameterType="map">
+        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and mobile_number = #{mobile}
+    </select>
+
+    <select id="findVerifiedUserByEmail" resultMap="userResultMap" parameterType="map">
+        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and is_verified = 1
+    </select>
+
+    <select id="findAnyUserByEmail" resultMap="userResultMap" parameterType="map">
+        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email}
+    </select>
+
+    <select id="retrieveUserForAuth" resultType = "java.lang.String" parameterType="map">
+        SELECT password FROM user
+        WHERE email = #{email} and mobile_number = #{mobile}
+    </select>
+
+    <insert id="createUser" parameterType="com.ticketmasterdemo.demo.dto.User"> 
+        INSERT into user
+        (user_id, mobile_number, email, password, authenticator_id, is_verified)
+        VALUES (#{user_id}, #{mobile}, #{email}, #{password}, #{authenticator_id}, #{is_verified})
+    </insert>
     
     <select id="getAllUserInfo" parameterType="map" resultMap="userInfoResultMap">
         SELECT u.user_id, u.mobile_number, u.email, c.has_user_confirmed, 
@@ -42,4 +52,15 @@
         ON u.user_id = c.user_id
         WHERE c.group_id=#{group_id}
     </select>
+
+    <select id="findEmailVerificationToken" parameterType="map" resultType="java.lang.String">
+        SELECT user_id FROM user_email_verification
+        WHERE verification_token = #{token} AND expiryDate > #{date_time};
+    </select>
+
+    <update id="updateEmailVerification" parameterType="map">
+        UPDATE user_email_mobile_verification
+        SET is_email_verified = 1
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>
