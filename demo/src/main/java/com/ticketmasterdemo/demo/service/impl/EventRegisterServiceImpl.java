@@ -241,4 +241,46 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         }
         return verifiedUserList;
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean modifyGroup(Registration newGroupForm) {
+        if (newGroupForm == null){
+            throw new InvalidArgsException("group cannot be modified as newGroupForm is null");
+        }
+        boolean isGroupLeader = eventRegisterRepository.validateGroupLeaderFromEventAndUserID(newGroupForm.getEventId(), newGroupForm.getGroupLeaderId());
+        
+        if (!isGroupLeader){
+            throw new EventRegisterException("User ID is not a group leader!");
+        }
+        RegistrationInfo regInfo = this.getRegistrationGroupInfo(newGroupForm.getEventId(), newGroupForm.getGroupLeaderId());
+        this.removeMembersFromGroup(regInfo, newGroupForm.getGroupLeaderId());
+        
+        return Boolean.valueOf(true);
+    }
+
+    public boolean removeMember(String groupID, String userID){
+        if (groupID == null || userID == null) {
+            throw new InvalidArgsException("unable to remove member from group that is null");
+        }
+        // Verify if user is group leader
+        String groupLeaderID = this.eventRegisterRepository.getRegistrationGroupLeader(groupID);
+        if (groupLeaderID.equals(userID)){
+            throw new EventRegisterException("Unable to remove a group leader from the group.");
+        } 
+        eventRegisterRepository.removeMemberFromRegGroup(groupID, userID);
+
+        return true;
+    }
+
+    private void removeMembersFromGroup(RegistrationInfo regInfo, String groupLeaderID){
+        if (regInfo == null || groupLeaderID == null) {
+            throw new EventRegisterException("Event Register Error - unable to remove members from group as the registration info is null");
+        }
+        List<UserInfo> userInfoList = regInfo.getUserInfoList();
+        for (UserInfo userInfo: userInfoList){
+            if (userInfo.getId().equals(groupLeaderID)) continue;
+            this.removeMember(regInfo.getGroupId(), userInfo.getId());
+        }
+    }
+
 }
