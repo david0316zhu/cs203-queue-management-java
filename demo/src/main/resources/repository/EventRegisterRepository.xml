@@ -81,8 +81,17 @@
     <!-- removeMemberFromRegGroup --> 
 
     <select id="removeMemberFromRegGroup" parameterType="map" >
-        DELETE FROM registration_group_for_event 
-        WHERE #{user_id} <> group_leader AND group_id = #{group_id} AND user_id = #{user_id}
+        DELETE FROM confirmation_group_for_event
+        WHERE group_id = #{group_id} AND user_id = #{user_id} AND event_id = #{event_id}
     </select>
-    
+
+    <!-- updateGroupSizeInformation --> 
+<!-- 
+    <update id="updateGroupSizeInformation", parameterType = "map">
+        UPDATE registration_group_for_event
+        SET 
+        has_all_users_confirmed = "0", 
+        group_size = #{group_size}
+        WHERE event_id = #{event_id} AND group_id = #{group_id}
+    </update>     -->
 </mapper>

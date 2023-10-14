@@ -128,7 +128,7 @@ public class EventRegisterController {
         }
     }
 
-    @PostMapping("/{eventId}/modify-group")
+    @PostMapping("/modify-group")
     public ResponseEntity<?> modifyGroup(@RequestBody Registration form){
         try{
             boolean status = eventRegisterService.modifyGroup(form);
