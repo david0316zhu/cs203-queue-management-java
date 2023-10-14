@@ -28,4 +28,7 @@ public interface EventRegisterService {
     public List<User> verifyUser(List<User> userList);
 
     public Boolean modifyGroup(Registration newGroupForm);
+
+    public boolean removeMemberFromGroup(String groupID, String userID, String eventID);
+
 }

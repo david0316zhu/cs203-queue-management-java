@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketmasterdemo.demo.common.exception.EventRegisterException;
@@ -91,6 +93,24 @@ public class EventRegisterController {
         } catch (Exception e) {
             log.error("Event Group User confirmation error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/group/leave-group")
+    public ResponseEntity<?> leaveGroup(@RequestParam String groupId, @RequestParam String eventId, @RequestParam String userId){
+        try {
+            boolean status = eventRegisterService.removeMemberFromGroup(groupId, userId, eventId);
+            return ResponseEntity.ok().body(status);
+        } catch (InvalidArgsException e){
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        } catch (EventRegisterException e){
+            // An EventRegisterException is thrown in this case, because we are unable to remove a group leader from the group.
+            if (e.getMessage().startsWith("Unable to remove")){
+              return ResponseEntity.status(403).body(e.getMessage());  
+            }
+            return ResponseEntity.status(500).body("Event Register Error: "+ e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body("Server Error: " +e.getMessage());
         }
     }
 
