@@ -89,7 +89,6 @@ public class EventRegisterServiceImpl implements EventRegisterService {
 
     @Override
     public Boolean registerUsers(List<User> userList, String groupId, String eventId, String groupLeaderEmail) {
-        System.out.println("userList, groupId, eventId, groupLeaderEmail = "+ userList + " " + groupId + " " + eventId + " " + groupLeaderEmail);
         Utility utility = new Utility();
         if (!utility.emailWhitelist(groupLeaderEmail) || !utility.isInputSafe(eventId)
                 || !utility.isInputSafe(groupId)) {
@@ -246,7 +245,7 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         }
         return verifiedUserList;
     }
-
+    
     @Transactional(rollbackFor = Exception.class)
     public Boolean modifyGroup(Registration newGroupForm) {
         if (newGroupForm == null) {
@@ -262,27 +261,19 @@ public class EventRegisterServiceImpl implements EventRegisterService {
 
         this.removeMembersFromGroup(regInfo, newGroupForm.getGroupLeaderId(), newGroupForm.getEventId());
 
-        System.out.println("All members except groupleader removed!");
-
         // remove the group leader frm the
         // "userGroup" list in place.
         removeLeaderFromGroup(newGroupForm, newGroupForm.getGroupLeaderEmail());
 
-        for (User user: newGroupForm.getUserGroup()){
-            System.out.println("user = "+ user.getEmail());
-        }
         // Add non-group leaders to the group
         AddMember addMemberForm = new AddMember(newGroupForm.getEventId(), regInfo.getGroupId(),
                 newGroupForm.getGroupLeaderId(), newGroupForm.getGroupLeaderEmail(), newGroupForm.getUserGroup());
 
-        System.out.println("All non-group leaders members added!");
-
         this.addUsersToGroup(addMemberForm);
 
         // Update information in reg_group_for_event table.
-        
+        eventRegisterRepository.updateGroupSizeInformation(Integer.toString(newGroupForm.getUserGroup().size() + 1), newGroupForm.getEventId(), regInfo.getGroupId());
 
-        System.out.println("END FUNC");
         return Boolean.valueOf(true);
     }
 
@@ -312,16 +303,19 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             this.removeMember(regInfo.getGroupId(), userInfo.getId(), eventID);
         }
     }
-
+    /**
+     * This method is used before calling the `AddMembers` method,
+     * to remove the groupLeader to prevent re-insertion of the group
+     * leader.
+     * @param regForm
+     * @param groupLeaderEmail
+     */
     private void removeLeaderFromGroup(Registration regForm, String groupLeaderEmail) {
         List<User> userList = regForm.getUserGroup();
         Iterator<User> iter = userList.iterator();
-        System.out.println("groupLeaderEmail = " + groupLeaderEmail);
         while (iter.hasNext()) {
             User user = iter.next();
-            System.out.println("user.getEmail() = "+ user.getEmail());
             if (user.getEmail().equals(groupLeaderEmail)) {
-                System.out.println("Removing " + user.getEmail());
                 iter.remove();
                 break;
             }

@@ -86,12 +86,17 @@
     </select>
 
     <!-- updateGroupSizeInformation --> 
-<!-- 
-    <update id="updateGroupSizeInformation", parameterType = "map">
+    <!--Note that there are different cases when a group > 1 suddenly becomes a single man group. In this case the group should be marked as "all_users_confirmed"-->
+    <update id="updateGroupSizeInformation" parameterType = "map">
         UPDATE registration_group_for_event
-        SET 
-        has_all_users_confirmed = "0", 
-        group_size = #{group_size}
+        SET  
+        group_size = #{group_size},
+        has_all_users_confirmed = 
+        CASE
+            <!--all users confirmed if the group only consists of the group leader-->
+            WHEN #{group_size} = '1' THEN 1
+            ELSE 0 <!--otherwise all users apart from the groupleader has not confirmed-->
+        END
         WHERE event_id = #{event_id} AND group_id = #{group_id}
-    </update>     -->
+    </update>    
 </mapper>
