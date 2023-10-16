@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ticketmasterdemo.demo.repository.SeatRepository">
+
+    <resultMap id="SeatCategoryInfoResultMap" type="com.ticketmasterdemo.demo.dto.SeatCategoryInfo">
+        <id column="category_id" property="categoryId"/>
+        <result column="seat_price" property="seatPrice"/>
+        <result column="seats_left" property="seatsLeft"/>
+        <result column="seats_total" property="seatsTotal"/>
+    </resultMap>
+
+    <select id="getSeatCategoryInfos" resultMap="SeatCategoryInfoResultMap" parameterType="map">
+        SELECT c.category_id, c.price as seat_price, 
+        count(CASE WHEN s.user_id IS NULL THEN 1 ELSE NULL END) AS seats_left,
+        count(s.seat_id) as seats_total
+        FROM seat_category_for_show c
+        INNER JOIN seat_for_show s 
+        ON (c.show_id = s.show_id AND c.event_id = s.event_id AND c.category_id = s.category_id)
+        WHERE c.event_id = #{event_id} and c.show_id = #{show_id}
+        GROUP BY c.category_id, c.price;
+    </select>
+</mapper>

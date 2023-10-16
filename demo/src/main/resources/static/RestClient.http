@@ -70,3 +70,15 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/events-register/anson-2023/user/2/group-info
 Content-Type: application/json
+
+###
+GET http://localhost:8080/events/tswift-era-2024/2024-03-02/categories
+Content-Type: application/json
+
+###
+GET http://localhost:8080/events/tswift-era-2024/a/categories
+Content-Type: application/json
+
+###
+GET http://localhost:8080/events/a/2024-03-02/categories
+Content-Type: application/json

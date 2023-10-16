@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ticketmasterdemo.demo.common.exception.EventException;
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.dto.Event;
+import com.ticketmasterdemo.demo.dto.SeatCategoryInfo;
 import com.ticketmasterdemo.demo.dto.Show;
 import com.ticketmasterdemo.demo.service.EventService;
 
@@ -77,6 +78,23 @@ public class EventController {
         try {
             List<Show> allShowsForSpecificEvent = eventService.getAllShowsForSpecificEvent(eventId);
             return new ResponseEntity<>(allShowsForSpecificEvent, HttpStatus.OK);
+        }
+        catch (EventException e) {
+            return ResponseEntity.status(404).body("Event Error: " + e.getMessage());
+        }
+        catch (InvalidArgsException e) {
+            return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{eventId}/{showId}/categories")
+    public ResponseEntity<?> getSeatCategoryInfosForSpecificShow(@PathVariable String eventId, @PathVariable String showId) {
+        try {
+            List<SeatCategoryInfo> seatCategoryInfos = eventService.getSeatCategoryInfos(eventId, showId);
+            return new ResponseEntity<>(seatCategoryInfos, HttpStatus.OK);
         }
         catch (EventException e) {
             return ResponseEntity.status(404).body("Event Error: " + e.getMessage());
