@@ -22,6 +22,7 @@ public class WebConfigure implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/users/**")
+                .addPathPatterns("/queues/**")
                 .addPathPatterns("/events-register/**");
     }
 }
