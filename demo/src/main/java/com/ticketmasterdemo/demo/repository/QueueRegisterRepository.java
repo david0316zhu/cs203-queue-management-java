@@ -1,7 +1,11 @@
 package com.ticketmasterdemo.demo.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import com.ticketmasterdemo.demo.dto.Queue;
 
 @Mapper
 public interface QueueRegisterRepository {
@@ -18,5 +22,7 @@ public interface QueueRegisterRepository {
     int getMaxQueuableValue(@Param("event_id") String eventId);
 
     int getGroupSize(@Param("group_id") String groupId);
+    
+    List<Queue> retrieveAllQueueTimesAndShowTimes(@Param("event_id") String eventId);
 
 }

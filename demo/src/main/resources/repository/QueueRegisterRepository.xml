@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ticketmasterdemo.demo.repository.QueueRegisterRepository">
+    <!--Queuetime showtime result map-->
+    <resultMap id = "queueResultMap" type="com.ticketmasterdemo.demo.dto.Queue">
+        <id column="queue_id" property= "queueId"/>
+        <id column="queue_start_datetime" property= "startDateTime"/>
+        <id column = "queue_end_datetime" property="endDatetime"/>
+        <id column = "show_id" property="showId"/>
+        <id column = "event_id" property="eventId"/>
+        <id column = "show_datetime" property="showDateTime"/>
+    </resultMap>
 
     <!-- saveQueueSelection --> 
 
@@ -62,5 +71,22 @@
         FROM confirmation_group_for_event 
         WHERE group_id = #{group_id}
     </select>    
+
+    <!-- retrieveAllQueueTimesAndShowTimes --> 
+
+    <select id="retrieveAllQueueTimesAndShowTimes" parameterType = "map" resultType="com.ticketmasterdemo.demo.dto.Queue">
+        SELECT q.queue_id, q.queue_start_datetime, q.queue_end_datetime, q.event_id, q.show_id, s.show_datetime 
+        FROM ticketmaster.show s INNER JOIN ticketmaster.queue q 
+        ON s.event_id = q.event_id AND s.show_id = q.show_id
+        WHERE q.event_id = #{event_id}
+    </select>
 </mapper>
 
+<!--     <resultMap id = "queueResultMap" type="com.ticketmasterdemo.demo.dto.Queue">
+        <id column="queue_id" property= "queueId"/>
+        <id column="queue_start_datetime" property= "startDateTime"/>
+        <id column = "queue_end_datetime" property="endDatetime"/>
+        <id column = "show_id" property="showId"/>
+        <id column = "event_id" property="eventId"/>
+        <id column = "show_datetime" property="showDateTime"/>
+    </resultMap> -->
