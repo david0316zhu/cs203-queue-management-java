@@ -10,5 +10,57 @@
         VALUES (#{group_id}, #{queue_id}, #{rand_no}, #{show_id}, #{event_id})
     </insert>
 
+
+    <!-- groupCanSelectQueues --> 
+
+    <select id="groupCanSelectQueues" parameterType = "map" resultType = "boolean">
+        SELECT 
+            CASE 
+                WHEN COUNT(*) > 0 THEN TRUE
+                ELSE FALSE
+            END
+        FROM registration_group_for_event
+        WHERE group_id = #{group_id} AND event_id = #{event_id} AND has_all_users_confirmed = 1
+    </select>
+
+    <!-- userInRegGroup --> 
+
+    <select id="userInRegGroup" parameterType = "map" resultType = "boolean">
+        SELECT
+            CASE
+                WHEN COUNT(*) > 0 THEN TRUE
+                ELSE FALSE
+            END
+        FROM confirmation_group_for_event
+        WHERE group_id = #{group_id} AND user_id = #{user_id}
+    </select>
+
+    <!-- validateQueueID --> 
+
+    <select id="validateQueueID" parameterType = "map" resultType = "boolean">
+        SELECT
+            CASE 
+                WHEN COUNT(*) > 0 THEN TRUE
+                ELSE FALSE
+            END
+        FROM queue
+        WHERE queue_id = #{queue_id} AND event_id = #{event_id} AND show_id = #{show_id}
+    </select>
+
+    <!-- getMaxQueuableValue --> 
+
+    <select id="getMaxQueuableValue" parameterType = "map" resultType = "int">
+        SELECT max_queueable 
+        FROM ticketmaster.event
+        WHERE event_id = #{event_id}
+    </select>
+
+    <!-- getGroupSize --> 
+
+    <select id="getGroupSize" parameterType = "map" resultType = "int">
+        SELECT COUNT(*) 
+        FROM confirmation_group_for_event 
+        WHERE group_id = #{group_id}
+    </select>    
 </mapper>
 
