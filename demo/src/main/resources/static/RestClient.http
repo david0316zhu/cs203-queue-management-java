@@ -70,3 +70,13 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/events-register/anson-2023/user/2/group-info
 Content-Type: application/json
+
+###
+POST http://localhost:8080/users/register
+Content-Type: application/json
+
+{
+  "email": "davidapsc@gmail.com",
+  "mobile": "92396157",
+  "password": "test123"
+}
