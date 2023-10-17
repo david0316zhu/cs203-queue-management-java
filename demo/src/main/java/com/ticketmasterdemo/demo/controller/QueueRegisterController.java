@@ -1,9 +1,12 @@
 package com.ticketmasterdemo.demo.controller;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.QueueRegisterException;
+import com.ticketmasterdemo.demo.dto.Queue;
 import com.ticketmasterdemo.demo.dto.QueueSelection;
 import com.ticketmasterdemo.demo.service.QueueRegisterService;
 
@@ -45,6 +49,18 @@ public class QueueRegisterController {
                         "Queue Register Error: This group might have already registered queues --> " + e.getMessage());
             }
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{eventId}")
+    public ResponseEntity<?> getQueuesForEvent(@PathVariable String eventId){
+        try {
+            List<Queue> queueInfo = queueRegisterService.getQueueInformation(eventId);
+            return ResponseEntity.ok().body(queueInfo);
+        } catch (InvalidArgsException e){
+            return ResponseEntity.unprocessableEntity().body("Invalid Request: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }
 }

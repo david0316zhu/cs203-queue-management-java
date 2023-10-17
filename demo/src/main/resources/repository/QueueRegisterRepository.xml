@@ -75,9 +75,9 @@
 
     <!-- retrieveAllQueueTimesAndShowTimes --> 
 
-    <select id="retrieveAllQueueTimesAndShowTimes" parameterType = "map" resultType="com.ticketmasterdemo.demo.dto.Queue">
+    <select id="retrieveAllQueueTimesAndShowTimes" parameterType = "map" resultMap="queueResultMap">
         SELECT q.queue_id, q.queue_start_datetime, q.queue_end_datetime, q.event_id, q.show_id, s.show_datetime, l.location_name
-        FROM ticketmaster.show s, ticketmaster.queue q, location l
+        FROM ticketmaster.show s, ticketmaster.queue q, ticketmaster.location l
         WHERE s.event_id = q.event_id 
         AND s.show_id = q.show_id 
         AND s.location_id = l.location_id

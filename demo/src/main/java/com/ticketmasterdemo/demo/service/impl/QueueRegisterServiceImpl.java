@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.QueueRegisterException;
+import com.ticketmasterdemo.demo.dto.Queue;
 import com.ticketmasterdemo.demo.repository.QueueRegisterRepository;
 import com.ticketmasterdemo.demo.service.QueueRegisterService;
 
@@ -62,6 +63,13 @@ public class QueueRegisterServiceImpl implements QueueRegisterService {
         
 
         return true;
+    }
+
+    public List<Queue> getQueueInformation(String eventId){
+        if (eventId == null){
+            throw new InvalidArgsException("Queue Retrieval Error - eventId is null");
+        }
+        return queueRegisterRepository.retrieveAllQueueTimesAndShowTimes(eventId);
     }
 
     private boolean validateQueueIds(List<String> queueIdList, List<String> showIdList, String eventId){
