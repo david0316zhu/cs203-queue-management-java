@@ -245,7 +245,8 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         }
         return verifiedUserList;
     }
-    
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean modifyGroup(Registration newGroupForm) {
         if (newGroupForm == null) {
@@ -276,6 +277,21 @@ public class EventRegisterServiceImpl implements EventRegisterService {
 
         return Boolean.valueOf(true);
     }
+
+    @Override
+    public boolean removeMemberFromGroup(String groupID, String userID, String eventID){
+        if (groupID == null || userID == null || eventID == null){
+            throw new InvalidArgsException("unable to remove member  from group, userid or eventid if either one of them is null");
+        }
+        RegistrationInfo regInfo = this.getRegistrationGroupInfo(userID, eventID);
+        int newGroupSize = regInfo.getUserInfoList().size() - 1; 
+        this.removeMember(groupID, userID, eventID);
+
+        // Update the reg_grp_info
+        eventRegisterRepository.updateGroupSizeInformation(Integer.toString(newGroupSize), eventID, groupID);
+        
+        return true;
+    }   
 
     public boolean removeMember(String groupID, String userID, String eventID) {
         if (groupID == null || userID == null || eventID == null) {
