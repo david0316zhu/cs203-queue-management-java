@@ -65,4 +65,5 @@
         FROM registration_group_for_event
         WHERE group_id = #{group_id} AND group_leader = #{user_id}
     </select>
+
 </mapper>

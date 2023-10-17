@@ -86,9 +86,23 @@ public class EventServiceImpl implements EventService {
             throw new InvalidArgsException("Invalid Request");
         }
         List<SeatCategoryInfo> seatCategoryInfos = seatRepository.getSeatCategoryInfos(eventId, showId);
-        if (seatCategoryInfos == null || seatCategoryInfos.size() < 1) {
+        if (seatCategoryInfos == null || seatCategoryInfos.size() == 0) {
             throw new EventException("Invalid Event ID / Show ID");
         }
         return seatCategoryInfos;
+    }
+
+    @Override
+    public Boolean isValidShowForEvent(String eventId, String showId) {
+        List<Show> showList = getAllShowsForSpecificEvent(eventId);
+        if (showList == null || showList.size() == 0) {
+            return false;
+        }
+        for (Show show : showList) {
+            if (show.getId().equals(showId)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

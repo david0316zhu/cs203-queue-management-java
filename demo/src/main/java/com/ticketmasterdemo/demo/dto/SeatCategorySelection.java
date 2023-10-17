@@ -1,6 +1,5 @@
 package com.ticketmasterdemo.demo.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RegistrationInfo {
+public class SeatCategorySelection {
     private String groupId;
-    private List<UserInfo> userInfoList;
-    private Boolean hasAllUsersConfirmed;
-    private List<Queue> queueList;
+    private String eventId;
+    private String showId;
+    private String userId;
+    private int categoryId;
 }

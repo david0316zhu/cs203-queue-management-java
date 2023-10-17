@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.dto.Seat;
 
 @Mapper
 public interface EventRegisterRepository {

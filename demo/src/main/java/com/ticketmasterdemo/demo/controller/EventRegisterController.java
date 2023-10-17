@@ -21,6 +21,7 @@ import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.dto.AddMember;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.RegistrationInfo;
+import com.ticketmasterdemo.demo.dto.SeatCategorySelection;
 import com.ticketmasterdemo.demo.dto.Status;
 
 import com.ticketmasterdemo.demo.service.EventRegisterService;
@@ -124,6 +125,27 @@ public class EventRegisterController {
             return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
         } catch (Exception e) {
             log.error("User Registration Group Info error: ", e);
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/group/event/seat-category-selection")
+    public ResponseEntity<?> saveSeatCategorySelection(@RequestBody SeatCategorySelection form) {
+        try {
+            Boolean addUsersStatus = eventRegisterService.saveSeatCategorySelectionForGroup(form);
+            Status responseStatus = new Status();
+            responseStatus.setStatus(addUsersStatus);
+            return new ResponseEntity<>(responseStatus, HttpStatus.OK);
+        } catch (EventRegisterException e) {
+            log.error("Event Registration Group error: ", e);
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (UserException e) {
+            log.error("User Exception: ", e);
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (InvalidArgsException e) {
+            return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
+        } catch (Exception e) {
+            log.error("Seat Category Selection error: ", e);
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
     }

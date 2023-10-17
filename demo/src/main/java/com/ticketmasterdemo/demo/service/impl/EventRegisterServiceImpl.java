@@ -17,12 +17,17 @@ import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.dto.UserInfo;
 import com.ticketmasterdemo.demo.dto.RegistrationInfo;
+import com.ticketmasterdemo.demo.dto.Seat;
+import com.ticketmasterdemo.demo.dto.SeatCategorySelection;
+import com.ticketmasterdemo.demo.dto.Show;
 import com.ticketmasterdemo.demo.dto.Queue;
 import com.ticketmasterdemo.demo.repository.EventRegisterRepository;
 import com.ticketmasterdemo.demo.repository.EventRepository;
+import com.ticketmasterdemo.demo.repository.SeatRepository;
 import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.EventRegisterService;
 import com.ticketmasterdemo.demo.service.enums.ValStatus;
+import com.ticketmasterdemo.demo.util.SeatAlgorithm;
 import com.ticketmasterdemo.demo.util.Utility;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -35,13 +40,18 @@ public class EventRegisterServiceImpl implements EventRegisterService {
     private final EventRegisterRepository eventRegisterRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final SeatRepository seatRepository;
+    private final EventServiceImpl eventService;
 
     @Autowired
     public EventRegisterServiceImpl(UserRepository userRepository, EventRepository eventRepository,
-            EventRegisterRepository eventRegisterRepository) {
+            EventRegisterRepository eventRegisterRepository, SeatRepository seatRepository,
+            EventServiceImpl eventService) {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
         this.eventRegisterRepository = eventRegisterRepository;
+        this.seatRepository = seatRepository;
+        this.eventService = eventService;
     }
 
     @Override
@@ -122,9 +132,11 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             Boolean status = eventRegisterRepository.checkGroupStatus(groupId, eventId);
 
             if (status == null) {
-                throw new EventRegisterException("Group ID/Event ID does not exist");
+                throw new EventRegisterException("Group ID / Event ID does not exist");
             }
             return status;
+        } catch (EventRegisterException e) {
+            throw new EventRegisterException(e.getMessage());
         } catch (Exception e) {
             // Handle any unexpected exceptions here
             e.printStackTrace(); // Log the exception for debugging
@@ -240,5 +252,64 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             }
         }
         return verifiedUserList;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean saveSeatCategorySelectionForGroup(SeatCategorySelection form) {
+
+        String userId = form.getUserId();
+        String groupId = form.getGroupId();
+        String eventId = form.getEventId();
+        String showId = form.getShowId();
+
+        Utility utility = new Utility();
+        if (!utility.isInputSafe(userId) || !utility.isInputSafe(groupId) || !utility.isInputSafe(eventId) || !utility.isInputSafe(showId)) {
+            throw new InvalidArgsException("Invalid Request");
+        }
+
+        if (!checkGroupRegistrationStatus(groupId, eventId)) {
+            throw new EventRegisterException("Group is not registered for that event");
+        }
+
+        RegistrationInfo groupRegistrationInfo = getRegistrationGroupInfo(userId, eventId);
+        if (groupRegistrationInfo == null) {
+            throw new UserException("Invalid User ID / Event ID");
+        }
+        
+        if (!eventRegisterRepository.isGroupLeader(groupId, userId)) {
+            throw new EventRegisterException("User is not the group leader for that group");
+        }
+
+        if (!eventService.isValidShowForEvent(eventId, showId)) {
+            throw new EventRegisterException("Invalid Show ID / Event ID");
+        }
+    
+        List<UserInfo> userInfoList = groupRegistrationInfo.getUserInfoList();
+        int groupSize = userInfoList.size();
+
+        List<Seat> seatsInCategory = seatRepository.getSeatsInCategoryForSpecificShow(eventId, showId, form.getCategoryId());
+        if (seatsInCategory == null || seatsInCategory.size() == 0) {
+            throw new EventRegisterException("There are no seats available in that category for that show");
+        }
+        
+        SeatAlgorithm seatAlgorithm = new SeatAlgorithm();
+
+        List<Seat> seatAllocation = seatAlgorithm.getSeatAllocation(seatsInCategory, groupSize);
+        if (seatAllocation == null) {
+            throw new EventRegisterException("There are not enough seats in that category for that group size");
+        }
+        
+        for (int i = 0; i < groupSize; i++) {
+            int seatIdAllocation = seatAllocation.get(i).getSeatId();
+            String userIdAllocation = userInfoList.get(i).getId();
+
+            if (seatRepository.userHasSeatForSpecificShow(eventId, showId, userIdAllocation)) {
+                throw new EventRegisterException("User is already allocated a seat");
+            }
+            seatRepository.saveSeatCategorySelection(eventId, showId, form.getCategoryId(), seatIdAllocation, userIdAllocation);
+        }
+
+        return true;
     }
 }

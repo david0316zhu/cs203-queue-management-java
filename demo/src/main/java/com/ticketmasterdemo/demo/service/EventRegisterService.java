@@ -6,6 +6,7 @@ import java.util.Map;
 import com.ticketmasterdemo.demo.dto.AddMember;
 import com.ticketmasterdemo.demo.dto.Registration;
 import com.ticketmasterdemo.demo.dto.RegistrationInfo;
+import com.ticketmasterdemo.demo.dto.SeatCategorySelection;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.service.enums.ValStatus;
 import com.ticketmasterdemo.demo.dto.UserInfo;
@@ -18,7 +19,14 @@ public interface EventRegisterService {
     public Boolean checkGroupRegistrationStatus(String groupId, String eventId);
 
     public Boolean updateEventGroupUserConfirmation(String userId, String eventId, String groupId);
-    public List<ValStatus> validateGroup (List<String> emailList, List<String> mobileList, String eventId);
+
+    public List<ValStatus> validateGroup(List<String> emailList, List<String> mobileList, String eventId);
+
     public RegistrationInfo getRegistrationGroupInfo(String userId, String eventId);
+
     public Boolean addUsersToGroup(AddMember form);
+
+    public Boolean saveSeatCategorySelectionForGroup(SeatCategorySelection form);
+
+    
 }
