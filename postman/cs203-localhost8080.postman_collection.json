@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "42f91ec7-5e10-4f2b-8d9a-e4b04aade728",
 		"name": "cs203-localhost8080",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29560067"
 	},
 	"item": [
@@ -30,7 +30,21 @@
 								"type": "text"
 							}
 						],
-						"url": "http://13.250.22.158:8080/auth/login"
+						"url": {
+							"raw": "http://13.250.22.158:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"13",
+								"250",
+								"22",
+								"158"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
 					},
 					"response": []
 				},
@@ -60,7 +74,21 @@
 								"type": "text"
 							}
 						],
-						"url": "http://18.139.67.183:8080/auth/login"
+						"url": {
+							"raw": "http://18.139.67.183:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"18",
+								"139",
+								"67",
+								"183"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
 					},
 					"response": []
 				}
@@ -89,7 +117,18 @@
 							"mode": "raw",
 							"raw": "{\r\n    \"email\": \"abc@gmail.com\",\r\n    \"mobile\": \"0000000009\",\r\n    \"password\":\"test123\"\r\n}"
 						},
-						"url": "http://localhost:8080/users/register"
+						"url": {
+							"raw": "http://localhost:8080/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"register"
+							]
+						}
 					},
 					"response": []
 				},
@@ -147,7 +186,18 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": "http://localhost:8080/events/highlighted"
+						"url": {
+							"raw": "http://localhost:8080/events/highlighted",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events",
+								"highlighted"
+							]
+						}
 					},
 					"response": []
 				}
@@ -176,7 +226,18 @@
 							"mode": "raw",
 							"raw": "{\r\n    \"userGroup\": [\r\n        {\r\n            \"email\": \"david.zhu.2022@smu.edu.sg\",\r\n            \"mobile\": \"06586616057\"\r\n        },\r\n        {\r\n            \"email\": \"ryan.yap.2022@smu.edu.sg\",\r\n            \"mobile\": \"06597873327\"\r\n        }\r\n    ],\r\n    \"groupLeaderEmail\": \"david.zhu.2022@smu.edu.sg\",\r\n    \"eventId\": \"pink-sc-2024\"\r\n}"
 						},
-						"url": "http://localhost:8080/events-register/group"
+						"url": {
+							"raw": "http://localhost:8080/events-register/group",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events-register",
+								"group"
+							]
+						}
 					},
 					"response": []
 				},
@@ -220,7 +281,18 @@
 							"mode": "raw",
 							"raw": "// Testcase 1: Run this once. Output should be true.\r\n// has_all_users_confirmed = 0 and group_size = 3 in the reg_group_for_events_table\r\n// previous entries deleted from confirmation group for events\r\n// {\r\n//     \"userGroup\": [\r\n//         {\r\n//             \"email\": \"david.zhu.2022@smu.edu.sg\",\r\n//             \"mobile\": \"06586616057\"\r\n//         },\r\n//         {\r\n//             \"email\": \"ryan.yap.2022@smu.edu.sg\",\r\n//             \"mobile\": \"06597873327\"\r\n//         },\r\n//         {\r\n//             \"email\": \"kaifengwoo3@gmail.com\",\r\n//             \"mobile\": \"00000000004\"\r\n//         }\r\n//     ],\r\n//     \"groupLeaderEmail\" : \"david.zhu.2022@smu.edu.sg\",\r\n//     \"groupLeaderId\": \"1\",\r\n//     \"eventId\": \"pink-sc-2024\"\r\n// }\r\n\r\n// Testcase 2: Group changes to only the group leader.\r\n// Output should be: true\r\n// has_all_users_confirmed = 1 and group size = 1 in the reg_group_for_events_table\r\n// previous entries deleted from confirmation group for events\r\n{\r\n    \"userGroup\": [\r\n        {\r\n            \"email\": \"david.zhu.2022@smu.edu.sg\",\r\n            \"mobile\": \"06586616057\"\r\n        }\r\n    ],\r\n    \"groupLeaderEmail\" : \"david.zhu.2022@smu.edu.sg\",\r\n    \"groupLeaderId\": \"1\",\r\n    \"eventId\": \"pink-sc-2024\"\r\n}\r\n\r\n// Run testcase 1 again, settings should reset\r\n\r\n\r\n// Testcase 3: Not a group leader\r\n// Should fail & previous group is unchanged.\r\n// {\r\n//     \"userGroup\": [\r\n//         {\r\n//             \"email\": \"ryan.yap.2022@smu.edu.sg\",\r\n//             \"mobile\": \"06597873327\"\r\n//         },\r\n//     ],\r\n//     \"groupLeaderEmail\" : \"ryan.yap.2022@smu.edu.sg\",\r\n//     \"groupLeaderId\": \"2\",\r\n//     \"eventId\": \"pink-sc-2024\"\r\n// }\r\n\r\n\r\n// Testcase 4: Incorrect user email\r\n// Should fail\r\n// Previous Group is not modified.\r\n// {\r\n//     \"userGroup\": [\r\n//         {\r\n//             \"email\": \"david.zhu.2022@smu.edu.sg2\",\r\n//             \"mobile\": \"06586616057\"\r\n//         }\r\n//     ],\r\n//     \"groupLeaderEmail\" : \"david.zhu.2022@smu.edu.sg\",\r\n//     \"groupLeaderId\": \"1\",\r\n//     \"eventId\": \"pink-sc-2024\"\r\n// }\r\n"
 						},
-						"url": "http://localhost:8080/events-register/modify-group"
+						"url": {
+							"raw": "http://localhost:8080/events-register/modify-group",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events-register",
+								"modify-group"
+							]
+						}
 					},
 					"response": []
 				},
@@ -275,6 +347,51 @@
 					"request": {
 						"method": "GET",
 						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Queue Register APIs",
+			"item": [
+				{
+					"name": "Register for Queues",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzU1MDEzMywiZXhwIjoxNjk3NTUzNzMzfQ.LzoYuW-D0_Qt4N2hUVtvSQR7oGR5oT7jPc9BuDJT-As",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "// Case 1: Wrong userID\r\n// Status: 406 Not Acceptable\r\n// {\r\n//     \"groupId\": \"ff3d7270-f13f-41d3-9c2a-3819e7cba2cf\",\r\n//     \"userId\": \"2\",\r\n//     \"eventId\": \"pink-sc-2024\",\r\n//     \"queueIdList\": [\r\n//         \"4faa4933-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa49aa-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa4a81-54cf-11ee-99af-0a2a518633fa\"\r\n//     ],\r\n//     \"showIdList\":[\r\n//         \"2024-02-13\",\r\n//         \"2024-02-20\",\r\n//         \"2024-03-02\"\r\n//     ]\r\n// }\r\n\r\n// Case 2: Correct entry\r\n// Status: 200 OK\r\n// {\r\n//     \"groupId\": \"ff3d7270-f13f-41d3-9c2a-3819e7cba2cf\",\r\n//     \"userId\": \"1\",\r\n//     \"eventId\": \"pink-sc-2024\",\r\n//     \"queueIdList\": [\r\n//         \"4faa4933-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa49aa-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa4a81-54cf-11ee-99af-0a2a518633fa\"\r\n//     ],\r\n//     \"showIdList\":[\r\n//         \"2024-02-13\",\r\n//         \"2024-02-20\",\r\n//         \"2024-03-02\"\r\n//     ]\r\n// }\r\n\r\n\r\n// Case 3: Discrepancy in QueueID, showID pair\r\n// Status: 406 Not Acceptable\r\n// Body: Queue Register Error: One or more queueIds are invalid\r\n// {\r\n//     \"groupId\": \"ff3d7270-f13f-41d3-9c2a-3819e7cba2cf\",\r\n//     \"userId\": \"1\",\r\n//     \"eventId\": \"pink-sc-2024\",\r\n//     \"queueIdList\": [\r\n//         \"4faa4933-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa49aa-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa4a81-54cf-11ee-99af-0a2a518633fa\"\r\n//     ],\r\n//     \"showIdList\":[\r\n//         \"2024-02-13\",\r\n//         \"2024-03-02\", // swapped\r\n//         \"2024-02-20\" // swapped\r\n//     ]\r\n// }\r\n\r\n// Case 4: GroupID, eventID pair\r\n// Status: 406 Not Acceptable\r\n// Queue Register Error: RegGroup is unable to select queues\r\n// {\r\n//     \"groupId\": \"36c63a1e-2b5f-47ab-b908-6197a60b3b24\",\r\n//     \"userId\": \"2\",\r\n//     \"eventId\": \"pink-sc-2024\", // wrong event\r\n//     \"queueIdList\": [ // correct queueID, showID pairs\r\n//         \"4faa28be-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa2984-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa2b3e-54cf-11ee-99af-0a2a518633fa\"\r\n//     ],\r\n//     \"showIdList\":[\r\n//         \"2023-11-11\",\r\n//         \"2023-11-17\",\r\n//         \"2023-11-19\" \r\n//     ]\r\n// }\r\n\r\n\r\n// Case 5: Valid case 2\r\n// Status: 200 OK\r\n// Queue Register Error: RegGroup is unable to select queues\r\n// {\r\n//     \"groupId\": \"36c63a1e-2b5f-47ab-b908-6197a60b3b24\",\r\n//     \"userId\": \"2\",\r\n//     \"eventId\": \"tswift-era-2024\", // correct event now\r\n//     \"queueIdList\": [ // correct queueID, showID pairs\r\n//         \"4faa28be-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa2984-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa2b3e-54cf-11ee-99af-0a2a518633fa\"\r\n//     ],\r\n//     \"showIdList\":[\r\n//         \"2023-11-11\",\r\n//         \"2023-11-17\",\r\n//         \"2023-11-19\" \r\n//     ]\r\n// }\r\n\r\n\r\n// Case 6: Resubmission of valid case\r\n// Status: 409 Conflict\r\n// {\r\n//     \"groupId\": \"36c63a1e-2b5f-47ab-b908-6197a60b3b24\",\r\n//     \"userId\": \"2\",\r\n//     \"eventId\": \"tswift-era-2024\", // correct event now\r\n//     \"queueIdList\": [ // correct queueID, showID pairs\r\n//         \"4faa28be-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa2984-54cf-11ee-99af-0a2a518633fa\",\r\n//         \"4faa2b3e-54cf-11ee-99af-0a2a518633fa\"\r\n//     ],\r\n//     \"showIdList\":[\r\n//         \"2023-11-11\",\r\n//         \"2023-11-17\",\r\n//         \"2023-11-19\" \r\n//     ]\r\n// }"
+						},
+						"url": {
+							"raw": "http://localhost:8080/queues/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"queues",
+								"register"
+							]
+						}
 					},
 					"response": []
 				}
