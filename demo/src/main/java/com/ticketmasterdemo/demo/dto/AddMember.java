@@ -15,5 +15,6 @@ public class AddMember {
     private String eventId;
     private String groupId;
     private String userId;
+    private String userEmail;
     private List<User> userGroup;
 }

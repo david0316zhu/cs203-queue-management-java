@@ -118,6 +118,5 @@ public class UserController {
             System.out.println(e.getStackTrace());
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
-
     }
 }

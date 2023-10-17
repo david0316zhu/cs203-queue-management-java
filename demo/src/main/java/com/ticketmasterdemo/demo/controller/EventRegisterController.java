@@ -127,4 +127,21 @@ public class EventRegisterController {
             return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
         }
     }
+
+    @PostMapping("/modify-group")
+    public ResponseEntity<?> modifyGroup(@RequestBody Registration form){
+        try{
+            boolean status = eventRegisterService.modifyGroup(form);
+            // true on success
+            return ResponseEntity.status(200).body(status);
+            
+        } catch (InvalidArgsException e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (UserException e){
+            return ResponseEntity.status(422).body("Invalid Request Error: " + e.getMessage());
+        } catch (Exception e){
+            log.error("Group modification error", e);
+            return ResponseEntity.status(500).body("Server Error: " + e.getMessage());
+        }
+    }
 }
