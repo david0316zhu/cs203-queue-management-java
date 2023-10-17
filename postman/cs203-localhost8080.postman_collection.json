@@ -1,0 +1,314 @@
+{
+	"info": {
+		"_postman_id": "42f91ec7-5e10-4f2b-8d9a-e4b04aade728",
+		"name": "cs203-localhost8080",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "29560067"
+	},
+	"item": [
+		{
+			"name": "Auth APIs",
+			"item": [
+				{
+					"name": "user login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "email",
+								"value": "jrteo.2022@smu.edu.sg",
+								"type": "text"
+							},
+							{
+								"key": "mobile",
+								"value": "06598231539",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "test123",
+								"type": "text"
+							}
+						],
+						"url": "http://13.250.22.158:8080/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "user login Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "email",
+								"value": "jrteo.2022@smu.edu.sg",
+								"type": "text"
+							},
+							{
+								"key": "mobile",
+								"value": "06598231539",
+								"type": "text"
+							},
+							{
+								"key": "password",
+								"value": "test123",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": "http://18.139.67.183:8080/auth/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User APIs",
+			"item": [
+				{
+					"name": "register user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzI5MDA0NSwiZXhwIjoxNjk3MjkzNjQ1fQ.5RMGnuNJaJp6JJDO0n9Rf-68rHRIulmLABbL1I12_7k",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"abc@gmail.com\",\r\n    \"mobile\": \"0000000009\",\r\n    \"password\":\"test123\"\r\n}"
+						},
+						"url": "http://localhost:8080/users/register"
+					},
+					"response": []
+				},
+				{
+					"name": "get user by email and mobile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzI5MDA0NSwiZXhwIjoxNjk3MjkzNjQ1fQ.5RMGnuNJaJp6JJDO0n9Rf-68rHRIulmLABbL1I12_7k",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/users?email=abc@123&mobile=06598231539",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "abc@123"
+								},
+								{
+									"key": "mobile",
+									"value": "06598231539"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "- Register User API might have an error when testing locally, but the `RabbitTemplate` might be giving us problems right now.\n    \n    - Stack trace:\n        \n        - `Server Error: SimpleMessageConverter only supports String, byte[] and Serializable payloads, received: com.ticketmasterdemo.demo.dto.VerificationEmail`"
+		},
+		{
+			"name": "Events APIs",
+			"item": [
+				{
+					"name": "get-events",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get-highlighted-events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/events/highlighted"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events-Register-APIs",
+			"item": [
+				{
+					"name": "post-register-group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NTc0Nzc5MCwiZXhwIjoxNjk1NzUxMzkwfQ.3ntIjbjBl_-RbGOpDnErYoaJpakUnVZcAFpDYi1eF8M",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userGroup\": [\r\n        {\r\n            \"email\": \"david.zhu.2022@smu.edu.sg\",\r\n            \"mobile\": \"06586616057\"\r\n        },\r\n        {\r\n            \"email\": \"ryan.yap.2022@smu.edu.sg\",\r\n            \"mobile\": \"06597873327\"\r\n        }\r\n    ],\r\n    \"groupLeaderEmail\": \"david.zhu.2022@smu.edu.sg\",\r\n    \"eventId\": \"pink-sc-2024\"\r\n}"
+						},
+						"url": "http://localhost:8080/events-register/group"
+					},
+					"response": []
+				},
+				{
+					"name": "Group Leader Modify Group",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzMwOTcxOSwiZXhwIjoxNjk3MzEzMzE5fQ.cGi4w6ndk1O2FsC_ehILkiVubYaD3JxQ__SFx197P4I",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "// Testcase 1: Run this once. Output should be true.\r\n// has_all_users_confirmed = 0 and group_size = 3 in the reg_group_for_events_table\r\n// previous entries deleted from confirmation group for events\r\n// {\r\n//     \"userGroup\": [\r\n//         {\r\n//             \"email\": \"david.zhu.2022@smu.edu.sg\",\r\n//             \"mobile\": \"06586616057\"\r\n//         },\r\n//         {\r\n//             \"email\": \"ryan.yap.2022@smu.edu.sg\",\r\n//             \"mobile\": \"06597873327\"\r\n//         },\r\n//         {\r\n//             \"email\": \"kaifengwoo3@gmail.com\",\r\n//             \"mobile\": \"00000000004\"\r\n//         }\r\n//     ],\r\n//     \"groupLeaderEmail\" : \"david.zhu.2022@smu.edu.sg\",\r\n//     \"groupLeaderId\": \"1\",\r\n//     \"eventId\": \"pink-sc-2024\"\r\n// }\r\n\r\n// Testcase 2: Group changes to only the group leader.\r\n// Output should be: true\r\n// has_all_users_confirmed = 1 and group size = 1 in the reg_group_for_events_table\r\n// previous entries deleted from confirmation group for events\r\n{\r\n    \"userGroup\": [\r\n        {\r\n            \"email\": \"david.zhu.2022@smu.edu.sg\",\r\n            \"mobile\": \"06586616057\"\r\n        }\r\n    ],\r\n    \"groupLeaderEmail\" : \"david.zhu.2022@smu.edu.sg\",\r\n    \"groupLeaderId\": \"1\",\r\n    \"eventId\": \"pink-sc-2024\"\r\n}\r\n\r\n// Run testcase 1 again, settings should reset\r\n\r\n\r\n// Testcase 3: Not a group leader\r\n// Should fail & previous group is unchanged.\r\n// {\r\n//     \"userGroup\": [\r\n//         {\r\n//             \"email\": \"ryan.yap.2022@smu.edu.sg\",\r\n//             \"mobile\": \"06597873327\"\r\n//         },\r\n//     ],\r\n//     \"groupLeaderEmail\" : \"ryan.yap.2022@smu.edu.sg\",\r\n//     \"groupLeaderId\": \"2\",\r\n//     \"eventId\": \"pink-sc-2024\"\r\n// }\r\n\r\n\r\n// Testcase 4: Incorrect user email\r\n// Should fail\r\n// Previous Group is not modified.\r\n// {\r\n//     \"userGroup\": [\r\n//         {\r\n//             \"email\": \"david.zhu.2022@smu.edu.sg2\",\r\n//             \"mobile\": \"06586616057\"\r\n//         }\r\n//     ],\r\n//     \"groupLeaderEmail\" : \"david.zhu.2022@smu.edu.sg\",\r\n//     \"groupLeaderId\": \"1\",\r\n//     \"eventId\": \"pink-sc-2024\"\r\n// }\r\n"
+						},
+						"url": "http://localhost:8080/events-register/modify-group"
+					},
+					"response": []
+				},
+				{
+					"name": "Non-group-leader to leave group",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzMxMjc3NywiZXhwIjoxNjk3MzE2Mzc3fQ.tAw9JHgrrhqhneX2653TJVTXuBZrhfVdqyoRsz_sQTo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/events-register/group/leave-group?groupId=7fca5275-6e6c-4518-b7d4-4c1ccdda0fc0&eventId=anson-2023&userId=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"events-register",
+								"group",
+								"leave-group"
+							],
+							"query": [
+								{
+									"key": "groupId",
+									"value": "7fca5275-6e6c-4518-b7d4-4c1ccdda0fc0"
+								},
+								{
+									"key": "eventId",
+									"value": "anson-2023"
+								},
+								{
+									"key": "userId",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-user-reg-group-info",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "validate-group-by-email-and-mobile",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Registration status of users in a group",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "email",
+			"value": "jrteo.2022@smu.edu.sg"
+		},
+		{
+			"key": "email2",
+			"value": "ryan.yap.2022@smu.edu.sg"
+		},
+		{
+			"key": "mobile2",
+			"value": "00000000001"
+		}
+	]
+}

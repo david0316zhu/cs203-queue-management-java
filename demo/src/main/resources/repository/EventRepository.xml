@@ -33,11 +33,15 @@
     </resultMap>
     
     <select id="retrieveAllEvents" resultMap="eventResultMap">
-        SELECT * FROM event
+        SELECT event_id, event_name, max_queueable, is_highlighted, description,
+        poster_image_path 
+        FROM event
     </select>
 
     <select id="retrieveEvent" parameterType="map" resultMap="eventResultMap">
-        SELECT * FROM event
+        SELECT event_id, event_name, max_queueable, is_highlighted, description,
+        poster_image_path  
+        FROM event
         WHERE event_id = #{event_id}
     </select>
 
@@ -49,20 +53,21 @@
     </select>
 
     <select id = "retrieveHighlightedEventInfo" resultMap= "eventResultMap">
-        SELECT * 
+        SELECT event_id, event_name, max_queueable, is_highlighted, description, poster_image_path 
         FROM ticketmaster.event
         WHERE is_highlighted = 1
     </select>
 
     <select id="retrieveAllShowsForSpecificEvent" parameterType="map" resultMap="showResultMap">
-        SELECT s.*, l.location_name as location_name
+        SELECT s.show_id, s.event_id, s.show_datetime, s.entry_conditions_path, s.seating_plan_path, s.location_id, s.venue_id, l.location_name as location_name
         FROM `show` s
         INNER JOIN location l ON s.location_id = l.location_id
         WHERE s.event_id = #{event_id}
     </select>
 
     <select id="retrieveAllQueuesForSpecificEvent" parameterType="map" resultMap="queueResultMap">
-        SELECT * FROM queue
+        SELECT queue_id, queue_start_datetime, queue_end_datetime, show_id, event_id 
+        FROM queue
         WHERE event_id = #{event_id}
     </select>
 

@@ -90,7 +90,8 @@ public class EventRegisterServiceImpl implements EventRegisterService {
     @Override
     public Boolean registerUsers(List<User> userList, String groupId, String eventId, String groupLeaderEmail) {
         Utility utility = new Utility();
-        if (!utility.emailWhitelist(groupLeaderEmail) || !utility.isInputSafe(eventId) || !utility.isInputSafe(groupId)) {
+        if (!utility.emailWhitelist(groupLeaderEmail) || !utility.isInputSafe(eventId)
+                || !utility.isInputSafe(groupId)) {
             throw new InvalidArgsException("Invalid request");
         }
         try {
@@ -192,21 +193,24 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         return output;
     }
 
-    private ValStatus determineUserElligibility(String email, String mobile, String eventId){
+    private ValStatus determineUserElligibility(String email, String mobile, String eventId) {
         Utility utility = new Utility();
         if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile) || !utility.isInputSafe(eventId)) {
             throw new InvalidArgsException("Invalid request");
         }
         User user = userRepository.findUserByEmailAndMobile(email, mobile);
-        if (user == null) return ValStatus.USER_DOES_NOT_EXIST;
+        if (user == null)
+            return ValStatus.USER_DOES_NOT_EXIST;
 
-        if (!user.isVerified()) return ValStatus.USER_NOT_VERIFIED;
+        if (!user.isVerified())
+            return ValStatus.USER_NOT_VERIFIED;
 
         // Searches the event
         int groupCount = eventRegisterRepository.userGroupForEventCount(user.getId(), eventId);
 
-        if(groupCount > 0) return ValStatus.USER_IN_OTHER_GROUP;
-        
+        if (groupCount > 0)
+            return ValStatus.USER_IN_OTHER_GROUP;
+
         return ValStatus.VALID_MEMBER;
     }
 
@@ -216,7 +220,7 @@ public class EventRegisterServiceImpl implements EventRegisterService {
             throw new EventRegisterException("User ID is not a group leader!");
         }
         List<User> verifiedUsers = verifyUser(form.getUserGroup());
-        registerUsers(verifiedUsers, form.getGroupId(), form.getEventId(), form.getUserId());
+        registerUsers(verifiedUsers, form.getGroupId(), form.getEventId(), form.getUserEmail());
         return true;
     }
 
@@ -241,4 +245,97 @@ public class EventRegisterServiceImpl implements EventRegisterService {
         }
         return verifiedUserList;
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean modifyGroup(Registration newGroupForm) {
+        if (newGroupForm == null) {
+            throw new InvalidArgsException("group cannot be modified as newGroupForm is null");
+        }
+        boolean isGroupLeader = eventRegisterRepository.validateGroupLeaderFromEventAndUserID(newGroupForm.getEventId(),
+                newGroupForm.getGroupLeaderId());
+
+        if (!isGroupLeader) {
+            throw new EventRegisterException("User ID is not a group leader!");
+        }
+        RegistrationInfo regInfo = this.getRegistrationGroupInfo(newGroupForm.getGroupLeaderId(), newGroupForm.getEventId());
+
+        this.removeMembersFromGroup(regInfo, newGroupForm.getGroupLeaderId(), newGroupForm.getEventId());
+
+        // remove the group leader frm the
+        // "userGroup" list in place.
+        removeLeaderFromGroup(newGroupForm, newGroupForm.getGroupLeaderEmail());
+
+        // Add non-group leaders to the group
+        AddMember addMemberForm = new AddMember(newGroupForm.getEventId(), regInfo.getGroupId(),
+                newGroupForm.getGroupLeaderId(), newGroupForm.getGroupLeaderEmail(), newGroupForm.getUserGroup());
+
+        this.addUsersToGroup(addMemberForm);
+
+        // Update information in reg_group_for_event table.
+        eventRegisterRepository.updateGroupSizeInformation(Integer.toString(newGroupForm.getUserGroup().size() + 1), newGroupForm.getEventId(), regInfo.getGroupId());
+
+        return Boolean.valueOf(true);
+    }
+
+    @Override
+    public boolean removeMemberFromGroup(String groupID, String userID, String eventID){
+        if (groupID == null || userID == null || eventID == null){
+            throw new InvalidArgsException("unable to remove member  from group, userid or eventid if either one of them is null");
+        }
+        RegistrationInfo regInfo = this.getRegistrationGroupInfo(userID, eventID);
+        int newGroupSize = regInfo.getUserInfoList().size() - 1; 
+        this.removeMember(groupID, userID, eventID);
+
+        // Update the reg_grp_info
+        eventRegisterRepository.updateGroupSizeInformation(Integer.toString(newGroupSize), eventID, groupID);
+        
+        return true;
+    }   
+
+    public boolean removeMember(String groupID, String userID, String eventID) {
+        if (groupID == null || userID == null || eventID == null) {
+            throw new InvalidArgsException("unable to remove member from group that is null");
+        }
+        // Verify if user is group leader
+        String groupLeaderID = this.eventRegisterRepository.getRegistrationGroupLeader(groupID);
+        if (groupLeaderID.equals(userID)) {
+            throw new EventRegisterException("Unable to remove a group leader from the group.");
+        }
+        eventRegisterRepository.removeMemberFromRegGroup(groupID, userID, eventID);
+
+        return true;
+    }
+
+    private void removeMembersFromGroup(RegistrationInfo regInfo, String groupLeaderID, String eventID) {
+        if (regInfo == null || groupLeaderID == null) {
+            throw new EventRegisterException(
+                    "Event Register Error - unable to remove members from group as the registration info is null");
+        }
+        List<UserInfo> userInfoList = regInfo.getUserInfoList();
+        for (UserInfo userInfo : userInfoList) {
+            if (userInfo.getId().equals(groupLeaderID))
+                continue;
+            this.removeMember(regInfo.getGroupId(), userInfo.getId(), eventID);
+        }
+    }
+    /**
+     * This method is used before calling the `AddMembers` method,
+     * to remove the groupLeader to prevent re-insertion of the group
+     * leader.
+     * @param regForm
+     * @param groupLeaderEmail
+     */
+    private void removeLeaderFromGroup(Registration regForm, String groupLeaderEmail) {
+        List<User> userList = regForm.getUserGroup();
+        Iterator<User> iter = userList.iterator();
+        while (iter.hasNext()) {
+            User user = iter.next();
+            if (user.getEmail().equals(groupLeaderEmail)) {
+                iter.remove();
+                break;
+            }
+        }
+    }
+
 }
