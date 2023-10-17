@@ -18,4 +18,5 @@ public class Queue {
     private String showId;
     private String eventId;
     private String showDateTime;
+    private String locationName;
 }
