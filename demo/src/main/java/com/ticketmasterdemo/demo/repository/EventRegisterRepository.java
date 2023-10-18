@@ -27,4 +27,6 @@ public interface EventRegisterRepository {
     Boolean removeMemberFromRegGroup(@Param("group_id") String groupID, @Param("user_id") String userID, @Param("event_id") String eventID);
 
     void updateGroupSizeInformation(@Param("group_size") String groupSize, @Param("event_id") String eventID, @Param("group_id") String groupID);
+
+    boolean groupCanSelectQueues(@Param("group_id") String groupId, @Param("event_id") String eventId);
 }
