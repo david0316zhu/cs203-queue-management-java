@@ -77,7 +77,8 @@ public class UserServiceImpl implements UserService {
         }
         String userId = utility.generateUserId();
         String authenticatorId = utility.generateRandomUUID();
-        userRepository.createUser(email, mobile, password, userId, authenticatorId, false);
+        String hashedPassword = utility.hashPassword(password);
+        userRepository.createUser(email, mobile, hashedPassword, userId, authenticatorId, false);
         userRepository.insertUserVerifier(userId, true);
         User user = getUser(email);
         // create verification token

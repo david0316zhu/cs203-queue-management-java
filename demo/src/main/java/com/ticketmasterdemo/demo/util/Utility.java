@@ -1,9 +1,9 @@
 package com.ticketmasterdemo.demo.util;
 
 import java.util.UUID;
-
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class Utility {
     
@@ -60,6 +60,17 @@ public class Utility {
     public String generateEmailVerificationToken() {
         UUID randomUUID = UUID.randomUUID();
         return randomUUID.toString();
+    }
+
+    public String hashPassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+        return hashedPassword;
+    }
+
+    public Boolean checkPassword(String plainPassword, String hashedPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(plainPassword, hashedPassword);
     }
 
 }
