@@ -23,8 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-@CrossOrigin(allowedHeaders = { "Authorization" }, exposedHeaders = { "Access-Control-Allow-Origin",
-        "Access-Control-Allow-Credentials" })
+@CrossOrigin(allowedHeaders = { "Authorization", "Content-Type" }, exposedHeaders = { "Access-Control-Allow-Origin",
+        "Access-Control-Allow-Credentials", "Access-Control-Allow-Headers" })
 @RequestMapping("/users")
 public class UserController {
 
@@ -109,7 +109,8 @@ public class UserController {
     }
 
     @PostMapping("/auth/verification/")
-    public ResponseEntity<?> emailVerification(@RequestParam String token) {
+    public ResponseEntity<?> emailVerification(@RequestBody Map<String, String> body) {
+        String token = body.get("token");
         try {
             return ResponseEntity.ok().body(userService.verifyEmailToken(token));
         } catch (UserException e) {
