@@ -55,7 +55,7 @@
 
     <select id="findEmailVerificationToken" parameterType="map" resultType="java.lang.String">
         SELECT user_id FROM user_email_verification
-        WHERE verification_token = #{token} AND expiryDate > #{date_time};
+        WHERE verification_token = #{token} AND expiry_date > #{date_time};
     </select>
 
     <update id="updateEmailVerification" parameterType="map">
@@ -63,4 +63,10 @@
         SET is_email_verified = 1
         WHERE user_id = #{user_id}
     </update>
+
+    <insert id='saveEmailToken' parameterType="map">
+        INSERT into user_email_verification
+        (user_id, verification_token, expiry_date)
+        VALUES (#{user_id}, #{token}, #{expiry_date})
+    </insert>
 </mapper>

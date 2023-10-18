@@ -29,4 +29,6 @@ public interface UserRepository {
     String findEmailVerificationToken(@Param("token") String token, @Param("date_time") LocalDateTime dateTime);
 
     int updateEmailVerification(@Param("user_id") String userId);
+
+    int saveEmailToken(@Param("user_id") String userId, @Param("token") String token, @Param("expiry_date") LocalDateTime dateTime);
 }

@@ -19,8 +19,6 @@ public interface UserService {
     
     public boolean authenticateUser(String email, String mobile, String password);
 
-    public Queue queue();
-
     public void sendVerificationTokenToEmailService(String email, String token);
 
     public boolean verifyEmailToken(String token);

@@ -14,6 +14,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
+import com.ticketmasterdemo.demo.configure.RabbitMqConfigure;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.dto.VerificationEmail;
 import com.ticketmasterdemo.demo.repository.UserRepository;
@@ -32,10 +33,6 @@ public class UserServiceImpl implements UserService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    @Bean
-    public Queue queue() {
-        return new Queue("emailQueue");
-    }
 
     @Override
     public void sendVerificationTokenToEmailService(String email, String token) {
@@ -44,7 +41,7 @@ public class UserServiceImpl implements UserService {
         verificationEmail.setEmail(email);
         verificationEmail.setVerificationUrl(verificationUrl);
 
-        rabbitTemplate.convertAndSend("emailQueue", verificationEmail);
+        rabbitTemplate.convertAndSend(RabbitMqConfigure.QUEUE_NAME, verificationEmail);
     }
 
     @Override
@@ -84,6 +81,7 @@ public class UserServiceImpl implements UserService {
         User user = getUser(email);
         // create verification token
         String token = utility.generateEmailVerificationToken();
+        userRepository.saveEmailToken(userId, token, LocalDateTime.now().plusMinutes(15));
         sendVerificationTokenToEmailService(email, token);
         return user;
 
@@ -128,6 +126,7 @@ public class UserServiceImpl implements UserService {
     public boolean verifyEmailToken(String token) {
         LocalDateTime currDateTime = LocalDateTime.now();
         String userId = userRepository.findEmailVerificationToken(token, currDateTime);
+        System.out.println(userId);
         if (userId == null) {
             throw new UserException("Verification Token Invalid/Expired");
         }
