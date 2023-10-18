@@ -394,6 +394,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Queues For Event",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwNjU5ODIzMTUzOSIsImlhdCI6MTY5NzU1OTE5OCwiZXhwIjoxNjk3NTYyNzk4fQ.2lWntqKMw3yiJYQoaqqrKa8FMpnQL-HMIOh8r6YTveU",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/queues/tswift-era-2024",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"queues",
+								"tswift-era-2024"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
