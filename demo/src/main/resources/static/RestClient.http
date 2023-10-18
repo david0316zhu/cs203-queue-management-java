@@ -76,7 +76,7 @@ POST http://localhost:8080/users/register
 Content-Type: application/json
 
 {
-  "email": "clarissatoh03@gmail.com",
-  "mobile": "91283746",
+  "email": "davidapsc@gmail.com",
+  "mobile": "92396157",
   "password": "test123"
 }
