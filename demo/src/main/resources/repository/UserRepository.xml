@@ -63,4 +63,9 @@
         SET is_email_verified = 1
         WHERE user_id = #{user_id}
     </update>
+
+    <inser id='saveEmailToken' parameterType="map">
+        INSERT into user_email_verification
+        (user_id, verification_token, expiry_date)
+        VALUES (#{user_id}, #{token}, #{expiry_date})
 </mapper>

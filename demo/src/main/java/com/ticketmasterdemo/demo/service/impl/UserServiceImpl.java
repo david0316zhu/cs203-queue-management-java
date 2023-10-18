@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
         User user = getUser(email);
         // create verification token
         String token = utility.generateEmailVerificationToken();
+        userRepository.saveEmailToken(userId, token, LocalDateTime.now());
         sendVerificationTokenToEmailService(email, token);
         return user;
 
