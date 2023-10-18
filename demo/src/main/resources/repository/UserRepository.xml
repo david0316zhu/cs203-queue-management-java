@@ -69,4 +69,10 @@
         (user_id, verification_token, expiry_date)
         VALUES (#{user_id}, #{token}, #{expiry_date})
     </insert>
+
+    <insert id='insertUserVerifier' parameterType="map">
+        INSERT into user_email_mobile_verification
+        (user_id, is_mobile_verified)
+        VALUES (#{user_id}, #{phone_verified})
+    </insert>
 </mapper>

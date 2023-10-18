@@ -31,4 +31,6 @@ public interface UserRepository {
     int updateEmailVerification(@Param("user_id") String userId);
 
     int saveEmailToken(@Param("user_id") String userId, @Param("token") String token, @Param("expiry_date") LocalDateTime dateTime);
+
+    int insertUserVerifier(@Param("user_id") String userId, @Param("phone_verified") Boolean phoneVerified);
 }

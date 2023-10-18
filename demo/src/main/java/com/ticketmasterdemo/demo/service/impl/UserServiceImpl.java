@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void sendVerificationTokenToEmailService(String email, String token) {
-        String verificationUrl = "https://yourwebsite.com/verify?token=" + token;
+        String verificationUrl = "http://localhost:4200/user/verify/token/" + token;
         VerificationEmail verificationEmail = new VerificationEmail();
         verificationEmail.setEmail(email);
         verificationEmail.setVerificationUrl(verificationUrl);
@@ -78,6 +78,7 @@ public class UserServiceImpl implements UserService {
         String userId = utility.generateUserId();
         String authenticatorId = utility.generateRandomUUID();
         userRepository.createUser(email, mobile, password, userId, authenticatorId, false);
+        userRepository.insertUserVerifier(userId, true);
         User user = getUser(email);
         // create verification token
         String token = utility.generateEmailVerificationToken();
