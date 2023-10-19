@@ -24,7 +24,7 @@ public class WebConfigure implements WebMvcConfigurer {
                 .addPathPatterns("/users/**")
                 .addPathPatterns("/queues/**")
                 .addPathPatterns("/events-register/**")
-                .excludePathPatterns("users/auth/verification/")
+                .excludePathPatterns("users/auth/**")
                 .excludePathPatterns("/users/register");
     }
 }
