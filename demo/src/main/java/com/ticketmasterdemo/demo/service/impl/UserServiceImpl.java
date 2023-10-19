@@ -120,8 +120,8 @@ public class UserServiceImpl implements UserService {
             throw new InvalidArgsException("invalid login credentials - failed preliminary check");
         }
 
-        String userPwd = userRepository.retrieveUserForAuth(email, mobile);
-        return password.equals(userPwd);
+        String hashedPassword = userRepository.retrieveUserForAuth(email, mobile);
+        return utility.checkPassword(password, hashedPassword);
     }
 
     @Override
