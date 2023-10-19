@@ -80,3 +80,8 @@ Content-Type: application/json
   "mobile": "92396157",
   "password": "test123"
 }
+
+###
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+Authorization: Basic ZGF2aWRhcHNjQGdtYWlsLmNvbTp0ZXN0MTIz

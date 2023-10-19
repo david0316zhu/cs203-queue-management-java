@@ -21,7 +21,7 @@
         <result column="is_group_leader" property="isGroupLeader"/>
     </resultMap>
 
-    <resultMap id="userAuthResultMap" type="java.util.UserAuth">
+    <resultMap id="userAuthResultMap" type="com.ticketmasterdemo.demo.dto.UserAuth">
         <result column="password" property="password"/>
         <result column="allow_login" property="allowLogin"/>
     </resultMap>
@@ -38,7 +38,7 @@
         SELECT user_id, mobile_number, email, authenticator_id, is_verified, allow_login FROM user WHERE email = #{email}
     </select>
 
-    <select id="retrieveUserForAuth" resultType = "userAuthResultMap" parameterType="map">
+    <select id="retrieveUserForAuth" resultMap="userAuthResultMap" parameterType="map">
         SELECT password, allow_login FROM user
         WHERE email = #{email} and mobile_number = #{mobile}
     </select>
