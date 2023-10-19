@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
+import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.service.UserService;
 import com.ticketmasterdemo.demo.util.JwtUtil;
 
@@ -37,6 +38,9 @@ public class AuthController {
         } catch (InvalidArgsException e) {
             log.error("Verify multiple error: ", e);
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        } catch (UserException e){
+            log.error(e.getMessage());
+            return ResponseEntity.status(401).body(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getStackTrace());
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());

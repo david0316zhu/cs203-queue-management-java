@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
         if (userAuth.isAllowLogin()) {
             return utility.checkPassword(password, userAuth.getPassword());
         }
-        //throw UserException("Email is not verified");
+        throw new UserException("Email is not verified");
         
     }
 
