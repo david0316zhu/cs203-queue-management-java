@@ -36,4 +36,6 @@ public interface UserRepository {
     int insertUserVerifier(@Param("user_id") String userId, @Param("phone_verified") Boolean phoneVerified);
 
     String findMobile(@Param("mobile") String mobile);
+
+    String findPaymentId(@Param("user_id") String userId);
 }

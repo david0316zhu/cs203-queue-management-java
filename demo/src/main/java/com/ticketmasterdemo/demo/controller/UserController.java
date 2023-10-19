@@ -133,4 +133,17 @@ public class UserController {
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/is-payment-verified")
+    public ResponseEntity<?> userPaymentMethodVerification(@RequestBody Map<String, String> body) {
+        try {
+            return ResponseEntity.ok().body(userService.verifyUserPaymentMethod(body.get("email"), body.get("mobile")));
+        } catch (InvalidArgsException e) {
+            log.error("Verify multiple error: ", e);
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
 }

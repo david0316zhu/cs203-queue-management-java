@@ -153,4 +153,15 @@ public class UserServiceImpl implements UserService {
         }
         return false;
     }
+
+    @Override
+    public boolean verifyUserPaymentMethod(String email, String mobile) {
+        User user = getUser(email, mobile);
+        String userId = user.getId();
+        String paymentId = userRepository.findPaymentId(userId);
+        if (paymentId != null) {
+            return true;
+        }
+        return false;
+    }
 }

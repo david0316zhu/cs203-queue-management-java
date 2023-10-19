@@ -87,4 +87,9 @@
         SELECT mobile FROM user
         WHERE mobile = #{mobile};
     </select>
+
+    <select id="findPaymentId" parameterType="map" resultType="java.lang.String">
+        SELECT payment_id FROM payment_method
+        WHERE user_id = #{user_id};
+    </select>
 </mapper>

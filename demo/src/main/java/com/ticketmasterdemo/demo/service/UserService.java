@@ -24,4 +24,6 @@ public interface UserService {
     public boolean verifyEmailToken(String token);
 
     public boolean hasMobileBeenUsed(String mobile);
+
+    public boolean verifyUserPaymentMethod(String email, String mobile);
 }
