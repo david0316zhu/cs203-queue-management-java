@@ -34,4 +34,6 @@ public interface UserRepository {
     int saveEmailToken(@Param("user_id") String userId, @Param("token") String token, @Param("expiry_date") LocalDateTime dateTime);
 
     int insertUserVerifier(@Param("user_id") String userId, @Param("phone_verified") Boolean phoneVerified);
+
+    String findMobile(@Param("mobile") String mobile);
 }

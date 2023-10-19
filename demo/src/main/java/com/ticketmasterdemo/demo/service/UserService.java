@@ -22,4 +22,6 @@ public interface UserService {
     public void sendVerificationTokenToEmailService(String email, String token);
 
     public boolean verifyEmailToken(String token);
+
+    public boolean hasMobileBeenUsed(String mobile);
 }

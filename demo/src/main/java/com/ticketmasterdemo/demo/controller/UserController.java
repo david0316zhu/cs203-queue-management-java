@@ -120,4 +120,17 @@ public class UserController {
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/mobile/{mobile}")
+    public ResponseEntity<?> checkMobile(@PathVariable String mobile) {
+        try {
+            return ResponseEntity.ok().body(userService.hasMobileBeenUsed(mobile));
+        } catch (InvalidArgsException e) {
+            log.error("Verify multiple error: ", e);
+            return ResponseEntity.unprocessableEntity().body(e.getMessage());
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
 }

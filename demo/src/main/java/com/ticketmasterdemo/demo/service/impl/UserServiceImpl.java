@@ -140,4 +140,17 @@ public class UserServiceImpl implements UserService {
         userRepository.updateEmailVerification(userId);
         return true;
     }
+
+    @Override
+    public boolean hasMobileBeenUsed(String mobile) {
+        Utility utility = new Utility();
+        if (!utility.isInputSafe(mobile)) {
+            throw new InvalidArgsException("invalid mobile number");
+        }
+        String checkedMobile = userRepository.findMobile(mobile);
+        if (checkedMobile != null) {
+            return true;
+        }
+        return false;
+    }
 }

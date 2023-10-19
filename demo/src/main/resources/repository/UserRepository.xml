@@ -82,4 +82,9 @@
         (user_id, is_mobile_verified)
         VALUES (#{user_id}, #{phone_verified})
     </insert>
+
+    <select id="findMobile" parameterType="map" resultType="java.lang.String">
+        SELECT mobile FROM user
+        WHERE mobile = #{mobile};
+    </select>
 </mapper>
