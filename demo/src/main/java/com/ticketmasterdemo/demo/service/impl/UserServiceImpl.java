@@ -16,6 +16,7 @@ import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.configure.RabbitMqConfigure;
 import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.dto.UserAuth;
 import com.ticketmasterdemo.demo.dto.VerificationEmail;
 import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.UserService;
@@ -120,8 +121,12 @@ public class UserServiceImpl implements UserService {
             throw new InvalidArgsException("invalid login credentials - failed preliminary check");
         }
 
-        String hashedPassword = userRepository.retrieveUserForAuth(email, mobile);
-        return utility.checkPassword(password, hashedPassword);
+        UserAuth userAuth = userRepository.retrieveUserForAuth(email, mobile);
+        if (userAuth.isAllowLogin()) {
+            return utility.checkPassword(password, userAuth.getPassword());
+        }
+        //throw UserException("Email is not verified");
+        
     }
 
     @Override

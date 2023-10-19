@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.dto.UserAuth;
 import com.ticketmasterdemo.demo.dto.UserInfo;
 
 @Mapper
@@ -22,7 +23,7 @@ public interface UserRepository {
             @Param("user_id") String userId, @Param("authenticator_id") String authenticatorId,
             @Param("is_verified") boolean isVerified);
 
-    String retrieveUserForAuth(@Param("email") String email, @Param("mobile") String mobile);
+    UserAuth retrieveUserForAuth(@Param("email") String email, @Param("mobile") String mobile);
 
     List<UserInfo> getAllUserInfo(@Param("group_id") String groupId);
 

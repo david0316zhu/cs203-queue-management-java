@@ -10,6 +10,7 @@
         <result column="password" property="password"/>
         <result column="authenticator_id" property="authenticatorId"/>
         <result column="is_verified" property="verified" />
+        <result column="allow_login" property="allowLogin" />
     </resultMap>
 
     <resultMap id="userInfoResultMap" type="com.ticketmasterdemo.demo.dto.UserInfo">
@@ -20,22 +21,28 @@
         <result column="is_group_leader" property="isGroupLeader"/>
     </resultMap>
 
+    <resultMap id="userAuthResultMap" type="java.util.UserAuth">
+        <result column="password" property="password"/>
+        <result column="allow_login" property="allowLogin"/>
+    </resultMap>
+
     <select id="findUserByEmailAndMobile" resultMap="userResultMap" parameterType="map">
-        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and mobile_number = #{mobile}
+        SELECT user_id, mobile_number, email, authenticator_id, is_verified, allow_login FROM user WHERE email = #{email} and mobile_number = #{mobile}
     </select>
 
     <select id="findVerifiedUserByEmail" resultMap="userResultMap" parameterType="map">
-        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email} and is_verified = 1
+        SELECT user_id, mobile_number, email, authenticator_id, is_verified, allow_login FROM user WHERE email = #{email} and is_verified = 1
     </select>
 
     <select id="findAnyUserByEmail" resultMap="userResultMap" parameterType="map">
-        SELECT user_id, mobile_number, email, authenticator_id, is_verified FROM user WHERE email = #{email}
+        SELECT user_id, mobile_number, email, authenticator_id, is_verified, allow_login FROM user WHERE email = #{email}
     </select>
 
-    <select id="retrieveUserForAuth" resultType = "java.lang.String" parameterType="map">
-        SELECT password FROM user
+    <select id="retrieveUserForAuth" resultType = "userAuthResultMap" parameterType="map">
+        SELECT password, allow_login FROM user
         WHERE email = #{email} and mobile_number = #{mobile}
     </select>
+
 
     <insert id="createUser" parameterType="com.ticketmasterdemo.demo.dto.User"> 
         INSERT into user
