@@ -134,10 +134,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/is-payment-verified")
-    public ResponseEntity<?> userPaymentMethodVerification(@RequestBody Map<String, String> body) {
+    @GetMapping("/is-payment-verified/{email}/{mobile}")
+    public ResponseEntity<?> userPaymentMethodVerification(@PathVariable String email, @PathVariable String mobile) {
         try {
-            return ResponseEntity.ok().body(userService.verifyUserPaymentMethod(body.get("email"), body.get("mobile")));
+            return ResponseEntity.ok().body(userService.verifyUserPaymentMethod(email, mobile));
         } catch (InvalidArgsException e) {
             log.error("Verify multiple error: ", e);
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
