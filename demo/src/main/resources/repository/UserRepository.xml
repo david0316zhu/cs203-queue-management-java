@@ -84,8 +84,8 @@
     </insert>
 
     <select id="findMobile" parameterType="map" resultType="java.lang.String">
-        SELECT mobile FROM user
-        WHERE mobile = #{mobile};
+        SELECT mobile_number FROM user
+        WHERE mobile_number = #{mobile};
     </select>
 
     <select id="findPaymentId" parameterType="map" resultType="java.lang.String">
