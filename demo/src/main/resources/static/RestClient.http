@@ -84,4 +84,15 @@ Content-Type: application/json
 ###
 POST http://localhost:8080/auth/login
 Content-Type: application/json
-Authorization: Basic ZGF2aWRhcHNjQGdtYWlsLmNvbTp0ZXN0MTIz
+email: davidapsc@gmail.com
+mobile: 92396157
+password: test123
+
+###
+GET http://localhost:8080/users/is-payment-verified
+Content-Type: application/json
+
+{
+  "email": "davidapsc@gmail.com",
+  "mobile": "92396157"
+}

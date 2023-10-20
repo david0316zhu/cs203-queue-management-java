@@ -3,7 +3,7 @@ package com.ticketmasterdemo.demo.util;
 import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class Utility {
     
@@ -62,15 +62,12 @@ public class Utility {
         return randomUUID.toString();
     }
 
-    public String hashPassword(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
-        return hashedPassword;
+    public String hashPassword(String rawPassword) {
+        return BCrypt.hashpw(rawPassword, BCrypt.gensalt());
     }
 
-    public Boolean checkPassword(String plainPassword, String hashedPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.matches(plainPassword, hashedPassword);
+    public boolean checkPassword(String rawPassword, String hashedPassword) {
+        return BCrypt.checkpw(rawPassword, hashedPassword);
     }
 
 }
