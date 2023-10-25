@@ -9,12 +9,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
 import com.ticketmasterdemo.demo.configure.RabbitMqConfigure;
+import com.ticketmasterdemo.demo.dto.PaymentInfo;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.dto.UserAuth;
 import com.ticketmasterdemo.demo.dto.VerificationEmail;
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public User createUser(String email, String mobile, String password) {
         Utility utility = new Utility();
         if (!utility.emailWhitelist(email) || !utility.isInputSafe(mobile)) {
@@ -163,5 +166,17 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    //@Transactional(rollbackFor = Exception.class)
+    public boolean saveUserPaymentMethod(PaymentInfo paymentInfo) {
+        
+        System.out.println(paymentInfo.getName());
+        userRepository.saveUserPaymentInfo(paymentInfo);
+        return true;
+        
+        
+        
     }
 }

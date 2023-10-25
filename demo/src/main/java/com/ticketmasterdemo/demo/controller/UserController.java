@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.UserException;
+import com.ticketmasterdemo.demo.dto.PaymentInfo;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.service.UserService;
 import com.ticketmasterdemo.demo.util.JwtUtil;
@@ -143,6 +144,19 @@ public class UserController {
             return ResponseEntity.unprocessableEntity().body(e.getMessage());
         }catch (Exception e){
             log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
+
+
+@PostMapping("/store-payment-info")
+    public ResponseEntity<?> storePaymentInfo(@RequestBody PaymentInfo paymentInfo) {
+        try {
+            return ResponseEntity.ok().body(userService.saveUserPaymentMethod(paymentInfo));
+        } catch (UserException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }

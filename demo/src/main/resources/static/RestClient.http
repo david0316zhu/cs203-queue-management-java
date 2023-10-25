@@ -96,3 +96,21 @@ Content-Type: application/json
   "email": "davidapsc@gmail.com",
   "mobile": "92396157"
 }
+
+###
+
+POST http://localhost:8080/users/store-payment-info
+Content-Type: application/json
+
+{
+  "userId": "29c4b6ae-a270-472e-a37b-8f2c5253bff4",
+  "cardNumber": "0000111122223333",
+  "expDate": "04/25",
+  "name": "David Zhu",
+  "street": "Douby Ghaut Street 1",
+  "city": "Singapore",
+  "state": "Singapore",
+  "zip": "111111",
+  "email": "davidapsc@gmail.com",
+  "mobile": "86616057"
+}

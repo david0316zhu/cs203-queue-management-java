@@ -27,6 +27,7 @@ public class Utility {
             return false;
         }
         Matcher matcher = EMAIL_PATTERN.matcher(email);
+        System.out.println(matcher.matches());
         return matcher.matches();
     }
 

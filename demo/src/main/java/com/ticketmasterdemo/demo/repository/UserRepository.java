@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.ticketmasterdemo.demo.dto.PaymentInfo;
 import com.ticketmasterdemo.demo.dto.User;
 import com.ticketmasterdemo.demo.dto.UserAuth;
 import com.ticketmasterdemo.demo.dto.UserInfo;
@@ -38,4 +39,6 @@ public interface UserRepository {
     String findMobile(@Param("mobile") String mobile);
 
     String findPaymentId(@Param("user_id") String userId);
+
+    int saveUserPaymentInfo(PaymentInfo paymentInfo);
 }

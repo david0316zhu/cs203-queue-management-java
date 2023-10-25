@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.amqp.core.Queue;
 
+import com.ticketmasterdemo.demo.dto.PaymentInfo;
 import com.ticketmasterdemo.demo.dto.User;
 
 public interface UserService {
@@ -26,4 +27,6 @@ public interface UserService {
     public boolean hasMobileBeenUsed(String mobile);
 
     public boolean verifyUserPaymentMethod(String email, String mobile);
+
+    public boolean saveUserPaymentMethod(PaymentInfo paymentInfo);
 }

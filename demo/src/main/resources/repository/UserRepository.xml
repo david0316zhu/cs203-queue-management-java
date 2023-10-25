@@ -92,4 +92,11 @@
         SELECT payment_id FROM payment_method
         WHERE user_id = #{user_id};
     </select>
+
+    <insert id='saveUserPaymentInfo' parameterType="com.ticketmasterdemo.demo.dto.PaymentInfo">
+        INSERT into payment_method
+        (user_id, expiry_date, state, city, street, zip, name, card_number)
+        VALUES (#{userId}, #{expDate}, #{state}, #{city}, #{street},
+        #{zip}, #{name}, #{cardNumber})
+    </insert>
 </mapper>
