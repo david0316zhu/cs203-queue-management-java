@@ -104,17 +104,21 @@ public class QueueRegisterServiceImpl implements QueueRegisterService {
             throw new InvalidArgsException("invalid login credentials - failed preliminary check");
         }
         User user = userRepository.findVerifiedUserByEmail(email);
-        String groupLeaderEmail = eventRegisterRepository.getRegistrationGroupLeader(user.getId());
+        String groupId = eventRegisterRepository.getRegistrationGroupId(user.getId(), eventId);
+        String groupLeaderEmail = eventRegisterRepository.getRegistrationGroupLeader(groupId);
         if (!user.getId().equals(groupLeaderEmail)) {
             throw new RuntimeException("User not group leader");
         }
-        String groupId = eventRegisterRepository.getRegistrationGroupId(groupLeaderEmail, eventId);
+        
 
-        Integer staticQueueNumber = queueRegisterRepository.getQueueNumber(queueId, groupId);
+        Integer sQueueNumber = queueRegisterRepository.getQueueNumber(queueId, groupId);
+        
         Integer queueFactor = queueRegisterRepository.getQueueFactor(queueId);
-        Integer queueNumber = staticQueueNumber - queueFactor;
+        
+        Integer queueNumber = sQueueNumber - queueFactor;
         queueFactor += 1;
-        queueRegisterRepository.updateQueueFactor(queueFactor);
+        queueRegisterRepository.updateQueueFactor(queueFactor, queueId);
+        
         return queueNumber;
 
     }

@@ -72,7 +72,8 @@ public class QueueRegisterController {
     public ResponseEntity<?> getQueueNumber(@PathVariable String email, @PathVariable String eventId, @PathVariable String queueId){
         try {
             Map<String, Integer> queueNumberMap = new HashMap<>();
-            queueNumberMap.put(eventId, null);
+            Integer queueNumber = queueRegisterService.getQueueNumber(email, eventId, queueId);
+            queueNumberMap.put("queueNumber", queueNumber);
             return ResponseEntity.ok().body(queueNumberMap);
         } catch (InvalidArgsException e){
             return ResponseEntity.unprocessableEntity().body("Invalid Request: " + e.getMessage());

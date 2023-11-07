@@ -29,5 +29,5 @@ public interface QueueRegisterRepository {
 
     Integer getQueueFactor(@Param("queue_id") String queueId);
 
-    void updateQueueFactor(@Param("factor") Integer queueFactor);
+    void updateQueueFactor(@Param("factor") Integer queueFactor, @Param("queue_id") String queueId);
 }

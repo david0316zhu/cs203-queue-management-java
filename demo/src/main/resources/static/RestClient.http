@@ -114,3 +114,7 @@ Content-Type: application/json
   "email": "davidapsc@gmail.com",
   "mobile": "86616057"
 }
+
+###
+POST http://localhost:8080/queues/davidapsc@gmail.com/cplay-mots-2024/4faa3cb7-54cf-11ee-99af-0a2a518633fa
+Content-Type: application/json
