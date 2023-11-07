@@ -1,7 +1,9 @@
 package com.ticketmasterdemo.demo.controller;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -65,4 +67,19 @@ public class QueueRegisterController {
     }
 
     
+
+    @PostMapping("/{email}/{eventId}/{queueId}")
+    public ResponseEntity<?> getQueueNumber(@PathVariable String email, @PathVariable String eventId, @PathVariable String queueId){
+        try {
+            Map<String, Integer> queueNumberMap = new HashMap<>();
+            queueNumberMap.put(eventId, null);
+            return ResponseEntity.ok().body(queueNumberMap);
+        } catch (InvalidArgsException e){
+            return ResponseEntity.unprocessableEntity().body("Invalid Request: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
 }
+    
+

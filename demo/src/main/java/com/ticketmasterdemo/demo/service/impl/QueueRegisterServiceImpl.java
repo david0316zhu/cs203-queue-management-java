@@ -12,15 +12,23 @@ import org.springframework.stereotype.Service;
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.QueueRegisterException;
 import com.ticketmasterdemo.demo.dto.Queue;
+import com.ticketmasterdemo.demo.dto.User;
+import com.ticketmasterdemo.demo.repository.EventRegisterRepository;
 import com.ticketmasterdemo.demo.repository.QueueRegisterRepository;
+import com.ticketmasterdemo.demo.repository.UserRepository;
 import com.ticketmasterdemo.demo.service.QueueRegisterService;
+import com.ticketmasterdemo.demo.util.Utility;
 
 @Service
 public class QueueRegisterServiceImpl implements QueueRegisterService {
     private final QueueRegisterRepository queueRegisterRepository;
+    private final UserRepository userRepository;
+    private final EventRegisterRepository eventRegisterRepository;
 
-    public QueueRegisterServiceImpl(QueueRegisterRepository queueRegisterRepository){
+    public QueueRegisterServiceImpl(QueueRegisterRepository queueRegisterRepository, UserRepository userRepository, EventRegisterRepository eventRegisterRepository){
         this.queueRegisterRepository = queueRegisterRepository;
+        this.userRepository = userRepository;
+        this.eventRegisterRepository = eventRegisterRepository;
     }
 
     @Override
@@ -65,6 +73,7 @@ public class QueueRegisterServiceImpl implements QueueRegisterService {
         return true;
     }
 
+    @Override
     public List<Queue> getQueueInformation(String eventId){
         if (eventId == null){
             throw new InvalidArgsException("Queue Retrieval Error - eventId is null");
@@ -86,6 +95,28 @@ public class QueueRegisterServiceImpl implements QueueRegisterService {
         }
         
         return true;
+    }
+
+    @Override
+    public Integer getQueueNumber(String email, String eventId, String queueId) {
+        Utility utility = new Utility();
+        if (!utility.emailWhitelist(email) || !utility.isInputSafe(eventId) || !utility.isInputSafe(queueId) ) {
+            throw new InvalidArgsException("invalid login credentials - failed preliminary check");
+        }
+        User user = userRepository.findVerifiedUserByEmail(email);
+        String groupLeaderEmail = eventRegisterRepository.getRegistrationGroupLeader(user.getId());
+        if (!user.getId().equals(groupLeaderEmail)) {
+            throw new RuntimeException("User not group leader");
+        }
+        String groupId = eventRegisterRepository.getRegistrationGroupId(groupLeaderEmail, eventId);
+
+        Integer staticQueueNumber = queueRegisterRepository.getQueueNumber(queueId, groupId);
+        Integer queueFactor = queueRegisterRepository.getQueueFactor(queueId);
+        Integer queueNumber = staticQueueNumber - queueFactor;
+        queueFactor += 1;
+        queueRegisterRepository.updateQueueFactor(queueFactor);
+        return queueNumber;
+
     }
     
     /**

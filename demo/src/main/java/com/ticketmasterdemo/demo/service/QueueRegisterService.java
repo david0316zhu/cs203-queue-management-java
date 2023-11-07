@@ -8,4 +8,6 @@ public interface QueueRegisterService {
     boolean processQueueChoices(String groupId, String eventId, String userId, List<String> selectedQueueIds, List<String> selectedShowIds);
 
     List<Queue> getQueueInformation(String eventId);
+
+    Integer getQueueNumber(String email, String eventId, String queueId);
 }

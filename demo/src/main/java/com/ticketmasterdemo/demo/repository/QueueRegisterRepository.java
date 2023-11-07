@@ -25,4 +25,9 @@ public interface QueueRegisterRepository {
     
     List<Queue> retrieveAllQueueTimesAndShowTimes(@Param("event_id") String eventId);
 
+    Integer getQueueNumber(@Param("queue_id") String queueId, @Param("group_id") String groupId);
+
+    Integer getQueueFactor(@Param("queue_id") String queueId);
+
+    void updateQueueFactor(@Param("factor") Integer queueFactor);
 }
