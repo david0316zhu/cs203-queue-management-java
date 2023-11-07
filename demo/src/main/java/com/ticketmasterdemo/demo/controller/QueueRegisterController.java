@@ -20,7 +20,7 @@ import com.ticketmasterdemo.demo.service.QueueRegisterService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("queues")
+@RequestMapping("/queues")
 public class QueueRegisterController {
     private final QueueRegisterService queueRegisterService;
 
@@ -63,4 +63,6 @@ public class QueueRegisterController {
             return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
         }
     }
+
+    
 }
