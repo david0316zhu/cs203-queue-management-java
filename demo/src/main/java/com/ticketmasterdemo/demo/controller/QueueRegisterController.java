@@ -68,13 +68,26 @@ public class QueueRegisterController {
 
     
 
-    @PostMapping("/{email}/{eventId}/{queueId}")
-    public ResponseEntity<?> getQueueNumber(@PathVariable String email, @PathVariable String eventId, @PathVariable String queueId){
+    @PostMapping("/queue-number")
+    public ResponseEntity<?> getQueueNumber(@RequestBody HashMap<String, String> queueData){
         try {
             Map<String, Integer> queueNumberMap = new HashMap<>();
-            Integer queueNumber = queueRegisterService.getQueueNumber(email, eventId, queueId);
+            Integer queueNumber = queueRegisterService.getQueueNumber(queueData.get("email"), queueData.get("eventId"), queueData.get("queueId"));
             queueNumberMap.put("queueNumber", queueNumber);
             return ResponseEntity.ok().body(queueNumberMap);
+        } catch (InvalidArgsException e){
+            return ResponseEntity.unprocessableEntity().body("Invalid Request: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Server Error: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/queue-factor")
+    public ResponseEntity<?> updateQueueFactor(@RequestBody HashMap<String, String> queueData){
+        try {
+            Map<String, Integer> queueNumberMap = new HashMap<>();
+            boolean status = queueRegisterService.updateQueueFactor(queueData.get("queueId"));
+            return ResponseEntity.ok().body(status);
         } catch (InvalidArgsException e){
             return ResponseEntity.unprocessableEntity().body("Invalid Request: " + e.getMessage());
         } catch (Exception e) {

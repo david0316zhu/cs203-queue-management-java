@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ticketmasterdemo.demo.common.exception.InvalidArgsException;
 import com.ticketmasterdemo.demo.common.exception.QueueRegisterException;
@@ -116,11 +117,20 @@ public class QueueRegisterServiceImpl implements QueueRegisterService {
         Integer queueFactor = queueRegisterRepository.getQueueFactor(queueId);
         
         Integer queueNumber = sQueueNumber - queueFactor;
-        queueFactor += 1;
-        queueRegisterRepository.updateQueueFactor(queueFactor, queueId);
         
         return queueNumber;
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateQueueFactor(String queueId) {
+        Utility utility = new Utility();
+        if (!utility.isInputSafe(queueId) ) {
+            throw new InvalidArgsException("invalid login credentials - failed preliminary check");
+        }
+        queueRegisterRepository.updateQueueFactor(queueId);
+        return true;
     }
     
     /**

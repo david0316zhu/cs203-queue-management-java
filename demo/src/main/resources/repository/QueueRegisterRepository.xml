@@ -97,8 +97,8 @@
 
     <update id="updateQueueFactor" parameterType = "map">
         UPDATE virtual_queue_factor
-        SET factor = #{factor}
-        WHERE queue_id = #{queue_id}
+        SET factor = factor + 1
+        WHERE queue_id = #{queue_id};
     </update>
 
 </mapper>

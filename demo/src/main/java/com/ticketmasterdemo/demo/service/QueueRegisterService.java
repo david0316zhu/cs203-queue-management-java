@@ -10,4 +10,6 @@ public interface QueueRegisterService {
     List<Queue> getQueueInformation(String eventId);
 
     Integer getQueueNumber(String email, String eventId, String queueId);
+
+    boolean updateQueueFactor(String queueId);
 }
