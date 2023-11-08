@@ -85,7 +85,6 @@ public class QueueRegisterController {
     @PostMapping("/queue-factor")
     public ResponseEntity<?> updateQueueFactor(@RequestBody HashMap<String, String> queueData){
         try {
-            Map<String, Integer> queueNumberMap = new HashMap<>();
             boolean status = queueRegisterService.updateQueueFactor(queueData.get("queueId"));
             return ResponseEntity.ok().body(status);
         } catch (InvalidArgsException e){
